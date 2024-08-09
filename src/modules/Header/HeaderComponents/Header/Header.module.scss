@@ -1,0 +1,57 @@
+@import '../../../../styles/settings.scss';
+
+.header {
+    &__banner {
+        width: 100%;
+        padding: 10px 20px;
+        background-color: $neutral-color;
+    }
+
+    &__bannerText {
+        text-align: center;
+        color: $primary-color;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    &__navigation {
+        padding: 12px 0px;
+        background-color: #FFF;
+        border-bottom: 1px solid rgba($neutral-color, .2);
+    }
+
+    &__navigationInner {
+        max-width: $container-width;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+
+    &__logo {
+        width: 225px;
+        font-family: 'GrandHotel';
+        font-size: 40px;
+        line-height: 0;
+        color: $title-color;
+    }
+
+    &__navigationLinks {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__link {
+        padding: 5px 8px;
+        margin: 0px 7px;
+    }
+    &__buttons{
+        align-items: center;
+        display: flex;
+    }
+    &__button {
+        width: 225px;
+    }
+}
