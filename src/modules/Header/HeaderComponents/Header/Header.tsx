@@ -1,27 +1,54 @@
-import React from 'react'
+import { useEffect, useState, FC } from 'react';
+import { motion } from 'framer-motion';
 import classes from './Header.module.scss'
 
 import { applicationStore } from '../../../../store'
-import { HeaderLink } from '../HeaderLinks/HeaderLink'
+import { HeaderLink, LinkType } from '../HeaderLinks/HeaderLink'
 import Button from '../../../../UI/Button/Button'
 import { NavLink } from 'react-router-dom'
 import { HOME_ROUTE } from '../../../../utils/const/routes'
+import classConnection from '../../../../utils/function/classConnection';
 
-export const Header = () => {
+export const Header: FC = () => {
+  const [scrollingDown, setScrollingDown] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+    setScrollingDown(currentScrollY > lastScrollY);
+    setLastScrollY(currentScrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
   return (
     <header className={classes.header}>
-      <div className={classes.header__banner}>
+      <motion.div className={
+        classConnection(
+          classes.header__banner,
+          scrollingDown ? classes.header__banner_hidden : ''
+        )}
+        initial={{ opacity: 1 }}                   
+        animate={{ opacity: scrollingDown ? 0 : 1 }}
+      >
         <h3 className={classes.header__bannerText}>{applicationStore.promoBanner}</h3>
-      </div>
-      <nav className={classes.header__navigation}>
+      </motion.div>
+      <nav className={
+        classConnection(
+          classes.header__navigation,
+          scrollingDown ? classes.header__navigation_upper : ''
+        )}
+      >
         <div className={classes.header__navigationInner}>
-          <NavLink to={HOME_ROUTE} className={classes.header__logo}>
-            Ppilit
-          </NavLink>
+          <HeaderLink link={HOME_ROUTE} title='Ppilit' className={classes.header__logo} />
           <div className={classes.header__navigationLinks}>
             {
               applicationStore.headerLinks.map(link =>
-               <HeaderLink {...link} className={classes.header__link} key={link.title}/>
+                <HeaderLink {...link} className={classes.header__link} key={link.title} type={LinkType.underline}/>
               )
             }
           </div>

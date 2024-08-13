@@ -1,0 +1,58 @@
+@import '../../styles/settings.scss';
+
+.homeMain {
+    padding-top: 130px;
+
+    &__titleBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__title {
+        font-size: 65px;
+        letter-spacing: 6px;
+        font-weight: 600;
+        text-align: center;
+        padding-right: 65px;
+        padding-left: 70px;
+    }
+
+    &__titleDecoration {
+        position: relative;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        background-color: rgba($title-color, .9);
+
+        &::after,
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            background-color: $title-color;
+
+
+        }
+
+        &::after {
+            left: -32px;
+            width: 20px;
+            height: 20px;
+        }
+
+        &::before {
+            opacity: .8;
+            right: -24px;
+            width: 12px;
+            height: 12px;
+
+        }
+
+        &_reverse {
+            transform: scaleX(-1);
+        }
+    }
+}

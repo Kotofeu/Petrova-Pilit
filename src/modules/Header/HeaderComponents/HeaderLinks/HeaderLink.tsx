@@ -4,26 +4,34 @@ import { ILink } from '../../../../store'
 import { motion } from 'framer-motion'
 import classes from './HeaderLinks.module.scss'
 import classConnection from '../../../../utils/function/classConnection'
+export enum LinkType {
+    underline = 'underline',
+    none = 'none'
+
+}
 interface IHeaderLink extends ILink {
     className?: string,
     children?: ReactNode,
     onClick?: React.MouseEventHandler<HTMLAnchorElement>
+    type?: LinkType,
 }
 
 export const HeaderLink: FC<IHeaderLink> = memo((props) => {
+    const {className, children, onClick, type = LinkType.none, title, link} = props
     return (
         <NavLink
             className={
                 ({ isActive }) =>
-                    classConnection(classes.headerLink, props.className, isActive ? classes.headerLink_active : '')
+                    classConnection(classes.headerLink, isActive ? classes.headerLink_active : '', className)
             }
-            to={props.link}
-            onClick={props.onClick}
+            to={link}
+            onClick={onClick}
         >
             {({ isActive }) =>
                 <>
-                    {props.title}
-                    {isActive &&
+                    {title}
+                    {children}
+                    {(isActive && type === LinkType.underline) &&
                         <motion.div
                             className={classes.headerLink__activeLine}
                             layoutId='activeLine'

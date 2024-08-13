@@ -1,10 +1,19 @@
 @import '../../../../styles/settings.scss';
 
 .header {
+    position: relative;
+    z-index: 99;
     &__banner {
-        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
         padding: 10px 20px;
         background-color: $neutral-color;
+        transition: opacity 0.3s ease;
+        &_hidden {
+           opacity: 0;
+        }
     }
 
     &__bannerText {
@@ -15,9 +24,18 @@
     }
 
     &__navigation {
+        position: fixed;
+        transition: top 0.3s ease;
+        top: 38px;
+        left: 0;
+        right: 0;
+        z-index: 999;
         padding: 12px 0px;
         background-color: #FFF;
         border-bottom: 1px solid rgba($neutral-color, .2);
+        &_upper{
+            top: 0;
+        }
     }
 
     &__navigationInner {
@@ -32,10 +50,10 @@
 
     &__logo {
         width: 225px;
-        font-family: 'GrandHotel';
-        font-size: 40px;
-        line-height: 0;
-        color: $title-color;
+        font-family: 'GrandHotel' !important;
+        font-size: 40px !important;
+        line-height: 0 !important;
+        color: $title-color !important;
     }
 
     &__navigationLinks {

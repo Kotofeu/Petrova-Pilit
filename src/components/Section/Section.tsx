@@ -1,12 +1,12 @@
 import { FC, ReactNode } from 'react'
-import classes from './Container.module.scss'
+import classes from './Section.module.scss'
 import classConnection from '../../utils/function/classConnection';
 interface IContainer {
   className?: string;
   children?: ReactNode | ReactNode[];
 }
 
-const Container: FC<IContainer> = (props) => {
+const Section: FC<IContainer> = (props) => {
   return (
     <section className={classConnection(classes.section, props.className)}>
       <div className={classes.container}>
@@ -16,4 +16,4 @@ const Container: FC<IContainer> = (props) => {
   )
 }
 
-export default Container
+export default Section
