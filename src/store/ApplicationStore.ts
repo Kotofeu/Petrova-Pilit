@@ -15,8 +15,10 @@ interface IGeneralData {
     email?: string;
     aboutMe?: string;
     vk?: string;
-    avito?: string;
-    inst?: string;
+    whatsapp?: string;
+    instagram?: string;
+    addressName?: string;
+    addressLink?: string;
 
 }
 export class ApplicationStore {
@@ -26,7 +28,7 @@ export class ApplicationStore {
     private _generalData: IGeneralData = {
         promoBanner: 'Скидка 50% на первый маникюр!',
         headerLinks: [
-            { title: "Главная", link: HOME_ROUTE},
+            { title: "Главная", link: HOME_ROUTE },
             { title: "Обо мне", link: ABOUT_ROUTE },
             { title: "Мои работы", link: WORKS_ROUTE },
             { title: "Контакты", link: CONTACT_ROUTE },
@@ -41,8 +43,10 @@ export class ApplicationStore {
 🗣️ нахожусь в центре города;вода/чай/сладкое предложу в процессе
 🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях(терпеть их не могу)`,
         vk: 'https://vk.com/id209456608',
-        avito: 'https://www.avito.ru/kaliningrad/predlozheniya_uslug/manikyurukrepleniedizayn_2912965690?utm_campaign=native&utm_medium=item_page_android&utm_source=soc_sharing',
-        inst: 'https://www.instagram.com/petrova.pilit?utm_source=qr'
+        whatsapp: 'https://wa.me/+79814621828',
+        instagram: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
+        addressName: 'Калининград Боткина 2А',
+        addressLink: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75'
     }
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
@@ -64,11 +68,17 @@ export class ApplicationStore {
     get vk() {
         return this._generalData.vk
     }
-    get avito() {
-        return this._generalData.avito
+    get whatsapp() {
+        return this._generalData.whatsapp
     }
-    get inst() {
-        return this._generalData.inst
+    get instagram() {
+        return this._generalData.instagram
+    }
+    get addressName() {
+        return this._generalData.addressName
+    }
+    get addressLink() {
+        return this._generalData.addressLink
     }
     get isLoading() {
         return this._isLoading

@@ -5,6 +5,9 @@ const Home = () => {
   return (
     <main>
         <HomeMainSection/>
+        <div style={{backgroundColor: '#241F20', marginTop: '-150px', height: '100vh'}}>
+
+        </div>
     </main>
   )
 }

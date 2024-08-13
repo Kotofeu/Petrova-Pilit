@@ -18,7 +18,7 @@
         transition: opacity .2s ease-in-out;
         border: none;
         background-color: transparent;
-        padding: 0;
+        padding: inherit;
 
     }
 
@@ -95,19 +95,11 @@
 
     }
 
-    &__prevArrowBox {
-
-    }
-
-    &__nextArrowBox {
-
-    }
-
     &__slides {
         display: flex;
         height: 100%;
         width: 100%;
-
+        align-items: center;
     }
 
     &__slide {
@@ -152,7 +144,7 @@
             }
         }
     }
-    
+
 }
 
 @keyframes animate {
