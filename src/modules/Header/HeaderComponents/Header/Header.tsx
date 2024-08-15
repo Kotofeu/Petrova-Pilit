@@ -1,4 +1,4 @@
-import { useEffect, useState, FC } from 'react';
+import { useEffect, useState, FC, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import classes from './Header.module.scss'
 
@@ -11,7 +11,9 @@ import classConnection from '../../../../utils/function/classConnection';
 export const Header: FC = () => {
   const [scrollingDown, setScrollingDown] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-
+  const onLinkClick = useCallback(() => {
+    window.scrollTo(0, 0);
+  }, [])
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
     setScrollingDown(currentScrollY > lastScrollY);
@@ -47,7 +49,7 @@ export const Header: FC = () => {
           <div className={classes.header__navigationLinks}>
             {
               applicationStore.headerLinks.map(link =>
-                <HeaderLink {...link} className={classes.header__link} key={link.title} type={LinkType.underline}/>
+                <HeaderLink {...link} className={classes.header__link} key={link.title} type={LinkType.underline} onClick={onLinkClick}/>
               )
             }
           </div>
