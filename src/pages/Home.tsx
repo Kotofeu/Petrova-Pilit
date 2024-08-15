@@ -1,13 +1,12 @@
 import React from 'react'
-import HomeMainSection from '../modules/HomeMainSection/HomeMainSection'
+import {HomeMainSection} from '../modules/HomeMain'
+import { HomeWorksSection } from '../modules/HomeWorks'
 
 const Home = () => {
   return (
     <main>
         <HomeMainSection/>
-        <div style={{backgroundColor: '#241F20', marginTop: '-150px', height: '100vh'}}>
-
-        </div>
+        <HomeWorksSection/>
     </main>
   )
 }

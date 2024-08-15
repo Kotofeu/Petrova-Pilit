@@ -1,0 +1,23 @@
+import Section from '../../../../components/Section/Section'
+import classes from './HomeWorksSection.module.scss'
+import { HomeWorksSlider } from '../HomeWorksSlider/HomeWorksSlider'
+
+import Background from '../../../../assets/images/hand.png';
+import { NavLink } from 'react-router-dom'
+import { WORKS_ROUTE } from '../../../../utils/const/routes'
+export const HomeWorksSection = () => {
+    return (
+        <Section className={classes.homeWorks}>
+            <img className={classes.homeWorks_background} src={Background} />
+            <div className={classes.homeWorks__titleBox}>
+                <h2 className={classes.homeWorks__title}>Последние работы</h2>
+                <h4 className={classes.homeWorks__subtitle}>Приходите и ваши ручки будут здесь</h4>
+                <NavLink to={WORKS_ROUTE} className={classes.homeWorks__button}>
+                    <span className={classes.homeWorks__buttonDecoration}>Смотреть больше работ</span>
+                </NavLink>
+            </div>
+            <HomeWorksSlider />
+
+        </Section>
+    )
+}

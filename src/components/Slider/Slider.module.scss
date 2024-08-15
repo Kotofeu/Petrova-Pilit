@@ -118,10 +118,10 @@
 
     &__pageButton {
         position: relative;
-        margin: 0 .5px;
+        margin: 0 3px;
         padding: 0;
-        width: 16px;
-        height: 16px;
+        width: 22px;
+        height: 22px;
         border: none;
         background-color: transparent;
 
@@ -133,14 +133,14 @@
             bottom: 1px;
             left: 1px;
             border-radius: 50%;
-            border: 2px solid $title-color;
+            border: 2px solid $active-color;
             background-color: transparent;
             transition: background-color .2s ease-in-out;
         }
 
         &_active {
             &::after {
-                background-color: $title-color;
+                background-color: $active-color;
             }
         }
     }

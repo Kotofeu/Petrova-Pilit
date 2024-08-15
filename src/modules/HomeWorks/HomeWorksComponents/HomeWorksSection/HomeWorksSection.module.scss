@@ -1,0 +1,118 @@
+@import '../../../../styles/settings.scss';
+
+.homeWorks {
+    margin-top: -130px;
+    padding-top: 220px;
+    padding-bottom: 80px;
+    min-height: auto;
+    background-color: $neutral-color;
+    position: relative;
+    &_background{
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        opacity: .2;
+        z-index: 0;
+    }
+    &__titleBox {
+        padding-left: 35px;
+    }
+
+    &__title {
+        font-size: 70px;
+        font-weight: 500;
+        color: $primary-color;
+    }
+
+    &__subtitle {
+        font-size: 24px;
+        font-weight: 400;
+        color: $primary-color;
+    }
+
+    &__button {
+        margin-top: 20px;
+        margin-bottom: 8px;
+        padding: 0;
+        border: none;
+        position: relative;
+        display: inline-block;
+        &:hover {
+            &::after {
+                background-color: $active-color;
+            }
+        }
+
+        &::after {
+            content: '';
+            pointer-events: none;
+            position: absolute;
+            transition: all .2s ease-in-out;
+            bottom: 3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: $primary-color;
+        }
+    }
+
+    &__buttonDecoration {
+        color: $primary-color;
+        font-size: 24px;
+        font-weight: 400;
+        position: relative;
+        font-family: "Geologica";
+        padding-right: 25px;
+        padding-bottom: 8px;
+        transition: all .2s ease-in-out;
+        display: block;
+
+        &:hover {
+            color: $active-color;
+            padding-right: 30px;
+
+            &::after {
+                background-color: $active-color;
+            }
+
+            &::before {
+                border-right: 2px solid $active-color;
+                border-top: 2px solid $active-color;
+            }
+        }
+
+        &::after,
+        &::before {
+            content: '';
+            position: absolute;
+            transition: all .2s ease-in-out;
+
+        }
+
+        &::after {
+            right: 0;
+            top: 42%;
+            transform: translate(4px, 1px);
+            width: 18px;
+            height: 2px;
+            background-color: $primary-color;
+
+        }
+
+        &::before {
+            right: 0;
+            top: 42%;
+            transform: rotate(45deg) translateY(-50%);
+            width: 13px;
+            height: 13px;
+            border-right: 2px solid $primary-color;
+            border-top: 2px solid $primary-color;
+        }
+    }
+}

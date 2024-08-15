@@ -5,7 +5,6 @@ import classes from './Header.module.scss'
 import { applicationStore } from '../../../../store'
 import { HeaderLink, LinkType } from '../HeaderLinks/HeaderLink'
 import Button from '../../../../UI/Button/Button'
-import { NavLink } from 'react-router-dom'
 import { HOME_ROUTE } from '../../../../utils/const/routes'
 import classConnection from '../../../../utils/function/classConnection';
 

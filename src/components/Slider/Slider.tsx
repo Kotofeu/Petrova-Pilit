@@ -12,6 +12,7 @@ export interface IBaseSlide {
 interface ISlider<T extends IBaseSlide> {
     name?: string;
     className?: string;
+    slideClassName?: string;
     items: T[];
     renderItem: (item: T, index: number) => ReactNode;
     addArrows?: boolean;
@@ -30,6 +31,7 @@ interface ISlider<T extends IBaseSlide> {
 export const Slider = <T extends IBaseSlide>({
     name,
     className,
+    slideClassName,
     items = [],
     renderItem,
     addArrows = false,
@@ -138,7 +140,7 @@ export const Slider = <T extends IBaseSlide>({
                 }}
             >
                 {items.map((item, index) => (
-                    <div className={classes.slider__slide} key={item.id} style={{ minWidth: `${100 / slidesToShow}%` }} aria-disabled>
+                    <div className={classConnection(classes.slider__slide, slideClassName)} key={item.id} style={{ minWidth: `${100 / slidesToShow}%` }} aria-disabled>
                         {renderItem(item, index)}
                     </div>
                 ))}

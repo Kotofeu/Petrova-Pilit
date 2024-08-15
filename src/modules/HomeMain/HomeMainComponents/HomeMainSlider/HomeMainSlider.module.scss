@@ -1,0 +1,20 @@
+.homeMainSlider {
+    width: 80vw;
+    max-width: 1440px;
+    min-width: 110px;
+    &__slide {
+        height: 80vh;
+        height: 80dvh;
+        width: 100%;
+        max-height: 850px;
+        min-height: 650px;
+        display: flex;
+        justify-content: center;
+    }
+    &__image {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        pointer-events: none;
+    }
+}

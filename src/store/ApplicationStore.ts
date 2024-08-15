@@ -3,22 +3,23 @@ import { makeAutoObservable } from 'mobx'
 import { resetGlobalState } from 'mobx/dist/internal';
 import { ABOUT_ROUTE, CONTACT_ROUTE, HOME_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
 
+import Instagram from '../assets/icons/social/instagram.svg'
+import Whatsapp from '../assets/icons/social/whatsapp.svg'
+import Map from '../assets/icons/social/map.svg'
 
 export interface ILink {
     title: string;
     link: string;
 }
+export interface IContactLink extends ILink {
+    imageSrc?: string;
+}
 interface IGeneralData {
     promoBanner?: string;
     headerLinks: ILink[];
-    phone?: string;
-    email?: string;
-    aboutMe?: string;
-    vk?: string;
-    whatsapp?: string;
-    instagram?: string;
-    addressName?: string;
-    addressLink?: string;
+    aboutMe: string;
+    contactLinks: IContactLink[];
+
 
 }
 export class ApplicationStore {
@@ -33,8 +34,38 @@ export class ApplicationStore {
             { title: "Мои работы", link: WORKS_ROUTE },
             { title: "Контакты", link: CONTACT_ROUTE },
         ],
-        phone: '+7 (981) 462 18-28',
-        email: 'cras.petrov@yandex.ru',
+        contactLinks: [
+            /*  
+            {
+                  title: 'Телефон',
+                  link: '+7 (981) 462 18-28',
+              },
+              */
+            {
+                title: 'WhatsApp',
+                link: 'https://wa.me/+79814621828',
+                imageSrc: Whatsapp
+            },
+            {
+                title: 'Instagram',
+                link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
+                imageSrc: Instagram
+            },
+            {
+                title: 'Калининград Боткина 2А',
+                link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
+                imageSrc: Map
+            },
+            /*
+            {
+                title: 'Почта',
+                link: '',
+                imageSrc: 
+            },
+            
+            */
+
+        ],
         aboutMe: `Здравствуйте дaмы и гocпода🤗
 Сертифициpовaнный и отвeтствeнный мacтер Hacтacья пpиглашает вac нa маникюp 👐
 Прeлeсть маникюра cо мной:
@@ -42,11 +73,6 @@ export class ApplicationStore {
 💪вcе включено в cтoимоcть по комплексу:cнятиe,рeмoнт, пoстaнoвкa формы, укрепление+выравнивание, дизайн(френч,слайдеры,втирка,стемпинг, блестки)
 🗣️ нахожусь в центре города;вода/чай/сладкое предложу в процессе
 🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях(терпеть их не могу)`,
-        vk: 'https://vk.com/id209456608',
-        whatsapp: 'https://wa.me/+79814621828',
-        instagram: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
-        addressName: 'Калининград Боткина 2А',
-        addressLink: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75'
     }
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
@@ -56,14 +82,13 @@ export class ApplicationStore {
     get headerLinks() {
         return this._generalData.headerLinks
     }
-    get phone() {
-        return this._generalData.phone
+    get contactLinks() {
+        return this._generalData.contactLinks
     }
-    get email() {
+    /*
+
+        get email() {
         return this._generalData.email
-    }
-    get aboutMe() {
-        return this._generalData.aboutMe
     }
     get vk() {
         return this._generalData.vk
@@ -80,6 +105,13 @@ export class ApplicationStore {
     get addressLink() {
         return this._generalData.addressLink
     }
+
+     */
+
+    get aboutMe() {
+        return this._generalData.aboutMe
+    }
+
     get isLoading() {
         return this._isLoading
     }
