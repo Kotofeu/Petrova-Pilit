@@ -1,18 +1,31 @@
-import { memo, FC } from 'react'
+import { memo, FC, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import classConnection from '../../../../utils/function/classConnection';
-import classes from './HomeWorkSlide.module.scss'
 import StarRating from '../../../../UI/StarRating/StarRating';
+import { WORKS_ROUTE } from '../../../../utils/const/routes';
+
+import { HomeWorkSlideImage } from '../HomeWorkSlideImage/HomeWorkSlideImage';
+
+import classes from './HomeWorkSlide.module.scss'
+
 
 interface IHomeWorkSlide {
     className?: string;
+    id: number;
     afterImage?: string;
     beforeImage?: string;
     title?: string;
     rating?: number;
 }
 export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
-    const { className, afterImage, beforeImage, title, rating } = props
+    const { className, id, afterImage, beforeImage, title, rating } = props
+    const router = useNavigate()
 
+    const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault()
+        router(`${WORKS_ROUTE}/${id}`)
+    }, [id])
     if (!afterImage && !beforeImage) return null
     const isSlice: boolean = !!afterImage && !!beforeImage
     return (
@@ -21,27 +34,32 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                 {
                     isSlice ?
                         <>
-                            <div className={classConnection(classes.homeWorkSlide__imageBox, classes.homeWorkSlide__imageBox_before)}>
-                                <img
-                                    className={classes.homeWorkSlide__image}
-                                    src={beforeImage}
-                                    alt={`${title} до работы`}
-                                />
-                            </div>
 
-                            <div className={classConnection(classes.homeWorkSlide__imageBox, classes.homeWorkSlide__imageBox_after)}>
-                                <img
-                                    className={classes.homeWorkSlide__image}
-                                    src={afterImage}
-                                    alt={`${title} после работы`}
-                                />
-                            </div>
+                            <HomeWorkSlideImage
+                                className={classes.homeWorkSlide__image}
+                                type='before'
+                                imageSrc={beforeImage}
+                                alt={`${title} до работы`}
+                            />
+                            <HomeWorkSlideImage
+                                className={classes.homeWorkSlide__image}
+                                type='after'
+                                imageSrc={afterImage}
+                                alt={`${title} после работы`}
+                            />
                         </>
                         :
-                        <img className={classes.homeWorkSlide__image} src={afterImage || beforeImage} alt={title} />
+                        <HomeWorkSlideImage
+                            className={classes.homeWorkSlide__image}
+                            imageSrc={afterImage || beforeImage}
+                            alt={title}
+                        />
                 }
-            </div>
-            <div className={classes.homeWorkSlide__content}>
+            </div >
+            <div
+                className={classes.homeWorkSlide__content}
+                onClick={onSlideClick}
+            >
                 <h6 className={classes.homeWorkSlide__title}>
                     {title}
                 </h6>
@@ -53,6 +71,6 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                 }
 
             </div>
-        </div>
+        </div >
     )
 })

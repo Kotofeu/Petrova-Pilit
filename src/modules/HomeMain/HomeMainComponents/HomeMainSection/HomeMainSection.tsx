@@ -1,12 +1,14 @@
+import { useRef, memo } from "react"
+
 import Section from "../../../../components/Section/Section"
-import { applicationStore } from "../../../../store"
+import { HomeMainLinksList } from "../HomeMainLinksList/HomeMainLinksList"
 import classConnection from "../../../../utils/function/classConnection"
-import Arrow from '../../../../assets/icons/Arrow.svg'
-import classes from './HomeMainSection.module.scss'
-import ContactLink from "../../../../UI/ContactLink/ContactLink"
 import { HomeMainSlider } from "../HomeMainSlider/HomeMainSlider"
-import { useRef } from "react"
-export const HomeMainSection = () => {
+import Arrow from '../../../../assets/icons/Arrow.svg'
+
+import classes from './HomeMainSection.module.scss'
+
+export const HomeMainSection = memo(() => {
     const homeMainBottom = useRef<HTMLDivElement>(null)
     const lookMoreClick = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault()
@@ -27,23 +29,7 @@ export const HomeMainSection = () => {
                 <span className={classes.homeMain__titleDecoration} />
             </div>
             <div className={classes.homeMain__content}>
-                <nav className={classes.homeMain__links}>
-                    {
-                        applicationStore.contactLinks.map(link => {
-                            return (
-                                <ContactLink
-                                    className={classes.homeMain__contactLink}
-                                    key={link.title}
-                                    href={link.link}
-                                    title={link.title}
-                                    linkType="socialLink"
-                                    imageSrc={link.imageSrc}
-                                />
-                            )
-                        })
-                    }
-                    <h6 className={classes.homeMain__contactDecoration}>Связь со мной</h6>
-                </nav>
+                <HomeMainLinksList className={classes.homeMain__links}/>
                 <HomeMainSlider />
                 <div className={classes.homeMain__lookMore}>
                     <button
@@ -67,4 +53,4 @@ export const HomeMainSection = () => {
             <div ref={homeMainBottom}/>
         </Section>
     )
-}
+})

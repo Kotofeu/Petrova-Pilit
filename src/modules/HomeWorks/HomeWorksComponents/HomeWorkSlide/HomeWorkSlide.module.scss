@@ -1,7 +1,6 @@
 @import '../../../../styles/settings.scss';
 
 .homeWorkSlide {
-    border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
 
@@ -12,95 +11,19 @@
 
     }
 
-    &__imageBox {
+
+    &__image{
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-
-        &_after,
-        &_before {
-            display: block;
-            transition: clip-path .15s ease-in-out;
-            z-index: 1;
-
-            &::after {
-                content: '';
-                position: absolute;
-                display: block;
-                z-index: 5;
-                font-size: 30px;
-                font-weight: 700;
-                color: $title-color
-            }
-        }
-
-        & img {
-            filter: blur(1px) grayscale(.4);
-            transition: filter .1s ease-in-out;
-        }
-
-        &_before {
-            clip-path: polygon(100% 0, 100% 0, 0 100%, 0 100%, 0 0);
-
-            &::after {
-                content: "ДО";
-                top: 5px;
-                left: 10px;
-            }
-
-            &:hover {
-                clip-path: polygon(100% 0, 100% 100%, 100% 100%, 0 100%, 0 0);
-
-                & img {
-                    filter: blur(0px) grayscale(0);
-
-                }
-
-                &~.homeWorkSlide__imageBox_after {
-                    clip-path: polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%);
-                }
-
-            }
-
-        }
-
-        &_after {
-            clip-path: polygon(100% 0, 100% 0, 100% 100%, 0 100%, 0 100%);
-            z-index: 2;
-
-            &::after {
-                content: "ПОСЛЕ";
-                bottom: 5px;
-                right: 10px;
-            }
-
-            &:hover {
-                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0);
-
-                & img {
-                    filter: blur(0px) grayscale(0);
-
-                }
-
-            }
-
-        }
-
-    }
-
-    &__image {
-        object-fit: cover;
         height: 100%;
         width: 100%;
-        pointer-events: none;
-
+        cursor: grab;
     }
-
     &__content {
-        padding: 10px;
-        padding-bottom: 15px;
+        padding: 15px 10px;
         background-color: $primary-color;
         display: flex;
         justify-content: space-between;
@@ -120,7 +43,7 @@
 
         &::after {
             right: 20px;
-            top: 42%;
+            top: 47%;
             transform: translate(4px, 1px);
             width: 18px;
             height: 2px;
@@ -130,28 +53,29 @@
 
         &::before {
             right: 20px;
-            top: 42%;
+            top: 47%;
             transform: rotate(45deg) translateY(-50%);
             width: 13px;
             height: 13px;
             border-right: 2px solid $neutral-color;
             border-top: 2px solid $neutral-color;
         }
+
         &:hover {
 
             &::after {
                 background-color: $active-color;
                 right: 18px;
             }
-    
+
             &::before {
                 border-right: 2px solid $active-color;
                 border-top: 2px solid $active-color;
                 right: 18px;
-    
+
             }
         }
-    
+
     }
 
     &__title {
@@ -159,7 +83,7 @@
         white-space: nowrap;
         overflow: hidden;
         font-size: 18px;
-        font-weight: 400;
+        font-weight: 600;
         line-height: 20px;
         flex-grow: 1;
 

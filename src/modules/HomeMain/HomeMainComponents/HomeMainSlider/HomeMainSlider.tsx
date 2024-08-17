@@ -1,34 +1,19 @@
-import {memo} from 'react'
+import { observer } from 'mobx-react-lite'
 import { Slider } from '../../../../components/Slider'
+import { applicationStore } from '../../../../store'
 
-import sliderImage1 from '../../../../assets/images/12_11zon.jpg'
-import sliderImage2 from '../../../../assets/images/background/1.png'
-import sliderImage3 from '../../../../assets/images/background/2.png'
+
 
 import classes from './HomeMainSlider.module.scss'
-const slides = [
-    {
-        id: 1,
-        image: sliderImage1,
-    },
-    {
-        id: 2,
-        image: sliderImage2,
-    },
-    {
-        id: 3,
-        image: sliderImage3,
-    },
-]
-export const HomeMainSlider = memo(() => {
+export const HomeMainSlider = observer(() => {
     return (
         <Slider
             className={classes.homeMainSlider}
-            items={slides}
+            items={applicationStore.homeSlider}
             renderItem={
                 (item) =>
                     <div className={classes.homeMainSlider__slide}>
-                        <img className={classes.homeMainSlider__image} src={item.image} alt={item.image}/>
+                        <img className={classes.homeMainSlider__image} src={item.imageSrc} alt={item.imageSrc}/>
                     </div>
             }
             addArrows

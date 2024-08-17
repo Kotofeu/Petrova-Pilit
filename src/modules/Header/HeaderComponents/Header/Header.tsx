@@ -1,6 +1,6 @@
 import { useEffect, useState, FC, useCallback } from 'react';
+import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
-import classes from './Header.module.scss'
 
 import { applicationStore } from '../../../../store'
 import { HeaderLink, LinkType } from '../HeaderLinks/HeaderLink'
@@ -8,7 +8,9 @@ import Button from '../../../../UI/Button/Button'
 import { HOME_ROUTE } from '../../../../utils/const/routes'
 import classConnection from '../../../../utils/function/classConnection';
 
-export const Header: FC = () => {
+import classes from './Header.module.scss'
+
+export const Header: FC = observer(() => {
   const [scrollingDown, setScrollingDown] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const onLinkClick = useCallback(() => {
@@ -60,4 +62,4 @@ export const Header: FC = () => {
       </nav>
     </header>
   )
-}
+})

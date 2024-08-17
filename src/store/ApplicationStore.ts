@@ -1,11 +1,14 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
-import { resetGlobalState } from 'mobx/dist/internal';
 import { ABOUT_ROUTE, CONTACT_ROUTE, HOME_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
 
 import Instagram from '../assets/icons/social/instagram.svg'
 import Whatsapp from '../assets/icons/social/whatsapp.svg'
 import Map from '../assets/icons/social/map.svg'
+
+import sliderImage1 from '../assets/images/12_11zon.jpg'
+import sliderImage2 from '../assets/images/background/1.png'
+import sliderImage3 from '../assets/images/background/2.png'
 
 export interface ILink {
     title: string;
@@ -14,13 +17,17 @@ export interface ILink {
 export interface IContactLink extends ILink {
     imageSrc?: string;
 }
+interface IHomeSlider {
+    id: number;
+    imageSrc: string;
+
+}
 interface IGeneralData {
     promoBanner?: string;
     headerLinks: ILink[];
     aboutMe: string;
     contactLinks: IContactLink[];
-
-
+    homeSlider: IHomeSlider[]
 }
 export class ApplicationStore {
     constructor() {
@@ -73,6 +80,20 @@ export class ApplicationStore {
 💪вcе включено в cтoимоcть по комплексу:cнятиe,рeмoнт, пoстaнoвкa формы, укрепление+выравнивание, дизайн(френч,слайдеры,втирка,стемпинг, блестки)
 🗣️ нахожусь в центре города;вода/чай/сладкое предложу в процессе
 🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях(терпеть их не могу)`,
+        homeSlider: [
+            {
+                id: 1,
+                imageSrc: sliderImage1,
+            },
+            {
+                id: 2,
+                imageSrc: sliderImage2,
+            },
+            {
+                id: 3,
+                imageSrc: sliderImage3,
+            },
+        ]
     }
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
@@ -84,6 +105,9 @@ export class ApplicationStore {
     }
     get contactLinks() {
         return this._generalData.contactLinks
+    }
+    get homeSlider() {
+        return this._generalData.homeSlider
     }
     /*
 

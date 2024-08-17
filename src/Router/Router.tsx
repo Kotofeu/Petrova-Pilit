@@ -14,8 +14,11 @@ export const Router = () => {
         <Route path={HOME_ROUTE} element={<Layout />}>
           <Route index element={<Home />} />
           <Route path={ABOUT_ROUTE} element={<div style={{ height: '200vh' }}></div>} />
-          <Route path={WORKS_ROUTE} element={<div style={{ height: '200vh' }}></div>} />
-          <Route path={CONTACT_ROUTE} element={<div style={{ height: '100vh' }}></div>} />
+          <Route path={WORKS_ROUTE}>
+            <Route index  element={<div style={{ height: '100vh' }}>DFJKDSAOFLJKDS</div>} />
+            <Route path=':id' element={<div style={{ height: '100vh' }}>DFJKDSAOFLJKDS</div>} />
+          </Route>
+          <Route path={CONTACT_ROUTE}  element={<div style={{ height: '100vh' }}></div>}/>
           <Route path='*' element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

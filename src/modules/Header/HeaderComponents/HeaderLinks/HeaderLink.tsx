@@ -1,9 +1,11 @@
 import { FC, memo, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ILink } from '../../../../store'
 import { motion } from 'framer-motion'
-import classes from './HeaderLinks.module.scss'
 import classConnection from '../../../../utils/function/classConnection'
+
+import { ILink } from '../../../../store'
+import classes from './HeaderLinks.module.scss'
+
 export enum LinkType {
     underline = 'underline',
     none = 'none'
@@ -26,6 +28,7 @@ export const HeaderLink: FC<IHeaderLink> = memo((props) => {
             }
             to={link}
             onClick={onClick}
+            end
         >
             {({ isActive }) =>
                 <>

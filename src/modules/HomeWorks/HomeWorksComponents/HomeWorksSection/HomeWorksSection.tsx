@@ -1,10 +1,13 @@
+import { NavLink } from 'react-router-dom'
+
 import Section from '../../../../components/Section/Section'
-import classes from './HomeWorksSection.module.scss'
 import { HomeWorksSlider } from '../HomeWorksSlider/HomeWorksSlider'
 
-import Background from '../../../../assets/images/hand.png';
-import { NavLink } from 'react-router-dom'
 import { WORKS_ROUTE } from '../../../../utils/const/routes'
+import Background from '../../../../assets/images/hand.png';
+
+import classes from './HomeWorksSection.module.scss'
+
 export const HomeWorksSection = () => {
     return (
         <Section className={classes.homeWorks}>
