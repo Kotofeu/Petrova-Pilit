@@ -22,6 +22,8 @@
     }
     &__titleBox {
         padding-left: 35px;
+        position: relative;
+        z-index: 1;
     }
 
     &__title {

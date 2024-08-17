@@ -29,7 +29,7 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
     if (!afterImage && !beforeImage) return null
     const isSlice: boolean = !!afterImage && !!beforeImage
     return (
-        <div className={classConnection(classes.homeWorkSlide, className)}>
+        <article className={classConnection(classes.homeWorkSlide, className)}>
             <div className={classes.homeWorkSlide__preview}>
                 {
                     isSlice ?
@@ -71,6 +71,6 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                 }
 
             </div>
-        </div >
+        </article >
     )
 })

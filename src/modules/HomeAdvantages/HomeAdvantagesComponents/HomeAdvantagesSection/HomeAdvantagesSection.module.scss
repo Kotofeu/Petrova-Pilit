@@ -1,0 +1,48 @@
+@import '../../../../styles/settings.scss';
+
+.advantagesSection {
+    padding-bottom: 50px;
+    min-height: auto;
+    position: relative;
+    color:  $neutral-color;
+
+    &__background {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        padding: 30px 0px;
+        object-fit: contain;
+        opacity: .1;
+        z-index: 0;
+    }
+    &__inner{
+        position: relative;
+        z-index: 1;
+    }
+    &__title {
+        font-size: 65px;
+        font-weight: 600;
+        color:  $neutral-color;
+        text-align: center;
+    }
+    &__slider, &__slide{
+
+    }
+    &__slider {
+        margin-top: 50px;
+        padding-bottom: 30px;
+    }
+
+    &__slide {
+        align-self: flex-start;
+    }
+    &__card{
+        padding: 0 30px;
+
+    }
+}

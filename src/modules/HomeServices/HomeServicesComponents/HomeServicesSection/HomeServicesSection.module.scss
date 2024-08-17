@@ -1,0 +1,32 @@
+@import '../../../../styles/settings.scss';
+
+.homeServices {
+    padding: 70px 0 80px;
+    &__title {
+        font-size: 70px;
+        font-weight: 500;
+        color: $title-color;
+        text-align: center;
+    }
+    &__inner {
+        padding-top: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__avatar{
+        height: 450px;
+        min-width: 520px;
+        margin-right: 80px;
+
+    }
+    &__accordion{
+        width: 100%;
+        max-width: 800px;
+    }
+    &__title{
+        padding: 5px 0;
+        margin-top: 5px;
+        padding-right: 50px;
+    }
+}

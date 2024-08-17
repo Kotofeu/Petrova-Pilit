@@ -10,6 +10,13 @@ import sliderImage1 from '../assets/images/12_11zon.jpg'
 import sliderImage2 from '../assets/images/background/1.png'
 import sliderImage3 from '../assets/images/background/2.png'
 
+import fast from '../assets/icons/fast.svg'
+import quality from '../assets/icons/quality.svg'
+import comfortable from '../assets/icons/comfortable.svg'
+import beautifully from '../assets/icons/beautifully.svg'
+
+
+
 export interface ILink {
     title: string;
     link: string;
@@ -22,12 +29,19 @@ interface IHomeSlider {
     imageSrc: string;
 
 }
+interface IAdvantages {
+    id: number;
+    title: string;
+    imageSrc: string;
+    description: string;
+}
 interface IGeneralData {
     promoBanner?: string;
     headerLinks: ILink[];
     aboutMe: string;
     contactLinks: IContactLink[];
-    homeSlider: IHomeSlider[]
+    homeSlider: IHomeSlider[];
+    advantages: IAdvantages[];
 }
 export class ApplicationStore {
     constructor() {
@@ -93,6 +107,32 @@ export class ApplicationStore {
                 id: 3,
                 imageSrc: sliderImage3,
             },
+        ],
+        advantages: [
+            {
+                id: 1,
+                imageSrc: fast,
+                title: 'Быстро',
+                description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!'
+            },
+            {
+                id: 2,
+                imageSrc: quality,
+                title: 'Качественно',
+                description: 'Качество на первом месте — ваши ногти заслуживают лучшего!'
+            },
+            {
+                id: 3,
+                imageSrc: beautifully,
+                title: 'Красиво',
+                description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!'
+            },
+            {
+                id: 4,
+                imageSrc: comfortable,
+                title: 'Комфортно',
+                description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!'
+            }
         ]
     }
     private _isLoading: boolean = true;
@@ -108,6 +148,9 @@ export class ApplicationStore {
     }
     get homeSlider() {
         return this._generalData.homeSlider
+    }
+    get advantages() {
+        return this._generalData.advantages
     }
     /*
 
