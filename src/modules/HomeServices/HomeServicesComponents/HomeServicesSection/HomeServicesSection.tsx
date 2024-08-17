@@ -23,7 +23,7 @@ export const HomeServicesSection = observer(() => {
                     setSelectedItem={setIsServiceOpen}
                     renderTitle={(service, index) =>
                         <HomeServicesTitle
-                            className={classes.homeServices__title}
+                            className={classes.homeServices__servicesTitle}
                             title = {service.title}
                             time={service.time}
                             price={service.price}
