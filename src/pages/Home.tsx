@@ -1,15 +1,15 @@
 import { HomeMainSection } from '../modules/HomeMain'
 import { HomeWorksSection } from '../modules/HomeWorks'
-import { HomeServicesSection } from '../modules/HomeServices'
-import { HomeAdvantagesSection } from '../modules/HomeAdvantages'
+import { ServicesSection } from '../modules/Services'
+import { AdvantagesSection } from '../modules/Advantages'
 
 const Home = () => {
   return (
     <main>
       <HomeMainSection />
       <HomeWorksSection />
-      <HomeServicesSection />
-      <HomeAdvantagesSection />
+      <ServicesSection />
+      <AdvantagesSection />
     </main>
   )
 }

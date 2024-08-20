@@ -1,1 +1,0 @@
-export {HomeAdvantagesSection} from './HomeAdvantagesComponents/HomeAdvantagesSection/HomeAdvantagesSection'

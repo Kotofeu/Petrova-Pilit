@@ -1,11 +1,11 @@
-import classes from './HomeAdvantagesSection.module.scss'
+import classes from './AdvantagesSection.module.scss'
 import { Slider } from '../../../../components/Slider'
 import { observer } from 'mobx-react-lite'
 import { applicationStore } from '../../../../store'
-import { HomeAdvantagesCard } from '../HomeAdvantagesCard/HomeAdvantagesCard'
+import { AdvantagesCard } from '../AdvantagesCard/AdvantagesCard'
 import Section from '../../../../components/Section/Section'
 
-export const HomeAdvantagesSection = observer(() => {
+export const AdvantagesSection = observer(() => {
     return (
         <Section
             className={classes.advantagesSection}
@@ -24,7 +24,7 @@ export const HomeAdvantagesSection = observer(() => {
                     slidesToScroll={1}
                     slideClassName={classes.advantagesSection__slide}
                     renderItem={(advantage) =>
-                        <HomeAdvantagesCard
+                        <AdvantagesCard
                             className={classes.advantagesSection__card}
                             key={advantage.id}
                             title={advantage.title}

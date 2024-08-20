@@ -1,12 +1,12 @@
 import { FC, memo } from 'react'
-import classes from './HomeServicesDescription.module.scss'
+import classes from './ServicesDescription.module.scss'
 import classConnection from '../../../../utils/function/classConnection';
 
-interface IHomeServicesDescription {
+interface IServicesDescription {
   className?: string;
   description?: string;
 }
-export const HomeServicesDescription: FC<IHomeServicesDescription> = memo(({
+export const ServicesDescription: FC<IServicesDescription> = memo(({
   className,
   description,
 }) => {

@@ -1,14 +1,14 @@
 import { FC, memo } from 'react'
 
-import classes from './HomeAdvantagesCard.module.scss'
+import classes from './AdvantagesCard.module.scss'
 import classConnection from '../../../../utils/function/classConnection';
-interface IHomeAdvantagesCard {
+interface IAdvantagesCard {
     className?: string;
     title: string;
     description: string;
     imageSrc: string;
 }
-export const HomeAdvantagesCard: FC<IHomeAdvantagesCard> = memo(({
+export const AdvantagesCard: FC<IAdvantagesCard> = memo(({
     className,
     title,
     description,

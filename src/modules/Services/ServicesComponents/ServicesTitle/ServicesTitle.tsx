@@ -1,14 +1,14 @@
 import { FC, memo, useMemo } from 'react'
 import classConnection from '../../../../utils/function/classConnection';
 import Clock from '../../../../assets/icons/clock.svg'
-import classes from './HomeServicesTitle.module.scss'
-interface IHomeServicesTitle {
+import classes from './ServicesTitle.module.scss'
+interface IServicesTitle {
     className?: string;
     title: string;
     price: number;
     time: number;
 }
-export const HomeServicesTitle: FC<IHomeServicesTitle> = memo(({
+export const ServicesTitle: FC<IServicesTitle> = memo(({
     className,
     title,
     price,

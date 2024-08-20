@@ -4,26 +4,26 @@ import Avatar from '../../../../components/Avatar/Avatar'
 import Accordion from '../../../../components/Accordion/Accordion'
 import { observer } from 'mobx-react-lite'
 import { servicesStore } from '../../../../store'
-import { HomeServicesTitle } from '../HomeServicesTitle/HomeServicesTitle'
-import classes from './HomeServicesSection.module.scss'
+import { ServicesTitle } from '../ServicesTitle/ServicesTitle'
+import classes from './ServicesSection.module.scss'
 
-import { HomeServicesDescription } from '../HomeServicesDescription/HomeServicesDescription'
-export const HomeServicesSection = observer(() => {
+import { ServicesDescription } from '../ServicesDescription/ServicesDescription'
+export const ServicesSection = observer(() => {
     const [isServiceOpen, setIsServiceOpen] = useState<number | null>(null)
     return (
-        <Section className={classes.homeServices}>
-            <h2 className={classes.homeServices__title}>Цены на услуги</h2>
-            <div className={classes.homeServices__inner}>
-                <Avatar className={classes.homeServices__avatar} />
+        <Section className={classes.services}>
+            <h2 className={classes.services__title}>Цены на услуги</h2>
+            <div className={classes.services__inner}>
+                <Avatar className={classes.services__avatar} />
                 <Accordion
-                    className={classes.homeServices__accordion}
+                    className={classes.services__accordion}
 
                     items={servicesStore.services}
                     selectedItem={isServiceOpen}
                     setSelectedItem={setIsServiceOpen}
                     renderTitle={(service, index) =>
-                        <HomeServicesTitle
-                            className={classes.homeServices__servicesTitle}
+                        <ServicesTitle
+                            className={classes.services__servicesTitle}
                             title = {service.title}
                             time={service.time}
                             price={service.price}
@@ -33,8 +33,8 @@ export const HomeServicesSection = observer(() => {
                     renderDescription={(service, index) => {
                         if (!service.description) return null
                         return (
-                            <HomeServicesDescription
-                                className={classes.homeServices__description}
+                            <ServicesDescription
+                                className={classes.services__description}
                                 description={service.description}
                             />
                         )
