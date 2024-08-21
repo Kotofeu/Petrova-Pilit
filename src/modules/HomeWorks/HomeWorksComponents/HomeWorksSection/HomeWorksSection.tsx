@@ -10,8 +10,7 @@ import classes from './HomeWorksSection.module.scss'
 
 export const HomeWorksSection = () => {
     return (
-        <Section className={classes.homeWorks}>
-            <img className={classes.homeWorks_background} src={Background} alt='Задний фон ладони' />
+        <Section className={classes.homeWorks} backgroundImage={Background}>
             <div className={classes.homeWorks__titleBox}>
                 <h2 className={classes.homeWorks__title}>Последние работы</h2>
                 <h4 className={classes.homeWorks__subtitle}>Приходите и ваши ручки будут здесь</h4>
@@ -20,7 +19,6 @@ export const HomeWorksSection = () => {
                 </NavLink>
             </div>
             <HomeWorksSlider />
-
         </Section>
     )
 }

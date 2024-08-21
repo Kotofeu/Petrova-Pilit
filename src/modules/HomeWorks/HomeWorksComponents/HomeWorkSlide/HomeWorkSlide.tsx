@@ -2,24 +2,21 @@ import { memo, FC, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import classConnection from '../../../../utils/function/classConnection';
-import StarRating from '../../../../UI/StarRating/StarRating';
 import { WORKS_ROUTE } from '../../../../utils/const/routes';
 
 import { HomeWorkSlideImage } from '../HomeWorkSlideImage/HomeWorkSlideImage';
 
 import classes from './HomeWorkSlide.module.scss'
+import { IWorks } from '../../../../store';
 
 
 interface IHomeWorkSlide {
     className?: string;
-    id: number;
-    afterImage?: string;
-    beforeImage?: string;
-    title?: string;
-    rating?: number;
+    work: IWorks;
 }
 export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
-    const { className, id, afterImage, beforeImage, title, rating } = props
+    const { className, work } = props
+    const {id, afterImage, beforeImage, title} = work
     const router = useNavigate()
 
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
@@ -63,13 +60,6 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                 <h6 className={classes.homeWorkSlide__title}>
                     {title}
                 </h6>
-                {
-                    rating && <StarRating
-                        className={classes.homeWorkSlide__rating}
-                        rating={rating}
-                    />
-                }
-
             </div>
         </article >
     )

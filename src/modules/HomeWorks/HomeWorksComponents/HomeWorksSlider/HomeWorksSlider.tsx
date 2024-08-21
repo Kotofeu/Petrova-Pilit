@@ -16,11 +16,7 @@ export const HomeWorksSlider = observer(() => {
                     <HomeWorkSlide
                         className={classes.homeWorksSlider__slide}
                         key={work.id}
-                        id = {work.id}
-                        afterImage={work.afterImage}
-                        beforeImage={work.beforeImage}
-                        rating={work.rating}
-                        title={work.title}
+                        work={work}
                     />
             }
             addDots

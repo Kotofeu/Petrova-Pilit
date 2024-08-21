@@ -22,7 +22,7 @@ export const HomeMainSection = memo(() => {
     }
 
     return (
-        <Section className={classes.homeMain}>
+        <Section className={classes.homeMain} isUnderline>
             <div className={classes.homeMain__titleBox}>
                 <span className={classConnection(classes.homeMain__titleDecoration, classes.homeMain__titleDecoration_reverse)} />
                 <h1 className={classes.homeMain__title}>PETROVA PILIT</h1>

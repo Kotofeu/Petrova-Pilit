@@ -1,10 +1,13 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
-import { ABOUT_ROUTE, CONTACT_ROUTE, HOME_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
+import { ABOUT_ROUTE, CONTACT_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
 
 import Instagram from '../assets/icons/social/instagram.svg'
 import Whatsapp from '../assets/icons/social/whatsapp.svg'
 import Map from '../assets/icons/social/map.svg'
+import InstagramLight from '../assets/icons/social/instagram light.svg'
+import WhatsappLight from '../assets/icons/social/whatsapp light.svg'
+import MapLight from '../assets/icons/social/map light.svg'
 
 import sliderImage1 from '../assets/images/12_11zon.jpg'
 import sliderImage2 from '../assets/images/background/1.png'
@@ -23,6 +26,8 @@ export interface ILink {
 }
 export interface IContactLink extends ILink {
     imageSrc?: string;
+    imageLightSrc?: string;
+
 }
 interface IHomeSlider {
     id: number;
@@ -39,6 +44,7 @@ interface IGeneralData {
     promoBanner?: string;
     headerLinks: ILink[];
     aboutMe: string;
+    addressMap?: string;
     contactLinks: IContactLink[];
     homeSlider: IHomeSlider[];
     advantages: IAdvantages[];
@@ -54,6 +60,7 @@ export class ApplicationStore {
             { title: "Обо мне", link: ABOUT_ROUTE },
             { title: "Мои работы", link: WORKS_ROUTE },
             { title: "Контакты", link: CONTACT_ROUTE },
+            { title: "Отзывы", link: REVIEWS_ROUTE },
         ],
         contactLinks: [
             /*  
@@ -65,17 +72,20 @@ export class ApplicationStore {
             {
                 title: 'WhatsApp',
                 link: 'https://wa.me/+79814621828',
-                imageSrc: Whatsapp
+                imageSrc: Whatsapp,
+                imageLightSrc: WhatsappLight,
             },
             {
                 title: 'Instagram',
                 link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
-                imageSrc: Instagram
+                imageSrc: Instagram,
+                imageLightSrc: InstagramLight,
             },
             {
-                title: 'Калининград Боткина 2А',
+                title: 'Калининград, Боткина 2А',
                 link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
-                imageSrc: Map
+                imageSrc: Map,
+                imageLightSrc: MapLight,
             },
             /*
             {
@@ -87,6 +97,7 @@ export class ApplicationStore {
             */
 
         ],
+        addressMap: 'https://yandex.ru/map-widget/v1/?ll=20.524867%2C54.716512&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgk3NzUwMTMzMjUSRNCg0L7RgdGB0LjRjywg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0YPQu9C40YbQsCDQkdC-0YLQutC40L3QsCwgMtCQIgoNKzGkQRXU3VpC&z=17.54',
         aboutMe: `Здравствуйте дaмы и гocпода🤗
 Сертифициpовaнный и отвeтствeнный мacтер Hacтacья пpиглашает вac нa маникюp 👐
 Прeлeсть маникюра cо мной:
@@ -151,6 +162,9 @@ export class ApplicationStore {
     }
     get advantages() {
         return this._generalData.advantages
+    }
+    get addressMap() {
+        return this._generalData.addressMap
     }
     /*
 

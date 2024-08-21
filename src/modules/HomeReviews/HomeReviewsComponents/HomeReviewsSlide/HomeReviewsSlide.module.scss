@@ -1,0 +1,119 @@
+@import '../../../../styles/settings.scss';
+
+.homeReviewsSlide {
+    background-color: $primary-color;
+    border-radius: 10px;
+    padding: 13px;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    &__userIcon {
+        margin-right: 20px;
+        min-width: 50px;
+        width: 50px;
+        min-height: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: $red-color-400;
+
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+    }
+
+    &__reviewInfo {
+        width: 100%;
+
+    }
+
+    &__reviewUser {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &__userName {
+        font-size: 22px;
+    }
+
+    &__rating {
+        flex-shrink: 0;
+    }
+
+    &__date {
+        font-size: 17px;
+        padding-top: 4px;
+    }
+
+    &__text {
+        padding-top: 16px;
+        font-size: 18px;
+        text-align: justify;
+        flex-grow: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 5; // количество строк
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__lookMore {
+        font-size: 16px;
+        font-weight: 500;
+        width: 100%;
+        padding-top: 7px;
+        padding-bottom: 13px;
+        position: relative;
+        transition: all .2s ease-in-out;
+        cursor: pointer;
+        &::before, &::after{
+            content: '';
+            position: absolute;
+            transition: all .2s ease-in-out;
+        }
+        &::before{
+            right: 10px;
+            top: 47%;
+            transform: translate(4px, 1px);
+            width: 18px;
+            height: 2px;
+            background-color: $neutral-color;
+        }
+        &::after{
+            right: 10px;
+            top: 47%;
+            transform: rotate(45deg) translateY(-50%);
+            width: 13px;
+            height: 13px;
+            border-right: 2px solid $neutral-color;
+            border-top: 2px solid $neutral-color;
+        }
+        &:hover{
+            color: $active-color;
+            &::after {
+                border-right: 2px solid $active-color;
+                border-top: 2px solid $active-color;
+                right: 5px;
+            }
+
+            &::before {
+                background-color: $active-color;
+                right: 5px;
+
+
+            }
+        }
+    }
+}

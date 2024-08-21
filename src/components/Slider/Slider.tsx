@@ -43,7 +43,7 @@ export const Slider = <T extends IBaseSlide>({
     slidesToScroll = 1,
     autoplayDelay = 2000,
     customArrow
-    
+
 }: ISlider<T>) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [translateX, setTranslateX] = useState(0);
@@ -110,6 +110,7 @@ export const Slider = <T extends IBaseSlide>({
             style={{
                 cursor: draggable && totalScrolls > 1 ? 'grab' : 'auto',
                 userSelect: draggable && totalScrolls > 1 ? 'none' : 'auto',
+                paddingBottom: (addDots && totalScrolls > 1) ? '30px' : undefined
             }}
             {...handlers}
             onMouseLeave={draggable && totalScrolls > 1 ? handleMouseLeave : undefined}

@@ -12,7 +12,7 @@
     }
 
 
-    &__image{
+    &__image {
         position: absolute;
         top: 0;
         left: 0;
@@ -22,6 +22,7 @@
         width: 100%;
         cursor: grab;
     }
+
     &__content {
         padding: 15px 10px;
         background-color: $primary-color;
@@ -89,12 +90,12 @@
 
     }
 
+    /*
     &__rating {
         flex-shrink: 0;
         line-height: 0;
 
 
     }
-
-
+    */
 }

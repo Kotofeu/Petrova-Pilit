@@ -21,7 +21,11 @@ declare module "*.png" {
   
     export = value;
   }
-  declare module "*.module.scss" {
+  declare module "*.MOV" {
+    const value: any;
+    export = value;
+  }
+  declare module "*.mp4" {
     const value: any;
     export = value;
   }

@@ -8,20 +8,20 @@ import sliderImage4 from '../assets/images/nails/4.jpg'
 import sliderImage5 from '../assets/images/nails/5.jpg'
 
 
-interface IOthersImage {
+export interface IOthersWorkImage {
     id: number;
     imageSrc: string;
     description?: string;
     title?: string;
 }
-interface IWorks {
+export interface IWorks {
     id: number;
     afterImage?: string;
     beforeImage?: string;
     title: string;
     rating?: number;
     description?: string;
-    othersImage?: IOthersImage[]
+    othersImage?: IOthersWorkImage[]
 }
 export class WorksStore {
     constructor() {

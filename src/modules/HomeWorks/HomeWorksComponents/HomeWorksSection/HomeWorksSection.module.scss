@@ -1,25 +1,11 @@
 @import '../../../../styles/settings.scss';
 
 .homeWorks {
-    margin: -130px 0 80px;
-    padding-top: 220px;
-    padding-bottom: 80px;
+    margin: 0 0 80px;
+    padding: 80px 0;
     min-height: auto;
     background-color: $neutral-color;
     position: relative;
-    &_background{
-        pointer-events: none;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
-        opacity: .2;
-        z-index: 0;
-    }
     &__titleBox {
         padding-left: 35px;
         position: relative;

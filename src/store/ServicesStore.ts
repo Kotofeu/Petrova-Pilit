@@ -10,7 +10,7 @@ import AlignmentNailPlate from '../assets/images/services/Alignment of the nail 
 import MensManicure from '../assets/images/services/Mens manicure.jpg'
 
 
-interface IService {
+export interface IService {
     id: number;
     title: string;
     time: number;
