@@ -12,7 +12,7 @@ export const HomeReviewsSection = memo(() => {
                 <h2 className={classes.homeReviews__title}>
                     Узнайте, что думают<br/><span> клиенты </span>о моей работе
                 </h2>
-                <NavLink to={REVIEWS_ROUTE} className={classes.homeReviews__button}>
+                <NavLink to={REVIEWS_ROUTE} className={classes.homeReviews__button} onClick={() => window.scrollTo(0, 0)}>
                     <span className={classes.homeReviews__buttonDecoration}>Были у меня? Оставьте свой отзыв!</span>
                 </NavLink>
             </div>
