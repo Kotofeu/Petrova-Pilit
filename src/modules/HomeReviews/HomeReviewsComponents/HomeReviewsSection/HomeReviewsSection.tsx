@@ -1,11 +1,11 @@
-import React from 'react'
+import {memo} from 'react'
 import Section from '../../../../components/Section/Section'
 import Background from '../../../../assets/images/heart.png';
 import classes from './HomeReviewsSection.module.scss'
 import { NavLink } from 'react-router-dom';
 import { REVIEWS_ROUTE } from '../../../../utils/const/routes';
 import { HomeReviewsSlider } from '../HomeReviewsSlider/HomeReviewsSlider';
-export const HomeReviewsSection = () => {
+export const HomeReviewsSection = memo(() => {
     return (
         <Section className={classes.homeReviews} backgroundImage={Background}>
             <div className={classes.homeReviews__titleBox}>
@@ -19,4 +19,4 @@ export const HomeReviewsSection = () => {
             <HomeReviewsSlider />
         </Section>
     )
-}
+})

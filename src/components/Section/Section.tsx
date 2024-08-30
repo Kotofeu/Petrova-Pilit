@@ -20,13 +20,14 @@ const Section: FC<IContainer> = (props) => {
           />
           : null
       }
-      <div className={classes.section__container}>
-        {props.children}
-      </div>
       {
         props.isUnderline
         && <div className={classes.section__underline} />
       }
+      <div className={classes.section__container}>
+        {props.children}
+      </div>
+
     </section>
   )
 }

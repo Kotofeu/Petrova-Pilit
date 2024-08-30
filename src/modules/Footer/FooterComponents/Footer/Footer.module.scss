@@ -49,6 +49,21 @@
         font-weight: 500;
         gap: 12px;
         white-space: nowrap;
+        transition: color .3s ease-in-out;
+        
+        @media (hover: hover) {
+            &:hover {
+                color: $active-color;
+            }
+
+    
+        }
+    
+        @media (hover: none) {
+            &:active {
+                color: $active-color;
+            }
+        }
     }
 
     &__policy {

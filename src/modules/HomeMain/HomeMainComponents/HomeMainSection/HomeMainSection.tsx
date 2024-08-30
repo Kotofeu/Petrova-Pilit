@@ -1,12 +1,12 @@
 import { useRef, memo } from "react"
 
 import Section from "../../../../components/Section/Section"
-import { HomeMainLinksList } from "../HomeMainLinksList/HomeMainLinksList"
 import classConnection from "../../../../utils/function/classConnection"
 import { HomeMainSlider } from "../HomeMainSlider/HomeMainSlider"
 import Arrow from '../../../../assets/icons/Arrow.svg'
 
 import classes from './HomeMainSection.module.scss'
+import ContactList from "../../../../components/ContactList/ContactList"
 
 export const HomeMainSection = memo(() => {
     const homeMainBottom = useRef<HTMLDivElement>(null)
@@ -29,7 +29,13 @@ export const HomeMainSection = memo(() => {
                 <span className={classes.homeMain__titleDecoration} />
             </div>
             <div className={classes.homeMain__content}>
-                <HomeMainLinksList className={classes.homeMain__links}/>
+                <div className={classes.homeMain__contact}>
+                    <ContactList
+                        className={classes.homeMain__links}
+                    />
+                    <h6 className={classes.homeMain__contactDecoration}>Связь со мной</h6>
+
+                </div>
                 <HomeMainSlider />
                 <div className={classes.homeMain__lookMore}>
                     <button
@@ -50,7 +56,7 @@ export const HomeMainSection = memo(() => {
                     </button>
                 </div>
             </div>
-            <div ref={homeMainBottom}/>
+            <div ref={homeMainBottom} />
         </Section>
     )
 })

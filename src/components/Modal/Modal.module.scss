@@ -1,0 +1,103 @@
+@import '../../styles/settings.scss';
+
+.modal {
+    overscroll-behavior: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal_inner {
+    max-width: $container-width;
+    position: relative;
+    margin: auto;
+    z-index: 1;
+    overflow: hidden;
+    margin: 60px;
+}
+
+.modal_close {
+    background-color: rgba($neutral-color, .7);
+    cursor: pointer;
+    border: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    &::before,
+    &::after {
+        position: absolute;
+        left: 50%;
+        bottom: 16px;
+        content: ' ';
+        height: 36px;
+        width: 3px;
+        background-color: $primary-color;
+        transition: scale .2s ease-in-out;
+    }
+
+    &::before {
+        animation: crossShow .3s forwards;
+
+    }
+
+    &::after {
+        animation: crossShow1 .3s forwards;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+
+            &::before,
+            &::after {
+                scale: 1.1;
+            }
+        }
+
+    }
+
+    @media (hover: none) {
+        &:active {
+
+            &::before,
+            &::after {
+                scale: 1.1;
+            }
+        }
+    }
+
+}
+
+@keyframes crossShow {
+    0% {
+        rotate: 0;
+
+    }
+
+    100% {
+        rotate: -45deg;
+
+    }
+}
+
+@keyframes crossShow1 {
+    0% {
+        rotate: 0;
+
+    }
+
+    100% {
+        rotate: 45deg;
+
+    }
+}

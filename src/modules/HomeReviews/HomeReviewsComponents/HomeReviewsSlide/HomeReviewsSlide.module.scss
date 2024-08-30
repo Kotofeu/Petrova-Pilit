@@ -62,11 +62,12 @@
         padding-top: 16px;
         font-size: 18px;
         text-align: justify;
-        flex-grow: 1;
         display: -webkit-box;
-        -webkit-line-clamp: 5; // количество строк
+        -webkit-line-clamp: 6; 
         -webkit-box-orient: vertical;
         overflow: hidden;
+        white-space: pre-wrap;
+        margin-bottom: auto;
     }
 
     &__lookMore {

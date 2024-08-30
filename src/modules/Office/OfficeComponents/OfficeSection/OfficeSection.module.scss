@@ -1,0 +1,23 @@
+@import '../../../../styles/settings.scss';
+
+.officeSection {
+    padding: 80px 0;
+    min-height: auto;
+    background-color: $neutral-color;
+    position: relative;
+
+    &__title {
+        text-align: center;
+        font-size: 70px;
+        font-weight: 500;
+        color: $primary-color;
+        line-height: 1.2em;
+        margin-bottom: 35px;
+
+        & span {
+            color: $active-color;
+        }
+    }
+
+
+}

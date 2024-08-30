@@ -29,7 +29,7 @@ export interface IContactLink extends ILink {
     imageLightSrc?: string;
 
 }
-interface IHomeSlider {
+interface IImages {
     id: number;
     imageSrc: string;
 
@@ -46,7 +46,8 @@ interface IGeneralData {
     aboutMe: string;
     addressMap?: string;
     contactLinks: IContactLink[];
-    homeSlider: IHomeSlider[];
+    homeSlider: IImages[];
+    officeImages: IImages[];
     advantages: IAdvantages[];
 }
 export class ApplicationStore {
@@ -97,14 +98,14 @@ export class ApplicationStore {
             */
 
         ],
-        addressMap: 'https://yandex.ru/map-widget/v1/?ll=20.524867%2C54.716512&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgk3NzUwMTMzMjUSRNCg0L7RgdGB0LjRjywg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0YPQu9C40YbQsCDQkdC-0YLQutC40L3QsCwgMtCQIgoNKzGkQRXU3VpC&z=17.54',
-        aboutMe: `Здравствуйте дaмы и гocпода🤗
-Сертифициpовaнный и отвeтствeнный мacтер Hacтacья пpиглашает вac нa маникюp 👐
-Прeлeсть маникюра cо мной:
-☝️никакoгo страха, диcкoмфоpта, болeвыx ощущений;стeрильно и бeзoпaснo
-💪вcе включено в cтoимоcть по комплексу:cнятиe,рeмoнт, пoстaнoвкa формы, укрепление+выравнивание, дизайн(френч,слайдеры,втирка,стемпинг, блестки)
-🗣️ нахожусь в центре города;вода/чай/сладкое предложу в процессе
-🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях(терпеть их не могу)`,
+        addressMap: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2304.608889733823!2d20.522914741385073!3d54.71650388760703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e3160bea68a3bf%3A0x47e628c68d0b71c0!2z0YPQuy4g0JHQvtGC0LrQuNC90LAsIDLQkCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtNGB0LrQsNGPINC-0LHQuy4sIDIzNjAxNg!5e0!3m2!1sru!2sru!4v1724979269501!5m2!1sru!2sru',
+        aboutMe: `Здравствуйте дамы и господа
+Сертифицированный и ответственный мастер Hacтacья приглашает вас на маникюр 👐
+Прелесть маникюра со мной:
+☝️ никакого страха, дискомфорта, болeвыx ощущений; стeрильно и бeзoпaснo
+💪 вcе включено в cтoимоcть по комплексу: cнятиe, рeмoнт, пoстaнoвкa формы, укрепление + выравнивание, дизайн (френч, слайдеры, втирка, стемпинг, блестки)
+🗣️ нахожусь в центре города; вода/чай/сладкое предложу в процессе
+🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях (терпеть их не могу)`,
         homeSlider: [
             {
                 id: 1,
@@ -118,6 +119,33 @@ export class ApplicationStore {
                 id: 3,
                 imageSrc: sliderImage3,
             },
+        ],
+        officeImages: [
+            {
+                id: 1,
+                imageSrc: sliderImage1,
+            },
+            {
+                id: 2,
+                imageSrc: sliderImage2,
+            },
+            {
+                id: 3,
+                imageSrc: sliderImage3,
+            },
+            {
+                id: 5,
+                imageSrc: sliderImage3,
+            },
+            {
+                id: 6,
+                imageSrc: sliderImage1,
+            },
+            {
+                id: 7,
+                imageSrc: sliderImage3,
+            },
+            
         ],
         advantages: [
             {
@@ -165,6 +193,9 @@ export class ApplicationStore {
     }
     get addressMap() {
         return this._generalData.addressMap
+    }
+    get officeImages() {
+        return this._generalData.officeImages
     }
     /*
 

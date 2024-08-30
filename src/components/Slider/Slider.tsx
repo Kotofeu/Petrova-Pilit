@@ -26,6 +26,7 @@ interface ISlider<T extends IBaseSlide> {
     prevArrow?: ReactNode;
     nextArrow?: ReactNode;
     customArrow?: ReactNode;
+    initialSlide?: number;
 }
 
 export const Slider = <T extends IBaseSlide>({
@@ -42,10 +43,11 @@ export const Slider = <T extends IBaseSlide>({
     slidesToShow = 1,
     slidesToScroll = 1,
     autoplayDelay = 2000,
-    customArrow
+    customArrow,
+    initialSlide = 0
 
 }: ISlider<T>) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(initialSlide);
     const [translateX, setTranslateX] = useState(0);
     const [isAnimating, setIsAnimating] = useState(true);
     const [swipeOffset, setSwipeOffset] = useState(0);
