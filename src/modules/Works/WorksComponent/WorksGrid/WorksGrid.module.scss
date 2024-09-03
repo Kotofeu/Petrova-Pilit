@@ -1,0 +1,12 @@
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    &__card {
+        max-width: 33%;
+        aspect-ratio: 4/3;
+
+    }
+}

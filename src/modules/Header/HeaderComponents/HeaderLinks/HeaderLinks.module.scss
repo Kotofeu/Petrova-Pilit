@@ -21,14 +21,7 @@
         }
     }
     &__activeLine {
-        display: block;
-        position: absolute;
-        height: 3px;
-        bottom: 0;
-        border-radius: 3px;
-        background-color: $active-color;
-        left: 7px;
-        right: 7px;
+        width: 90%;
     }
 
     &_active {

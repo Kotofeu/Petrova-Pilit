@@ -5,6 +5,7 @@ import classConnection from '../../../../utils/function/classConnection'
 
 import { ILink } from '../../../../store'
 import classes from './HeaderLinks.module.scss'
+import ActiveLine from '../../../../UI/ActiveLine/ActiveLine'
 
 export enum LinkType {
     underline = 'underline',
@@ -19,7 +20,7 @@ interface IHeaderLink extends ILink {
 }
 
 export const HeaderLink: FC<IHeaderLink> = memo((props) => {
-    const {className, children, onClick, type = LinkType.none, title, link} = props
+    const { className, children, onClick, type = LinkType.none, title, link } = props
     return (
         <NavLink
             className={
@@ -34,12 +35,11 @@ export const HeaderLink: FC<IHeaderLink> = memo((props) => {
                 <>
                     {title}
                     {children}
-                    {(isActive && type === LinkType.underline) &&
-                        <motion.div
-                            className={classes.headerLink__activeLine}
-                            layoutId='activeLine'
-                        />
-                    }
+                    <ActiveLine
+                        className={classes.headerLink__activeLine}
+                        layoutId='headerActiveLine'
+                        isActive={isActive && type === LinkType.underline}
+                    />
                 </>
 
             }

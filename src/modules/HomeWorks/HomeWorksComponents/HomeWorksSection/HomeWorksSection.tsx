@@ -12,7 +12,7 @@ export const HomeWorksSection = () => {
     return (
         <Section className={classes.homeWorks} backgroundImage={Background}>
             <div className={classes.homeWorks__titleBox}>
-                <h2 className={classes.homeWorks__title}>Последние работы</h2>
+                <h2 className={classes.homeWorks__title}>Последние <span>работы</span></h2>
                 <h4 className={classes.homeWorks__subtitle}>Приходите и ваши ручки будут здесь</h4>
                 <NavLink to={WORKS_ROUTE} className={classes.homeWorks__button} onClick={() => window.scrollTo(0, 0)}>
                     <span className={classes.homeWorks__buttonDecoration}>Смотреть больше работ</span>

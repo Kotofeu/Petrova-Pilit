@@ -9,7 +9,7 @@ import { NewsletterSubscription } from '../NewsletterSubscription/NewsletterSubs
 
 export const Footer = observer(() => {
     const [email, setEmail] = useState<string>('');
-    
+
     const onLinkClick = useCallback(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -30,6 +30,7 @@ export const Footer = observer(() => {
                 <PageLinks onLinkClick={onLinkClick} />
                 <NewsletterSubscription email={email} setEmail={setEmail} />
             </div>
+            <div className={classes.footer__copyrighting}>© Petrova Pilit, 2024</div>
         </footer>
     );
 });
