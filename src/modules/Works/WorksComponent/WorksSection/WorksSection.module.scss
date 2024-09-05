@@ -1,23 +1,44 @@
 @import '../../../../styles/settings.scss';
 
 .works {
-    padding-top: 125px;
-    padding-bottom: 80px;
     min-height: 100vh;
     min-height: 100dvh;
-    max-width: 1600px;
-    margin: 0 auto;
+    
+    padding-top: 125px;
+    padding-bottom: 80px;
+    &__inner {
+        position: relative;
+        z-index: 1;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
     &__title {
-        font-size: 70px;
-        letter-spacing: 6px;
+        font-size: 75px;
         font-weight: 600;
         white-space: nowrap;
         margin-right: 50px;
         text-align: center;
+        letter-spacing: 3px;
+        position: relative;
+        padding-bottom: .4em;
+        &::after{
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width:  200px;
+            width: 100%;
+            margin: 0 auto;
+            height: 6px;
+            border-radius: 6px;
+            background-color: $title-color;
+        }
     }
 
     &__tabs {
-        padding-top: 20px;
+        padding-top: 45px;
         justify-content: center;
         display: flex;
         align-items: center;
@@ -29,5 +50,99 @@
 
     &__grid {
         padding-top: 20px;
+    }
+
+    &__showMore {
+        width: 100%;
+        margin-top: 15px;
+        background-color: transparent;
+        border: none;
+        padding: 8px 0;
+        font-size: 22px;
+
+        & span {
+            display: inline-block;
+            position: relative;
+            padding: 0px 40px;
+            animation: show .2s ease-in-out backwards;
+            will-change: translate, scale, transform, color, background-color;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                top: 47%;
+                width: 22px;
+                height: 2px;
+                background-color: $text-color;
+                transition: all .2s ease-in-out;
+                will-change: translate, scale, transform, background-color, left, right;
+
+            }
+
+            &::after {
+                right: 5px;
+            }
+
+            &::before {
+                left: 5px;
+            }
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                & span {
+
+                    &::before,
+                    &::after {
+                        background-color: $active-color;
+                    }
+
+                    &::after {
+                        right: 0;
+                    }
+
+                    &::before {
+                        left: 0;
+                    }
+                }
+            }
+        }
+
+        @media (hover: none) {
+            &:active {
+                & span {
+
+                    &::before,
+                    &::after {
+                        background-color: $active-color;
+                    }
+
+                    &::after {
+                        right: 0;
+                    }
+
+                    &::before {
+                        left: 0;
+                    }
+                }
+            }
+        }
+
+
+    }
+}
+
+@keyframes show {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(.8);
+
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+
     }
 }

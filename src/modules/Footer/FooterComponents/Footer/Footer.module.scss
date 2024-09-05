@@ -2,7 +2,8 @@
 
 .footer {
     background-color: $title-color;
-
+    position: relative;
+    z-index: 2;
     &__inner {
         padding: 55px 10px;
         max-width: 1600px;
