@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Slider } from '../../../../components/Slider'
 import { observer } from 'mobx-react-lite'
 
@@ -7,6 +8,9 @@ import { HomeWorkSlide } from '../HomeWorkSlide/HomeWorkSlide'
 import { worksStore } from '../../../../store'
 
 export const HomeWorksSlider = observer(() => {
+    useEffect(() => {
+        worksStore.loadWorks()
+    }, [])
     return (
         <Slider
             className={classes.homeWorksSlider}

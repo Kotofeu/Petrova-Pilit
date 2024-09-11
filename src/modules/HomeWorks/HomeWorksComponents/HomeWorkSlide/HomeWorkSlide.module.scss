@@ -62,18 +62,37 @@
             border-top: 2px solid $neutral-color;
         }
 
-        &:hover {
+        @media (hover: hover) {
+            &:hover {
 
-            &::after {
-                background-color: $active-color;
-                right: 18px;
+                &::after {
+                    background-color: $active-color;
+                    right: 18px;
+                }
+
+                &::before {
+                    border-right: 2px solid $active-color;
+                    border-top: 2px solid $active-color;
+                    right: 18px;
+
+                }
             }
 
-            &::before {
-                border-right: 2px solid $active-color;
-                border-top: 2px solid $active-color;
-                right: 18px;
+        }
 
+        @media (hover: none) {
+            &:active {
+                &::after {
+                    background-color: $active-color;
+                    right: 18px;
+                }
+
+                &::before {
+                    border-right: 2px solid $active-color;
+                    border-top: 2px solid $active-color;
+                    right: 18px;
+
+                }
             }
         }
 

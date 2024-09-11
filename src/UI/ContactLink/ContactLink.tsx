@@ -37,6 +37,7 @@ const ContactLink: FC<IContactLink> = memo((props) => {
                 target="_blank"
                 title={title}
                 aria-label={ariaLabel}
+                rel="noopener noreferrer"
             >
                 <img
                     className={classes.contact_socialImage}

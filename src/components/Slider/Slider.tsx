@@ -9,7 +9,7 @@ export interface IBaseSlide {
     id: string | number;
 }
 
-interface ISlider<T extends IBaseSlide> {
+export interface ISlider<T extends IBaseSlide> {
     name?: string;
     className?: string;
     slideClassName?: string;
@@ -50,6 +50,7 @@ export const Slider = <T extends IBaseSlide>({
     const [currentSlide, setCurrentSlide] = useState(initialSlide);
     const [translateX, setTranslateX] = useState(0);
     const [isAnimating, setIsAnimating] = useState(true);
+    const [isClickable, setIsClickable] = useState(true)
     const [swipeOffset, setSwipeOffset] = useState(0);
 
     const totalScrolls = useMemo(() => {
@@ -58,6 +59,7 @@ export const Slider = <T extends IBaseSlide>({
 
     useEffect(() => {
         updateTranslateX();
+        if (Math.abs(swipeOffset) > 1 && isClickable) setIsClickable(false)
     }, [currentSlide, swipeOffset]);
 
     useEffect(() => {
@@ -73,6 +75,7 @@ export const Slider = <T extends IBaseSlide>({
     const changeSlide = (direction: number) => {
         setSwipeOffset(0);
         setIsAnimating(true);
+        setIsClickable(true)
         setCurrentSlide((prev) => {
             const newSlide = prev + direction;
             if (looped) {
@@ -140,6 +143,7 @@ export const Slider = <T extends IBaseSlide>({
                 style={{
                     transform: `translateX(${translateX}%)`,
                     transition: isAnimating ? 'transform 0.3s ease' : 'none',
+                    pointerEvents: isClickable ? 'auto' : 'none'
                 }}
             >
                 {items.map((item, index) => (

@@ -24,9 +24,10 @@ const Modal: FC<IModal> = (props) => {
 
                     </motion.div>
                     <motion.button
-                            onClick={closeModal}
-                            className={classes.modal_close}
-                        />
+                        className={classes.modal_close}
+                        type='button'
+                        onClick={closeModal}
+                    />
                 </motion.div >
             )}
         </AnimatePresence>

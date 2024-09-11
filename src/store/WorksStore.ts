@@ -6,16 +6,11 @@ import sliderImage2 from '../assets/images/nails/2.jpg'
 import sliderImage3 from '../assets/images/nails/3.jpg'
 import sliderImage4 from '../assets/images/nails/4.jpg'
 import sliderImage5 from '../assets/images/nails/5.jpg'
+import { IGetAllJSON, IImages } from '.';
 
 export interface IWorksType {
     id: number;
     title: string;
-}
-export interface IOthersWorkImage {
-    id: number;
-    imageSrc: string;
-    description?: string;
-    title?: string;
 }
 export interface IWorks {
     id: number;
@@ -25,57 +20,60 @@ export interface IWorks {
     rating?: number;
     description?: string;
     workType?: IWorksType;
-    othersImage?: IOthersWorkImage[]
+    othersImage?: IImages[]
 }
-const mockWorks: IWorks[] = [
-    {
-        id: 1,
-        afterImage: sliderImage5,
-        beforeImage: sliderImage1,
-        title: 'Я выбираю пилить ноготочки, а не мозги😏',
-        rating: 5,
-        workType: {
+const mockWorks: IGetAllJSON<IWorks> = {
+    count: 7,
+    rows: [
+        {
             id: 1,
-            title: 'Пиллинг'
-        }
+            afterImage: sliderImage5,
+            beforeImage: sliderImage1,
+            title: 'Я выбираю пилить ноготочки, а не мозги😏',
+            rating: 5,
+            workType: {
+                id: 1,
+                title: 'Пиллинг'
+            }
 
-    },
-    {
-        id: 2,
-        afterImage: sliderImage4,
-        beforeImage: sliderImage3,
-        title: 'Восстановление архитектуры? WTF?🤔',
-        rating: 4,
-        workType: {
+        },
+        {
             id: 2,
-            title: 'Фантазия пропала'
-        }
-    },
-    {
-        id: 3,
-        beforeImage: sliderImage4,
-        title: 'Закрываем апрель🔥🔥',
-        workType: {
+            afterImage: sliderImage4,
+            beforeImage: sliderImage3,
+            title: 'Восстановление архитектуры? WTF?🤔',
+            rating: 4,
+            workType: {
+                id: 2,
+                title: 'Фантазия пропала'
+            }
+        },
+        {
             id: 3,
-            title: 'Маник'
-        }
-    },
-    {
-        id: 4,
-        afterImage: sliderImage3,
-        beforeImage: sliderImage1,
-        title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ БЛА БЛА БЛА БЛА',
-        workType: {
-            id: 1,
-            title: 'Пиллинг'
-        }
-    },
-    {
-        id: 5,
-        beforeImage: sliderImage4,
-        title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА'
-    },
-]
+            beforeImage: sliderImage4,
+            title: 'Закрываем апрель🔥🔥',
+            workType: {
+                id: 3,
+                title: 'Маник'
+            }
+        },
+        {
+            id: 4,
+            afterImage: sliderImage3,
+            beforeImage: sliderImage1,
+            title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ БЛА БЛА БЛА БЛА',
+            workType: {
+                id: 1,
+                title: 'Пиллинг'
+            }
+        },
+        {
+            id: 5,
+            beforeImage: sliderImage4,
+            title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА'
+        },
+    ]
+}
 export class WorksStore {
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
@@ -148,11 +146,11 @@ export class WorksStore {
     loadWorks(typeId: number | null = null, page: number = this._page, limit: number = this._limit) {
         this._isLoading = true;
         this._works = typeId === null
-        ? [...mockWorks]
-        : [...mockWorks.filter(work => work.workType?.id === typeId)];
+            ? [...mockWorks.rows]
+            : [...mockWorks.rows.filter(work => work.workType?.id === typeId)];
         this._worksCache = [...this.worksCache, ...this._works]
-         // Тут замена this._works.length на количесво работ с запроса
-         this._hasMoreWorks = this._works.length > this._page * this._limit;
+        // Тут замена this._works.length на количесво работ с запроса
+        this._hasMoreWorks = this._works.length > this._page * this._limit;
 
     }
     private setIsLoading(isLoading: boolean) {

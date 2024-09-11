@@ -1,0 +1,33 @@
+@import '../../../../styles/settings.scss';
+
+.reviewsSection {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-width: $container-width;
+    margin: 0 auto;
+
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: $neutral-color;
+        height: 100%;
+        width: 100vw;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+    }
+
+    &__list {
+        padding-top: 130px;
+        padding-bottom: 40px;
+        display: flex;
+        margin-left: 40px;
+        padding-right: 20px;
+        flex-direction: column;
+        gap: 20px;
+    }
+}

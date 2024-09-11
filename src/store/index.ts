@@ -9,9 +9,19 @@ export type {ILink} from './ApplicationStore'
 export type {IReviews} from './ReviewsStore'
 export type {IUser} from './ReviewsStore'
 export type {IService} from './ServicesStore'
-export type {IOthersWorkImage} from './WorksStore'
 export type {IWorks} from './WorksStore'
 
+export interface IGetAllJSON<T> {
+    count: number;
+    rows: T[];
+}
+export interface IImages {
+    id: number;
+    imageSrc: string;
+    title?: string;
+    description?: string;
+
+}
 
 export const applicationStore = new ApplicationStore()
 export const worksStore = new WorksStore()

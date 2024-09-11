@@ -1,0 +1,49 @@
+@import '../../../../styles/settings.scss';
+.reviewsNavbar{
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    min-width: 40%;
+    height: 100vh;
+    height: 100dvh;
+    background-color: $neutral-color;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__inner{
+        padding: 20px;
+        padding-right: 10%;
+        margin-left: auto;
+        
+    }
+    &__title{
+        font-size: 75px;
+        color: $primary-color;
+        padding-top: 80px;
+        line-height: .92em;
+    }
+    &__button{
+        margin-top: 30px;
+        width: 100%;
+        color: $primary-color;
+        border-color: $primary-color;
+        font-size: 26px;
+        border-width: 2px;
+    }
+}
+/*
+&::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: $neutral-color;
+    width: 30px;
+    transform: translateX(95%);
+    clip-path: ellipse(100% 50% at 0% 50%);
+}
+*/

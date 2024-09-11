@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
-import { ABOUT_ROUTE, CONTACT_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
+import { ABOUT_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
 
 import Instagram from '../assets/icons/social/instagram.svg'
 import Whatsapp from '../assets/icons/social/whatsapp.svg'
@@ -17,6 +17,7 @@ import fast from '../assets/icons/fast.svg'
 import quality from '../assets/icons/quality.svg'
 import comfortable from '../assets/icons/comfortable.svg'
 import beautifully from '../assets/icons/beautifully.svg'
+import { IImages } from '.';
 
 
 
@@ -29,11 +30,7 @@ export interface IContactLink extends ILink {
     imageLightSrc?: string;
 
 }
-interface IImages {
-    id: number;
-    imageSrc: string;
 
-}
 interface IAdvantages {
     id: number;
     title: string;
@@ -60,16 +57,9 @@ export class ApplicationStore {
             { title: "Главная", link: HOME_ROUTE },
             { title: "Обо мне", link: ABOUT_ROUTE },
             { title: "Мои работы", link: WORKS_ROUTE },
-            { title: "Контакты", link: CONTACT_ROUTE },
             { title: "Отзывы", link: REVIEWS_ROUTE },
         ],
         contactLinks: [
-            /*  
-            {
-                  title: 'Телефон',
-                  link: '+7 (981) 462 18-28',
-              },
-              */
             {
                 title: 'WhatsApp',
                 link: 'https://wa.me/+79814621828',
@@ -89,6 +79,10 @@ export class ApplicationStore {
                 imageLightSrc: MapLight,
             },
             /*
+            {
+                title: 'Телефон',
+                link: '+7 (981) 462 18-28',
+            },
             {
                 title: 'Почта',
                 link: '',
@@ -145,7 +139,7 @@ export class ApplicationStore {
                 id: 7,
                 imageSrc: sliderImage3,
             },
-            
+
         ],
         advantages: [
             {

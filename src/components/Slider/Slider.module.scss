@@ -146,6 +146,29 @@
     }
 
 }
+.sliderModal{
+    height: 100%;
+    position: relative;
+    overflow: visible;
+    &__slider{
+        height: 100%;
+    }
+    &__arrow{
+        border: none;
+        width: 25px;
+        height: 25px;
+        margin: 12px;
+        padding: 0;
+        background-color: transparent;
+        border-top: 3px solid $primary-color;
+        border-left: 3px solid $primary-color;
+        transform: rotate(-45deg);
+        transition: all .15s ease-in-out;
+        &:hover{
+            transform: rotate(-45deg) translate(-4px, -4px);
+        }
+    }
+}
 
 @keyframes animate {
     0% {

@@ -17,7 +17,7 @@ export const OfficeGrid: FC<IOfficeGrid> = observer(({ openModal }) => (
                 className={classes.officeGrid__image}
                 key={image.id}
                 src={image.imageSrc}
-                alt={`Мой офис: ${index}`}
+                alt={`Мой офис: ${index+1}`}
                 onClick={() => openModal(index)}
             />
         )}
