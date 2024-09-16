@@ -34,6 +34,7 @@ export const ReviewModal: FC<IReviewModal> = memo(({ isUserAuth, isOpen, closeMo
         <Modal className={classes.reviewModal} isOpen={isOpen} closeModal={closeModal} >
             <AnimatePresence>
                 <ReviewFormMain
+                    key={'ReviewFormMain'}
                     isOpen={isMainOpen}
                     formValues={formValues}
                     setFormValues={setFormValues}
@@ -41,6 +42,7 @@ export const ReviewModal: FC<IReviewModal> = memo(({ isUserAuth, isOpen, closeMo
                     isUserAuth={false}
                 />
                 <ReviewFormImages
+                    key={'ReviewFormImages'}
                     isOpen={!isMainOpen}
                     formValues={formValues}
                     setFormValues={setFormValues}

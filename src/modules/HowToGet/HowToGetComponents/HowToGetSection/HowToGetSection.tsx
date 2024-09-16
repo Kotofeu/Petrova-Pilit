@@ -30,7 +30,7 @@ export const HowToGetSection = observer(() => {
           width='100%'
           height='100%'
           playing
-          style={{ aspectRatio: "3/4" }}
+          style={{ aspectRatio: "3/4", backgroundColor: '#F2F1F0' }}
           url={HowToGetMp4}
           controls
           light={HowToGet}
