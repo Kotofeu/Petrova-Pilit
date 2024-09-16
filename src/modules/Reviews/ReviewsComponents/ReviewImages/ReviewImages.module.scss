@@ -1,0 +1,44 @@
+@import '../../../../styles/settings.scss';
+
+.reviewImages {
+
+    &__filesInfo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 7px;
+        & span {
+            font-weight: 600;
+            font-size: 18px;
+        }
+    }
+
+    &__images {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+
+    }
+
+    &__image {
+        max-height: 150px;
+        width: 100%;
+        aspect-ratio: 1/1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        background-color: $secondary-color;
+        overflow: hidden;
+        &_empty{
+            opacity: .5;
+        }
+        & img {
+            object-fit: contain;
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+}

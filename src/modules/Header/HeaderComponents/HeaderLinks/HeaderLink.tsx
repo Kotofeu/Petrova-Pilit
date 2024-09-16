@@ -29,7 +29,6 @@ export const HeaderLink: FC<IHeaderLink> = memo((props) => {
             }
             to={link}
             onClick={onClick}
-            end
         >
             {({ isActive }) =>
                 <>

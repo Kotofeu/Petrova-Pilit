@@ -17,7 +17,6 @@ export const OfficeSection = memo(() => {
         setIsOpen(false)
         document.body.style.overflowY = 'auto';
         setActiveImage(0)
-
     }
     return (
         <Section className={classes.officeSection} backgroundImage={Background}>

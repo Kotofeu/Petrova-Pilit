@@ -1,6 +1,7 @@
 import { memo, FC } from 'react'
 import Rating from 'react-star-ratings'
 interface IStarRating {
+    name?: string,
     rating?: number,
     setRating?: (rating: number) => void,
     className?: string
@@ -12,6 +13,7 @@ interface IStarRating {
 }
 const StarRating: FC<IStarRating> = memo((props) => {
     const {
+        name,
         rating = 0,
         setRating,
         className = '',
@@ -27,6 +29,7 @@ const StarRating: FC<IStarRating> = memo((props) => {
         <div className={className}>
             <Rating
                 rating={rating}
+                name={name}
                 changeRating={setRating}
                 starRatedColor={starRatedColor}
                 starEmptyColor={starEmptyColor}

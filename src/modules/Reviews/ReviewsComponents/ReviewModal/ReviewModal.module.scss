@@ -1,0 +1,147 @@
+@import '../../../../styles/settings.scss';
+.reviewModal{
+    padding: 10px;
+}
+.modalContent {
+    height: 100%;
+    max-width: 900px;
+    width: calc(100vw - 40px);
+    margin: 0 auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    &__inner {
+        overflow-y: auto;
+        padding-left: 0px;
+        padding: 15px 25px;
+        background-color: #FFF;
+        border-radius: 0 0 15px 15px;
+        height: 100%;
+    }
+
+    &__title {
+        
+        font-size: 42px;
+        background-color: $secondary-color;
+        padding: 25px;
+        padding-bottom: 15px;
+        padding-top: 15px;
+        color: $title-color;
+        line-height: 1.1em;
+        border-radius: 15px 15px 0 0;
+
+        & span {
+            font-size: 32px;
+            font-weight: 400;
+        }
+    }
+
+    &__inputRow {
+        padding: 13px 0px;
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 20px;
+    }
+
+    &__label {
+        width: 100%;
+        font-size: 20px;
+    }
+
+    &__registerButton {
+        font-size: 20px;
+        padding: 5px;
+        border: none;
+        color: $active-color;
+        white-space: nowrap;
+    }
+
+    &__nameInputContainer,
+    &__rating,
+    &__commentContainer {
+        width: 100%;
+
+    }
+
+    &__nameInputContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & span {
+            font-size: 18px;
+            padding: 0 20px;
+            white-space: nowrap;
+
+        }
+    }
+
+    &__nameInput {
+        border: none;
+        background-color: transparent !important;
+        border-bottom: 3px solid $text-color;
+        font-size: 20px;
+        max-width: 350px;
+        width: 100%;
+        font-weight: 500;
+        padding: 5px;
+        transition: border-color .2s ease-in-out,
+            outline-color .2s ease-in-out;
+
+        &_error {
+            border-color: $active-color;
+            outline-color: $active-color;
+        }
+    }
+
+    &__rating {}
+
+    &__commentContainer {}
+
+    &__textArea {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 8em;
+        max-height: 14em;
+        resize: vertical;
+        font-size: 16px;
+        padding: 3px 5px;
+        border: 1px solid $title-color;
+        border-radius: 5px;
+        color: $title-color;
+        font-weight: 500;
+    }
+
+    &__charCount {
+        display: flex;
+        justify-content: flex-end;
+        transition: color .2s ease-in-out;
+        padding-top: 3px;
+        font-weight: 500;
+        font-size: 16px;
+
+        &_error {
+            color: $active-color;
+        }
+    }
+
+    &__imagesContainer {
+        padding: 10px 0;
+    }
+
+    &__send {
+        margin-left: auto;
+        display: block;
+        font-size: 18px;
+        padding: 7px 0;
+        border: none;
+
+    }
+    &__policy{
+        font-size: 14px;
+        & a {
+            color: $active-color;
+        }
+    }
+}

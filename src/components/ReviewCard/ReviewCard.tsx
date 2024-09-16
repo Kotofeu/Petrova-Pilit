@@ -17,12 +17,12 @@ interface IReviewCard {
 
 const ReviewCard: FC<IReviewCard> = memo((props) => { 
     const { className, review, isShortCard, onClick, children } = props; 
-    const { user, title, time, rating } = review; 
+    const { user, comment, time, rating } = review; 
     const memoizedChildren = useMemo(() => {
         return children;
     }, [children]);
 
-    if (!title || !rating || !time) return null; 
+    if (!comment || !rating || !time) return null; 
 
     return ( 
         <article 
@@ -46,7 +46,7 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
                 </div> 
             </header> 
             <div className={classes.reviewCard__text}> 
-                {title} 
+                {comment} 
             </div> 
             <footer className={classes.reviewCard__footer}> 
                 {

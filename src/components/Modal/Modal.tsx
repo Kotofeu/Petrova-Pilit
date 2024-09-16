@@ -1,13 +1,15 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { FC, ReactNode } from 'react'
 import classes from './Modal.module.scss'
+import classConnection from '../../utils/function/classConnection';
 interface IModal {
+    className?: string;
     isOpen: boolean;
     children: ReactNode;
     closeModal: () => void;
 }
 const Modal: FC<IModal> = (props) => {
-    const { isOpen, children, closeModal } = props
+    const { className, isOpen, children, closeModal } = props
     return (
         <AnimatePresence>
             {isOpen && (
@@ -18,7 +20,7 @@ const Modal: FC<IModal> = (props) => {
                     animate={{ opacity: 1 }}
                 >
                     <motion.div
-                        className={classes.modal_inner}
+                        className={classConnection(classes.modal_inner, className)}
                     >
                         {children}
 

@@ -15,8 +15,10 @@ export const HomeReviewsSlider = observer(() => {
 
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>, id: number) => {
         event.preventDefault()
+        window.scrollTo(0, 0)
         router(`${REVIEWS_ROUTE}/${id}`)
     }, [])
+
     return (
         <Slider
             className={classes.homeReviewsSlider}

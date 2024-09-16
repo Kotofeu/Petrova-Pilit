@@ -21,6 +21,7 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
 
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault()
+        window.scrollTo(0, 0)
         router(`${WORKS_ROUTE}/${id}`)
     }, [id])
     if (!afterImage && !beforeImage) return null

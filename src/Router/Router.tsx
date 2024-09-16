@@ -28,7 +28,7 @@ export const Router = () => {
           </Route>
           <Route path={REVIEWS_ROUTE}>
             <Route index element={<Reviews />} />
-            <Route path=':id' element={<div style={{ height: '100vh' }}>DFJKDSAOFLJKDS</div>} />
+            <Route path=':id' element={<Reviews />} />
           </Route>
           <Route path={POLICY_ROUTE} element={<div style={{ height: '100vh' }}></div>} />
         </Route>
