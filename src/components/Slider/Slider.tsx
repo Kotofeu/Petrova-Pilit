@@ -67,7 +67,7 @@ export const Slider = <T extends IBaseSlide>({
             const intervalId = setInterval(nextSlide, autoplayDelay);
             return () => clearInterval(intervalId);
         }
-    }, [currentSlide, autoplayDelay, autoplay]);
+    }, [items.length, currentSlide, autoplayDelay, autoplay]);
     const updateTranslateX = () => {
         setTranslateX(-100 * (currentSlide * (slidesToScroll / slidesToShow)) + swipeOffset);
     };
