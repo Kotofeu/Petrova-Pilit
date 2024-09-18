@@ -1,0 +1,29 @@
+@import '../../../../styles/settings.scss';
+
+.policy {
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    padding-top: 130px;
+    padding-bottom: 40px;
+    background-color: #FFF;
+
+    &__inner {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    &__title {
+        font-size: 48px;
+        line-height: 1em;
+        font-weight: 700;
+        text-align: center;
+        position: relative;
+    }
+    &__content{
+        padding-top: 30px;
+    }
+
+}

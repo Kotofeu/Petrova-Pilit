@@ -22,64 +22,89 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
     maxFilesCount = 10,
     name,
 }) => {
-    const [error, setError] = useState<string>('')
+    const [error, setError] = useState<string>('');
+    const [isHovering, setIsHovering] = useState<boolean>(false);
     const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
 
-
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-
-        if (!files || !files.length) {
-            return;
-        }
-
+    const validateFiles = (files: FileList) => {
         const totalSize = Array.from(files).reduce((acc, curr) => acc + curr.size, 0);
 
         if (totalSize > maxTotalSize) {
             setError(`Превышен максимальный общий размер файлов: ${maxTotalSize / 1024 / 1024}Мб`);
             handleFilesChange(null);
-            return;
+            return false;
         }
 
         if (files.length > maxFilesCount) {
             setError(`Превышено максимальное количество файлов: ${maxFilesCount}шт.`);
             handleFilesChange(null);
-            return;
+            return false;
         }
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
 
             if (file.size > maxFileSize) {
-                setError(`Превышен размер файла ${file.name}. Максимальный размер: ${maxFileSize / 1024 / 1024}Мб`);
+                setError(`Превышен размер файла ${file.name}.Максимальный размер: ${maxFileSize / 1024 / 1024}Мб`);
                 handleFilesChange(null);
-                return;
+                return false;
             }
 
             if (!allowedExtensions.exec(file.name)) {
-                setError(`Неподдерживаемый формат файла ${file.name}.`);
+                setError(`Неподдерживаемый формат файла ${file.name}`);
                 handleFilesChange(null);
-                return;
+                return false;
             }
         }
 
-        handleFilesChange(files);
-        setError('');
+        return true;
     };
 
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+
+        if (files && validateFiles(files)) {
+            handleFilesChange(files);
+            setError('');
+        }
+    };
+
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setIsHovering(false);
+        const files = event.dataTransfer.files;
+
+        if (files && validateFiles(files)) {
+            handleFilesChange(files);
+            setError('');
+        }
+    };
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setIsHovering(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsHovering(false);
+    };
 
     return (
-        <div >
-            <label className={classConnection(
-                classes.multipleFileInput,
-                error ? classes.multipleFileInput_error : '',
-                className
-            )}>
+        <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+        >
+            <label
+                className={classConnection(
+                    classes.multipleFileInput,
+                    error ? classes.multipleFileInput_error : '',
+                    isHovering ? classes.multipleFileInput_hover : '',
+                    className
+                )}
+            >
                 <span className={classes.multipleFileInput__cam} />
-                <span
-                    className={classes.multipleFileInput__text}
-                >
+                <span className={classes.multipleFileInput__text}>
                     {error || title}
                 </span>
                 <input

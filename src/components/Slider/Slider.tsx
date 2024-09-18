@@ -60,7 +60,7 @@ export const Slider = <T extends IBaseSlide>({
     useEffect(() => {
         updateTranslateX();
         if (Math.abs(swipeOffset) > 1 && isClickable) setIsClickable(false)
-    }, [currentSlide, swipeOffset]);
+    }, [currentSlide, swipeOffset, isClickable]);
 
     useEffect(() => {
         if (autoplay) {

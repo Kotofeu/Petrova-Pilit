@@ -13,6 +13,7 @@ import ScrollToTop from '../components/ScrollToTop'
 import AboutMe from '../pages/AboutMe'
 import Works from '../pages/Works'
 import Reviews from '../pages/Reviews'
+import Policy from '../pages/Policy'
 
 export const Router = () => {
   return (
@@ -30,7 +31,7 @@ export const Router = () => {
             <Route index element={<Reviews />} />
             <Route path=':id' element={<Reviews />} />
           </Route>
-          <Route path={POLICY_ROUTE} element={<div style={{ height: '100vh' }}></div>} />
+          <Route path={POLICY_ROUTE} element={<Policy/>} />
         </Route>
       </Routes>
     </BrowserRouter>

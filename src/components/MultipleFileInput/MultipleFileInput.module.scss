@@ -17,18 +17,37 @@
     transition: border-color .2s ease-in-out;
 
     &_error {
-        border-color: $active-color;
+        border-color: $active-color ;
+
         .multipleFileInput__cam {
-            background-color: $active-color;
+            background-color: $active-color ;
 
             &::after {
-                background-color: $active-color;
+                background-color: $active-color ;
             }
 
         }
 
         .multipleFileInput__text {
             color: $active-color;
+
+        }
+    }
+
+    &_hover {
+        border-color: $green-color-600;
+
+        .multipleFileInput__cam {
+            background-color: $green-color-600;
+
+            &::after {
+                background-color: $green-color-600;
+            }
+
+        }
+
+        .multipleFileInput__text {
+            color: $green-color-600;
 
         }
     }
@@ -47,6 +66,7 @@
         border-radius: 10px;
         position: relative;
         margin-bottom: 7px;
+        transition: background-color .2s ease-in-out;
 
         &::after,
         &::before {

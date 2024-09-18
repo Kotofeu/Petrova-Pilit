@@ -1,6 +1,5 @@
 import { FC, memo, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import classConnection from '../../../../utils/function/classConnection'
 
 import { ILink } from '../../../../store'
