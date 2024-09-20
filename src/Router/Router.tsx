@@ -12,6 +12,7 @@ import Home from '../pages/Home'
 import ScrollToTop from '../components/ScrollToTop'
 import AboutMe from '../pages/AboutMe'
 import Works from '../pages/Works'
+import Work from '../pages/Work'
 import Reviews from '../pages/Reviews'
 import Policy from '../pages/Policy'
 
@@ -25,7 +26,7 @@ export const Router = () => {
           <Route path={ABOUT_ROUTE} element={<AboutMe />} />
           <Route path={WORKS_ROUTE}>
             <Route index element={<Works />} />
-            <Route path=':id' element={<div style={{ height: '100vh' }}>DFJKDSAOFLJKDS</div>} />
+            <Route path=':id' element={<Work/>} />
           </Route>
           <Route path={REVIEWS_ROUTE}>
             <Route index element={<Reviews />} />

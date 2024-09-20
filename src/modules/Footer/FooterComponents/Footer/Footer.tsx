@@ -5,10 +5,8 @@ import { applicationStore } from '../../../../store'
 import { observer } from 'mobx-react-lite'
 import { ContactLinks } from '../ContactLinks/ContactLinks'
 import { PageLinks } from '../PageLinks/PageLinks'
-import { NewsletterSubscription } from '../NewsletterSubscription/NewsletterSubscription'
 
 export const Footer = observer(() => {
-    const [email, setEmail] = useState<string>('');
 
     const onLinkClick = useCallback(() => {
         window.scrollTo(0, 0);
@@ -28,9 +26,20 @@ export const Footer = observer(() => {
                 </div>
                 <ContactLinks />
                 <PageLinks onLinkClick={onLinkClick} />
-                <NewsletterSubscription email={email} setEmail={setEmail} />
+                <div className={classes.footer__workSchedule}>
+                    <h6 className={classes.footer__columnTitle}>График работы</h6>
+                    <div className={classes.footer__linksList}>
+                        <p className={classes.footer__workDay}><span>Понеденьник</span><span>08:00 - 20:00</span></p>
+                        <p className={classes.footer__workDay}><span>Вторник</span><span>08:00 - 20:00</span></p>
+                        <p className={classes.footer__workDay}><span>Среда</span><span>08:00 - 20:00</span></p>
+                        <p className={classes.footer__workDay}><span>Четвер:</span><span>08:00 - 20:00</span></p>
+                        <p className={classes.footer__workDay}><span>Пятница</span><span>08:00 - 20:00</span></p>
+                        <p className={classes.footer__workDay}><span>Суббота</span><span>08:00 - 18:00</span></p>
+                        <p className={classes.footer__workDay}><span>Воскресенье</span><span>Выходной</span></p>
+                    </div>
+                </div>
             </div>
             <div className={classes.footer__copyrighting}>© Petrova Pilit, 2024</div>
-        </footer>
+        </footer >
     );
 });
