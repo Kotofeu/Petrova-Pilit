@@ -62,6 +62,12 @@ export const ReviewImages: FC<IReviewImages> = memo(({ className, images, handle
                                     className={classes.reviewImages__image}
                                     key={image.name}
                                 >
+                                    <span
+                                        className={classes.reviewImages__background}
+                                        style={{
+                                            backgroundImage: `url(${imageUrl})`
+                                        }}
+                                    />
                                     <img
                                         src={imageUrl}
                                         alt={image.name}

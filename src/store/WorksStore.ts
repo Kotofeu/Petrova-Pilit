@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import sliderImage1 from '../assets/images/nails/1.jpg'
-import sliderImage2 from '../assets/images/nails/2.jpg'
+import sliderImage2 from '../assets/images/works-background.jpg'
 import sliderImage3 from '../assets/images/nails/3.jpg'
 import sliderImage4 from '../assets/images/nails/4.jpg'
 import sliderImage5 from '../assets/images/nails/5.jpg'
@@ -14,43 +14,112 @@ export interface IWorksType {
 }
 export interface IWorks {
     id: number;
-    afterImage?: string;
-    beforeImage?: string;
+    afterImage?: IImages;
+    beforeImage?: IImages;
     title: string;
     rating?: number;
     description?: string;
     workType?: IWorksType;
-    othersImage?: IImages[]
+    othersImage?: IImages[];
+    time: number;
 }
 const mockWorks: IGetAllJSON<IWorks> = {
     count: 7,
     rows: [
         {
             id: 1,
-            afterImage: sliderImage5,
-            beforeImage: sliderImage1,
+            afterImage: {
+                id: 10,
+                imageSrc: sliderImage2
+            },
+            beforeImage: {
+                id: 11,
+                imageSrc: sliderImage1
+            },
             title: 'Я выбираю пилить ноготочки, а не мозги😏',
             rating: 5,
             workType: {
                 id: 1,
                 title: 'Пиллинг'
-            }
-
+            },
+            time: 1724233268040,
+            othersImage: [
+                {
+                    id: 1,
+                    imageSrc: sliderImage1
+                },
+                {
+                    id: 2,
+                    imageSrc: sliderImage2
+                },
+                {
+                    id: 3,
+                    imageSrc: sliderImage3
+                },
+            ],
+            description: `Любим мы какие-то слова всегда умные использовать: гипонихий, дорсальный слой,синусы и прочее😏
+Сегодня разберем ту самую архитектуру, что мы там восстанавливаем :
+Правильная архитектура складывается из параллелей ☝Ваш ноготь должен быть параллелен со всех сторон,чтобы квадрат был квадратным, а овал/миндаль не был клювом
+Это можно сделать только жестким материалом: гелем/акригелем мы выстраиваем все стороны и опиливаем все параллельно
+Кому-то это требуется, кому-то нет, но зачастую после носки ногтей в месяц они любят скрутиться, упасть или уехать влево-вправо
+Часто в таких случаях мастера просто убирают длину до минимальной и ничего строить не приходится🤷🏼‍♀
+Но мы не ищем легких путей и не облегчаем себе работу, а делаем так, чтобы прям нраааавилось🫠
+Для записи пиши в сообщения группы,мы найдем подходящее время🫡
+Только до конца августа фиксированная цена 🔥1300🔥
+Боткина 2а( 9 апреля, магазин Мир ткани)🏃🏼‍♀‍➡
+С заботой, Ваш мастер Настасья🥰`
         },
         {
             id: 2,
-            afterImage: sliderImage4,
-            beforeImage: sliderImage3,
+            afterImage: {
+                id: 12,
+                imageSrc: sliderImage4
+            },
+            beforeImage: {
+                id: 13,
+                imageSrc: sliderImage3
+            },
             title: 'Восстановление архитектуры? WTF?🤔',
             rating: 4,
             workType: {
                 id: 2,
                 title: 'Фантазия пропала'
-            }
+            },
+            time: 1724233267040,
+            othersImage: [
+                {
+                    id: 1,
+                    imageSrc: sliderImage1
+                },
+                {
+                    id: 2,
+                    imageSrc: sliderImage2
+                },
+                {
+                    id: 3,
+                    imageSrc: sliderImage3
+                },
+                {
+                    id: 4,
+                    imageSrc: sliderImage5
+                },
+                {
+                    id: 5,
+                    imageSrc: sliderImage4
+                },
+                {
+                    id: 6,
+                    imageSrc: sliderImage1
+                },
+            ]
         },
         {
             id: 3,
-            beforeImage: sliderImage4,
+            beforeImage: {
+                id: 14,
+                imageSrc: sliderImage4
+            },
+            time: 1724233258040,
             title: 'Закрываем апрель🔥🔥',
             workType: {
                 id: 3,
@@ -59,18 +128,30 @@ const mockWorks: IGetAllJSON<IWorks> = {
         },
         {
             id: 4,
-            afterImage: sliderImage3,
-            beforeImage: sliderImage1,
+            afterImage: {
+                id: 15,
+                imageSrc: sliderImage3
+            },
+            beforeImage: {
+                id: 16,
+                imageSrc: sliderImage1
+            },
             title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ БЛА БЛА БЛА БЛА',
             workType: {
                 id: 1,
                 title: 'Пиллинг'
-            }
+            },
+            time: 1724233268040,
+
         },
         {
+            beforeImage: {
+                id: 17,
+                imageSrc: sliderImage4
+            },
             id: 5,
-            beforeImage: sliderImage4,
-            title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА'
+            title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА',
+            time: 1724233168040,
         },
     ]
 }
@@ -151,7 +232,10 @@ export class WorksStore {
         this._worksCache = [...this.worksCache, ...this._works]
         // Тут замена this._works.length на количесво работ с запроса
         this._hasMoreWorks = this._works.length > this._page * this._limit;
-
+    }
+    loadWorkById(id: number) {
+        // Тут совершено другая логика
+        return mockWorks.rows.find(work => work.id === id)
     }
     private setIsLoading(isLoading: boolean) {
         this._isLoading = isLoading

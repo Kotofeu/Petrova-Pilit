@@ -5,15 +5,17 @@ import classes from './WorkCard.module.scss';
 import classConnection from '../../../../utils/function/classConnection';
 import { WORKS_ROUTE } from '../../../../utils/const/routes';
 import Button from '../../../../UI/Button/Button';
+import DateTime from '../../../../UI/DateTime/DateTime';
 
 interface IWorkCard {
     id: number;
     className?: string;
     image?: string;
     title?: string;
+    date: number;
 }
 
-const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image }) => {
+const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => {
     const router = useNavigate();
     const [isShowMore, setIsShowMore] = useState<boolean>(false)
 
@@ -33,6 +35,7 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image }) => {
         >
             <img className={classes.workCard__image} src={image} alt={title} />
             <h4 className={classes.workCard__title}>{title}</h4>
+            <DateTime className={classes.workCard__date} date={date} addTime/>
             <Button onClick={onCardClick} className={classes.workCard__button}>Посмотреть подробнее</Button>
             <Button onClick={() => setIsShowMore(prev => !prev)} className={classes.workCard__show} />
         </motion.article>

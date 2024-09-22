@@ -36,20 +36,20 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                             <HomeWorkSlideImage
                                 className={classes.homeWorkSlide__image}
                                 type='before'
-                                imageSrc={beforeImage}
+                                imageSrc={beforeImage?.imageSrc}
                                 alt={`${title} до работы`}
                             />
                             <HomeWorkSlideImage
                                 className={classes.homeWorkSlide__image}
                                 type='after'
-                                imageSrc={afterImage}
+                                imageSrc={afterImage?.imageSrc}
                                 alt={`${title} после работы`}
                             />
                         </>
                         :
                         <HomeWorkSlideImage
                             className={classes.homeWorkSlide__image}
-                            imageSrc={afterImage || beforeImage}
+                            imageSrc={afterImage?.imageSrc || beforeImage?.imageSrc}
                             alt={title}
                         />
                 }

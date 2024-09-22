@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react-lite';
-import { ModalSlider, Slider } from '../../../../components/Slider';
+import { ModalSlider } from '../../../../components/Slider';
 import { applicationStore } from '../../../../store';
 import classes from './OfficeModal.module.scss'
 

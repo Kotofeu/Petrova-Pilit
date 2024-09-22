@@ -1,7 +1,7 @@
 import { memo, FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import classes from './WorksGrid.module.scss';
-import { IWorks, worksStore } from '../../../../store';
+import { IWorks } from '../../../../store';
 import WorkCard from '../WorkCard/WorkCard';
 import classConnection from '../../../../utils/function/classConnection';
 
@@ -23,8 +23,9 @@ export const WorksGrid: FC<IWorksGrid> = memo(({ className, works }) => {
                                 className={classes.grid__card}
                                 key={work.id}
                                 id={work.id}
-                                image={work.beforeImage || work.beforeImage}
+                                image={work.beforeImage?.imageSrc || work.afterImage?.imageSrc}
                                 title={work.title}
+                                date={work.time}
                             />
                         ))}
                     </AnimatePresence>
