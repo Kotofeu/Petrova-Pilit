@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom'
 import classes from './WorkByIdSection.module.scss'
 import Section from '../../../../components/Section/Section'
 import { observer } from 'mobx-react-lite'
-import { IImages, worksStore } from '../../../../store'
-import { Slider } from '../../../../components/Slider'
+import { worksStore } from '../../../../store'
+import DateTime from '../../../../UI/DateTime/DateTime'
+import BeforeAfterSlider from '../../../../components/BeforeAfterSlider/BeforeAfterSlider'
+import { WorkImagesGrid } from '../WorkImagesGrid/WorkImagesGrid'
 
 export const WorkByIdSection = observer(() => {
     const params = useParams();
@@ -15,19 +17,60 @@ export const WorkByIdSection = observer(() => {
 
 
     if (!work) return null
-
+    if (!work.afterImage?.imageSrc && !work.beforeImage?.imageSrc) return null
+    if (!work.title) return null
     return (
-        <Section className={classes.workById}>
-            <div className={classes.workById__inner}>
-                <h1 className={classes.workById__title}>{work.title}</h1>
-                {
-                    work.description?.split('\n').map(paragraph=> 
-                        <p className={classes.workById__desc}>{paragraph}</p>
+        <>
+            <Section className={classes.workById} isUnderline={!!work.othersImage?.length}>
+                <div className={classes.workById__inner}>
+                    {
+                        (work.afterImage?.imageSrc && work.beforeImage?.imageSrc)
+                            ? <BeforeAfterSlider
+                                className={classes.workById__slider}
+                                before={work.beforeImage?.imageSrc || ''}
+                                after={work.afterImage?.imageSrc || ''}
 
-                    )
-                }
-            </div>
-        </Section>
+                            />
+                            : <img
+                                className={classes.workById__preview}
+                                src={work.afterImage?.imageSrc || work.beforeImage?.imageSrc}
+                                alt={work.title}
+                            />
+                    }
+                    <div className={classes.workById__text}>
+                        <h1 className={classes.workById__title}>{work.title}</h1>
+                        <DateTime
+                            className={classes.workById__date}
+                            date={work.time}
+                            addTime
+                        />
+                        <div
+                            className={classes.workById__desc}
+                        >
+                            {
+                                work.description?.split('\n').map(paragraph =>
+                                    <p
+                                        className={classes.workById__paragraph}
+                                        key={paragraph}
+                                    >
+                                        {paragraph}
+                                    </p>
+                                )
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </Section>
+            {
+                work.othersImage?.length ?
+                    <WorkImagesGrid
+                        images={work.othersImage}
+                    />
+                    : null
+            }
+        </>
+
 
     )
 })
