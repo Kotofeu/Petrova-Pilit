@@ -14,6 +14,17 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, for
     const handleImagesChange = useCallback((images: FileList | null) => {
         setFormValues(prev => ({ ...prev, [IMAGES]: images }));
     }, []);
+    const handleImagesDelete = useCallback((index: number) => {
+        if (!formValues[IMAGES] || formValues[IMAGES].length === 0) return;
+        const imagesArray = Array.from(formValues[IMAGES]);
+        const updatedImagesArray = imagesArray.filter((_, i) => i !== index);
+        const newFileList = new DataTransfer();
+        updatedImagesArray.forEach(file => newFileList.items.add(file));
+        setFormValues(prevValues => ({
+            ...prevValues,
+            [IMAGES]: newFileList.files
+        }));
+    }, [formValues, setFormValues]);
     if (!isOpen) return null
     return (
         <motion.div
@@ -31,6 +42,7 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, for
                     className={classes.modalContent__imagesContainer}
                     images={formValues.images}
                     handleFilesChange={handleImagesChange}
+                    handleImagesDelete={handleImagesDelete}
                 />
                 <Button className={classes.modalContent__send} onClick={closeModal}>
                     Отправить

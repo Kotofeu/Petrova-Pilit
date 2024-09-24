@@ -6,7 +6,7 @@ interface IMultipleFileInput {
     className?: string;
     title?: string;
     showFileName?: boolean;
-    handleFilesChange: (images: FileList | null) => void;
+    handleFilesChange: (images: FileList | null) => void
     maxFileSize?: number;
     maxTotalSize?: number;
     maxFilesCount?: number;

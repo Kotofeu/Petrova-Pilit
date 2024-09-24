@@ -6,7 +6,6 @@ import { worksStore } from '../../../../store'
 import { observer } from 'mobx-react-lite'
 import { WorksGrid } from '../WorksGrid/WorksGrid'
 import Button from '../../../../UI/Button/Button'
-import Background from '../../../../assets/images/works-background.jpg'
 export const WorksSection = observer(() => {
     const [workTypes, setWorkTypes] = useState<number | null>(null)
     useEffect(() => {
