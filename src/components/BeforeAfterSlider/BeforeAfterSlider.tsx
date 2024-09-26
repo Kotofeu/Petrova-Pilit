@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import compare from './compare.svg'
 import classes from './BeforeAfterSlider.module.scss';
-import classConnection from "../../utils/function/classConnection";
+import { classConnection } from "../../utils/function";
 
 interface IBeforeAfterSlider {
     className?: string;

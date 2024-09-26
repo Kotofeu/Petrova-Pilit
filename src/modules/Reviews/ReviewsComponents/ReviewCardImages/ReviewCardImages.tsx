@@ -4,7 +4,7 @@ import { IReviews } from '../../../../store';
 import ReviewCard from '../../../../components/ReviewCard/ReviewCard';
 import { ModalSlider } from '../../../../components/Slider';
 import classes from './ReviewCardImages.module.scss'
-import classConnection from '../../../../utils/function/classConnection';
+import { classConnection } from '../../../../utils/function';
 interface IReviewCard {
     className?: string;
     review: IReviews;

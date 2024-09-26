@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import defaultAvatar from '../../assets/images/main 3.png'
 import defaultBlob from '../../assets/images/blob.svg'
 import defaultSplashes from '../../assets/images/splashes.png'
-import classConnection from '../../utils/function/classConnection';
 import classes from './Avatar.module.scss'
+import { classConnection } from '../../utils/function'
 
 
 interface IAvatar {

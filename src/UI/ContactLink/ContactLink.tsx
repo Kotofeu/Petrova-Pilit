@@ -1,6 +1,6 @@
 import { memo, FC } from 'react'
 import classes from './ContactLink.module.scss'
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 
 interface IContactLink {
     className?: string;

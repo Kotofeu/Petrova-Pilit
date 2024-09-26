@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import classes from './MultipleFileInput.module.scss';
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 
 interface IMultipleFileInput {
     className?: string;

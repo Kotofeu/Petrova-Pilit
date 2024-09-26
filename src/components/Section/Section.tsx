@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react'
 import classes from './Section.module.scss'
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 interface IContainer {
   className?: string;
   children?: ReactNode | ReactNode[];

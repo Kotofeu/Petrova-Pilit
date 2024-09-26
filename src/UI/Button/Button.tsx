@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react'
-import classConnection from '../../utils/function/classConnection'
 import classes from './Button.module.scss'
+import { classConnection } from '../../utils/function';
 interface IButton {
     className?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement>,

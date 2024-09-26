@@ -66,6 +66,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            line-height: 1em;
 
         }
     }   
@@ -98,29 +99,41 @@
     &__reviewInfo { 
         width: 100%; 
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     } 
     
     &__reviewUser { 
         display: flex; 
-        gap: 20px; 
-        row-gap: 7px;
+        gap: 15px; 
+        row-gap: 2px;
         align-items: center; 
         justify-content: space-between; 
         width: 100%; 
         flex-wrap:wrap;
     } 
-    
+
     &__userName { 
         font-size: 22px; 
+        line-height: 1.2em;
     } 
     
     &__rating { 
         flex-shrink: 0; 
     }
-
+    &__level{
+        font-size: 17px;
+        line-height: 1em;
+        font-weight: 500;
+        white-space: nowrap;
+        flex-grow: 1;
+        margin-top: .16em;
+        color: $text-color;
+    }
     &__date {
         font-size: 17px;
-        padding-top: 4px;
+        margin-right: 10px;
     }
 
     &__text {

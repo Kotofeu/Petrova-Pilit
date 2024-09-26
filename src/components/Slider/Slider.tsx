@@ -1,9 +1,9 @@
 import { ReactNode, useState, useEffect, useMemo } from 'react';
 import { SwipeableHandlers, useSwipeable } from 'react-swipeable';
 import classes from './Slider.module.scss';
-import classConnection from '../../utils/function/classConnection';
 import { SliderPagination } from './SliderPagination';
 import { SliderArrow } from './SliderArrow';
+import { classConnection } from '../../utils/function';
 
 export interface IBaseSlide {
     id: string | number;

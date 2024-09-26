@@ -1,12 +1,12 @@
 import { useRef, memo } from "react"
 
 import Section from "../../../../components/Section/Section"
-import classConnection from "../../../../utils/function/classConnection"
 import { HomeMainSlider } from "../HomeMainSlider/HomeMainSlider"
 import Arrow from '../../../../assets/icons/Arrow.svg'
 
 import classes from './HomeMainSection.module.scss'
 import ContactList from "../../../../components/ContactList/ContactList"
+import { classConnection } from "../../../../utils/function"
 
 export const HomeMainSection = memo(() => {
     const homeMainBottom = useRef<HTMLDivElement>(null)

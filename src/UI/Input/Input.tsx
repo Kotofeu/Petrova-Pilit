@@ -1,6 +1,6 @@
 import { memo, FC, ChangeEvent, HTMLInputTypeAttribute } from 'react'
 import classes from './Input.module.scss'
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 export interface IInput {
     className?: string;
     value: string;

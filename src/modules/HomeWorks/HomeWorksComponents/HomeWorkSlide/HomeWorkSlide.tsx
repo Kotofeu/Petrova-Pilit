@@ -1,13 +1,13 @@
 import { memo, FC, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import classConnection from '../../../../utils/function/classConnection';
 import { WORKS_ROUTE } from '../../../../utils/const/routes';
 
 import { HomeWorkSlideImage } from '../HomeWorkSlideImage/HomeWorkSlideImage';
 
 import classes from './HomeWorkSlide.module.scss'
 import { IWorks } from '../../../../store';
+import { classConnection } from '../../../../utils/function';
 
 
 interface IHomeWorkSlide {

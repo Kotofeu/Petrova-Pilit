@@ -4,10 +4,11 @@ import {ApplicationStore} from './ApplicationStore'
 import {WorksStore} from './WorksStore'
 import {ServicesStore} from './ServicesStore'
 import { ReviewsStore } from './ReviewsStore'
+import { UserStore } from './UserStore'
 
 export type {ILink} from './ApplicationStore'
 export type {IReviews} from './ReviewsStore'
-export type {IUser} from './ReviewsStore'
+export type {IUser} from './UserStore'
 export type {IService} from './ServicesStore'
 export type {IWorks} from './WorksStore'
 
@@ -27,3 +28,4 @@ export const applicationStore = new ApplicationStore()
 export const worksStore = new WorksStore()
 export const servicesStore = new ServicesStore()
 export const reviewsStore = new ReviewsStore()
+export const userStore = new UserStore()

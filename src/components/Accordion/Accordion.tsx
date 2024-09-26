@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import arrowImage from '../../assets/icons/Arrow.svg'
 
 import classes from './Accordion.module.scss'
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 interface IBaseSlide {
     id: string | number;
 }

@@ -1,7 +1,7 @@
 import { memo, FC } from 'react'
 import classes from './Tabs.module.scss'
-import classConnection from '../../utils/function/classConnection';
 import TabButton from './TabButton';
+import { classConnection } from '../../utils/function';
 
 
 interface ITabItem {

@@ -1,6 +1,6 @@
 import { ReactNode, useMemo } from 'react'; 
 import classes from './Grid.module.scss'; 
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 
 export interface IBaseSlide { 
     id: string | number; 

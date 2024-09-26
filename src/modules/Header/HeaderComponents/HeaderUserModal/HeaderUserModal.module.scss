@@ -1,0 +1,67 @@
+@import '../../../../styles/settings.scss';
+
+.headerUserModal {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 320px;
+    width: 100%;
+    background-color: #FFF;
+    box-shadow: -1px 1px 5px #000;
+
+    &__inner {
+        padding: 20px 25px 80px;
+        position: relative;
+    }
+
+    &__close {
+        width: 30px;
+        height: 30px;
+    }
+
+    &__imageBox {
+        position: relative;
+        max-width: 220px;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 15px;
+
+    }
+
+    &__image {
+
+        height: auto;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: $secondary-color;
+    }
+
+    &__edit {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 25px;
+        height: 25px;
+    }
+
+    &__level {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 400;
+        padding-top: 2px;
+    }
+    &__content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    &__name{
+        font-size: 24px;
+    }
+}

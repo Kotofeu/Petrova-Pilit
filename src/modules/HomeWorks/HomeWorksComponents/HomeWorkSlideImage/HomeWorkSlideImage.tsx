@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
-import classConnection from '../../../../utils/function/classConnection';
 import classes from './HomeWorkSlideImage.module.scss'
+import { classConnection } from '../../../../utils/function';
 
 interface IHomeWorkSlideImage {
     className?: string

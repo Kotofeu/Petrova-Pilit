@@ -1,7 +1,7 @@
 import { FC, memo } from 'react'
 
 import classes from './AdvantagesCard.module.scss'
-import classConnection from '../../../../utils/function/classConnection';
+import { classConnection } from '../../../../utils/function';
 interface IAdvantagesCard {
     className?: string;
     title: string;

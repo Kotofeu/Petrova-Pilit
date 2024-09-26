@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import classes from './Slider.module.scss';
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 
 interface ISliderArrow {
     direction: 'prev' | 'next';

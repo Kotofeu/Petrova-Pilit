@@ -2,20 +2,15 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import combinedManicure from '../assets/images/services/combined manicure.jpg'
-import manicureGelPolishCoating from '../assets/images/services/Manicure with gel polish coating.jpg'
 import nailRepair from '../assets/images/services/nail repair.jpg'
 import strengtheningNails from '../assets/images/services/Strengthening nails.jpg'
-import frenchManicure from '../assets/images/services/French manicure.jpg'
 import AlignmentNailPlate from '../assets/images/services/Alignment of the nail plate.jpg'
 import MensManicure from '../assets/images/services/Mens manicure.jpg'
 
 import { IGetAllJSON, IImages } from '.';
+import { IUser } from './UserStore';
 
-export interface IUser {
-    id: number;
-    name?: string;
-    imageSrc?: string;
-}
+
 export interface IReviews {
     id: number;
     user: IUser;
@@ -73,7 +68,8 @@ export class ReviewsStore {
                 user: {
                     id: 1,
                     name: 'Анастасия петрова',
-                    imageSrc: combinedManicure
+                    imageSrc: combinedManicure,
+                    visitsNumber: 4
                 }
 
             },
@@ -85,6 +81,7 @@ export class ReviewsStore {
                 user: {
                     id: 2,
                     name: 'cras.petrov@yandex.ru',
+                    visitsNumber: 5
                 }
 
             },
@@ -96,7 +93,8 @@ export class ReviewsStore {
                 user: {
                     id: 3,
                     name: 'Василиса',
-                    imageSrc: nailRepair
+                    imageSrc: nailRepair,
+                    visitsNumber: 2
                 }
 
             },
@@ -110,7 +108,8 @@ export class ReviewsStore {
                 user: {
                     id: 4,
                     name: 'Чел ты...',
-                    imageSrc: strengtheningNails
+                    imageSrc: strengtheningNails,
+                    visitsNumber: 7
                 }
 
             },
@@ -135,13 +134,13 @@ export class ReviewsStore {
                     {
                         id: 4,
                         imageSrc: AlignmentNailPlate,
-                    },
+                    }
                 ],
 
                 user: {
                     id: 5,
                     name: 'Ноу нейм',
-                    imageSrc: ''
+                    visitsNumber: 0
                 }
 
             },
@@ -153,7 +152,8 @@ export class ReviewsStore {
                 user: {
                     id: 6,
                     name: 'Николай',
-                    imageSrc: MensManicure
+                    imageSrc: MensManicure,
+                    visitsNumber: 9
                 }
 
             },
@@ -165,7 +165,7 @@ export class ReviewsStore {
                 user: {
                     id: 7,
                     name: 'Очень длинное имя И очень длинная фамилия',
-                    imageSrc: ''
+                    visitsNumber: 5
                 }
 
             }]

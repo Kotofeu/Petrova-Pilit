@@ -1,7 +1,7 @@
-import { memo, FC, ReactNode } from 'react'
-import classConnection from '../../utils/function/classConnection'
+import { memo, FC } from 'react'
 import classes from './Tabs.module.scss'
 import ActiveLine from '../../UI/ActiveLine/ActiveLine';
+import { classConnection } from '../../utils/function';
 interface ITabButton {
     isActive: boolean;
     className?: string;

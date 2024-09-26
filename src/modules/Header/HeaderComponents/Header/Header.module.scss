@@ -68,8 +68,12 @@
     &__buttons{
         align-items: center;
         display: flex;
+        gap: 25px;
     }
     &__button {
         width: 225px;
+    }
+    &__user{
+        
     }
 }

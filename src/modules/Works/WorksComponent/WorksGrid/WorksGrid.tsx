@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import classes from './WorksGrid.module.scss';
 import { IWorks } from '../../../../store';
 import WorkCard from '../WorkCard/WorkCard';
-import classConnection from '../../../../utils/function/classConnection';
+import { classConnection } from '../../../../utils/function';
 
 interface IWorksGrid {
     className?: string;

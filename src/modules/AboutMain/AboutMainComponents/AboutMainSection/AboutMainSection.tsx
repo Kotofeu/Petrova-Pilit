@@ -3,8 +3,8 @@ import Avatar from '../../../../components/Avatar/Avatar'
 import classes from './AboutMainSection.module.scss'
 import { applicationStore } from '../../../../store'
 import ContactList from '../../../../components/ContactList/ContactList'
-import classConnection from '../../../../utils/function/classConnection'
 import { observer } from 'mobx-react-lite'
+import { classConnection } from '../../../../utils/function'
 
 export const AboutMainSection = observer(() => {
   return (

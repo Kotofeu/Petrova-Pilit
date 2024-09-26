@@ -58,7 +58,8 @@
             }
 
             & .workCard__title,
-            & .workCard__button {
+            & .workCard__button,
+            & .workCard__date {
                 transform: translateX(0);
                 opacity: 1;
             }

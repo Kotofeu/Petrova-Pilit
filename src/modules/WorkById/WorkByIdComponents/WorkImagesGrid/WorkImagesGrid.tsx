@@ -16,9 +16,16 @@ export const WorkImagesGrid: FC<IWorkImagesGrid> = memo(({
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [activeImage, setActiveImage] = useState<number>(0)
-    const modalHandler = useCallback((index: number) => {
-        setActiveImage(index)
-        setIsOpen(true)
+    const modalHandler = useCallback((index?: number) => {
+        if (index === undefined) {
+            setIsOpen(false)
+            document.body.style.overflowY = 'auto';
+        }
+        else {
+            setActiveImage(index)
+            setIsOpen(true)
+            document.body.style.overflowY = 'hidden';
+        }
     }, [])
     return (
         <Section className={classes.workImages} backgroundImage={Background}>
@@ -40,7 +47,7 @@ export const WorkImagesGrid: FC<IWorkImagesGrid> = memo(({
             />
             <ModalSlider
                 isOpen={isOpen}
-                closeModal={() => setIsOpen(false)}
+                closeModal={() => modalHandler()}
                 items={images}
                 renderItem={(image, index) => (
                     <motion.img

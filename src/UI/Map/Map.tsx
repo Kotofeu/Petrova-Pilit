@@ -1,6 +1,6 @@
 import { memo, FC, HTMLAttributeReferrerPolicy } from 'react'
 import classes from './Map.module.scss'
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 export type loadingTypes = "lazy" | "eager" | undefined
 interface IMap {
     className?: string;

@@ -2,10 +2,10 @@ import { FC, memo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import classes from './WorkCard.module.scss';
-import classConnection from '../../../../utils/function/classConnection';
 import { WORKS_ROUTE } from '../../../../utils/const/routes';
 import Button from '../../../../UI/Button/Button';
 import DateTime from '../../../../UI/DateTime/DateTime';
+import { classConnection } from '../../../../utils/function';
 
 interface IWorkCard {
     id: number;

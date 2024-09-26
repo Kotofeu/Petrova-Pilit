@@ -1,10 +1,10 @@
 import { FC, memo, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
-import classConnection from '../../../../utils/function/classConnection'
 
 import { ILink } from '../../../../store'
 import classes from './HeaderLinks.module.scss'
 import ActiveLine from '../../../../UI/ActiveLine/ActiveLine'
+import { classConnection } from '../../../../utils/function'
 
 export enum LinkType {
     underline = 'underline',

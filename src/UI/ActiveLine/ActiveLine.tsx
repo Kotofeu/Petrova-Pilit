@@ -1,7 +1,7 @@
 import { FC, memo } from 'react'
 import { motion } from 'framer-motion'
 import classes from './ActiveLine.module.scss'
-import classConnection from '../../utils/function/classConnection';
+import { classConnection } from '../../utils/function';
 
 interface IActiveLine {
     className?: string;

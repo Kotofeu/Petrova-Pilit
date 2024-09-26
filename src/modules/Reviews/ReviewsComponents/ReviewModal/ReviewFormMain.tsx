@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import Input from '../../../../UI/Input/Input';
 import StarRating from '../../../../UI/StarRating/StarRating';
 import Button from '../../../../UI/Button/Button';
-import classConnection from '../../../../utils/function/classConnection';
 import { COMMENT, MAX_COMMENT_NAME, MAX_COMMENT_LENGTH, NAME, RATING, IReviewForm } from './const';
 
 import classes from './ReviewModal.module.scss'
+import { classConnection } from '../../../../utils/function';
 
 
 export const ReviewFormMain: FC<IReviewForm> = memo(({ isUserAuth, isOpen, closeModal, formValues, setFormValues }) => {

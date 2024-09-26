@@ -1,11 +1,11 @@
 import { FC } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import classConnection from '../../utils/function/classConnection'
 import { applicationStore } from '../../store'
 import ContactLink from '../../UI/ContactLink/ContactLink'
 
 import classes from './ContactList.module.scss'
+import { classConnection } from '../../utils/function'
 interface IContactList{
     className?: string
 }

@@ -1,7 +1,7 @@
 import { FC, memo, useMemo } from 'react'
-import classConnection from '../../../../utils/function/classConnection';
 import Clock from '../../../../assets/icons/clock.svg'
 import classes from './ServicesTitle.module.scss'
+import { classConnection } from '../../../../utils/function';
 interface IServicesTitle {
     className?: string;
     title: string;

@@ -2,9 +2,10 @@ import { FC, memo, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import MultipleFileInput from '../../../../components/MultipleFileInput/MultipleFileInput'
 
-import classConnection from '../../../../utils/function/classConnection'
 
 import classes from './ReviewImages.module.scss'
+import { classConnection } from '../../../../utils/function'
+import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 
 const MAX_IMAGE_COUNT = 6
 const MAX_IMAGES_WEIGHT = 10485760
@@ -85,11 +86,11 @@ export const ReviewImages: FC<IReviewImages> = memo(({
                                             src={imageUrl}
                                             alt={image.name}
                                         />
-                                        <button
+                                        <ControllerButton
                                             className={classes.reviewImages__button}
+                                            type='delete'
                                             onClick={() => handleImagesDelete(index)}
-                                            type='button'
-                                            title='delete'
+                                            title='Удалить фото'
                                         />
                                     </motion.div>
 
