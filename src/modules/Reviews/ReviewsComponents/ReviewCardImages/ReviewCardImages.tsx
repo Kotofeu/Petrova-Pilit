@@ -49,7 +49,7 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                                     <img
                                         className={classes.reviewCard__image}
                                         src={image.imageSrc}
-                                        alt={`Фотография к отзыву пользователя ${review.user.name} №${index+1}`}
+                                        alt={`Фотография к отзыву пользователя ${review.user?.name} №${index+1}`}
 
                                     />
                                 </div>
@@ -64,7 +64,7 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                                     className={classes.reviewCard__modalImage}
                                     key={image.id}
                                     src={image.imageSrc}
-                                    alt={`Фотография к отзыву пользователя ${review.user.name} №${index+1}`}
+                                    alt={`Фотография к отзыву пользователя ${review.user?.name} №${index+1}`}
                                 />
                             )}
                             initialSlide={activeImage}

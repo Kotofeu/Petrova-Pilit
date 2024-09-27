@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { REVIEWS_ROUTE } from '../../../../utils/const/routes'
+import { ID_PARAM, REVIEWS_ROUTE } from '../../../../utils/const/routes'
 
 import { Slider } from '../../../../components/Slider'
 import { reviewsStore } from '../../../../store'
@@ -16,7 +16,7 @@ export const HomeReviewsSlider = observer(() => {
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>, id: number) => {
         event.preventDefault()
         window.scrollTo(0, 0)
-        router(`${REVIEWS_ROUTE}/${id}`)
+        router(`${REVIEWS_ROUTE}/?${ID_PARAM}=${id}`)
     }, [])
 
     return (

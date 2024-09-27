@@ -2,9 +2,12 @@ import React, { memo, useState } from 'react';
 import classes from './ReviewsNavbar.module.scss';
 import Button from '../../../../UI/Button/Button';
 import { ReviewModal } from '../ReviewModal/ReviewModal';
+import { useSearchParams } from 'react-router-dom';
+import { IS_WRITING_PARAM } from '../../../../utils/const/routes';
 
 export const ReviewsNavbar: React.FC = memo(() => {
-    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [searchParams] = useSearchParams();
+    const [isOpen, setIsOpen] = useState<boolean>(searchParams.get(IS_WRITING_PARAM) === 'true');
     const openModal = () => {
         setIsOpen(true)
         document.body.style.overflowY = 'hidden';

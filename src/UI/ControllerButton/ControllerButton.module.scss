@@ -1,14 +1,10 @@
 @import '../../styles/settings.scss';
 
 .button {
-    position: relative;
     background-color: transparent;
     border: none;
     padding: 0;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
-
     &_edit {
         &>img {
             width: 100%;
@@ -20,7 +16,7 @@
 
     &_add>span,
     &_delete {
-
+        position: relative;
         &::before,
         &::after {
             position: absolute;

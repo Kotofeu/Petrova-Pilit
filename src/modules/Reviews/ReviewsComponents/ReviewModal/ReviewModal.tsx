@@ -1,4 +1,4 @@
-import { memo, FC, useState, useEffect } from 'react'
+import {  FC, useState, useEffect } from 'react'
 import Modal from '../../../../components/Modal/Modal';
 import { ReviewFormMain } from './ReviewFormMain';
 import { ReviewFormImages } from './ReviewFormImages';
@@ -6,6 +6,8 @@ import { COMMENT, IMAGES, IValues, NAME, RATING } from './const';
 
 import classes from './ReviewModal.module.scss'
 import { AnimatePresence } from 'framer-motion';
+import { observer } from 'mobx-react-lite';
+import { userStore } from '../../../../store';
 
 interface IReviewModal {
     isUserAuth?: boolean;
@@ -20,7 +22,7 @@ const initialValues: IValues = {
     [IMAGES]: null,
 };
 
-export const ReviewModal: FC<IReviewModal> = memo(({ isUserAuth, isOpen, closeModal }) => {
+export const ReviewModal: FC<IReviewModal> = observer(({ isUserAuth, isOpen, closeModal }) => {
     const [formValues, setFormValues] = useState(initialValues);
     const [isMainOpen, setIsMainOpen] = useState<boolean>(true)
     useEffect(() => {
@@ -39,7 +41,7 @@ export const ReviewModal: FC<IReviewModal> = memo(({ isUserAuth, isOpen, closeMo
                     formValues={formValues}
                     setFormValues={setFormValues}
                     closeModal={() => setIsMainOpen(false)}
-                    isUserAuth={false}
+                    isUserAuth={userStore.isAuth}
                 />
                 <ReviewFormImages
                     key={'ReviewFormImages'}

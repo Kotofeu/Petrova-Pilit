@@ -40,6 +40,7 @@ export const Header: FC = observer(() => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
+
   return (
     <header className={classes.header}>
       <motion.div className={
@@ -75,14 +76,14 @@ export const Header: FC = observer(() => {
               user={userStore.user}
               isAdmin={userStore.isAdmin}
               isAuth={userStore.isAuth}
-              openModal={() => modalHandler(true)}
+              openModal={modalHandler}
             />
             {
               userStore.isAuth
               && <HeaderUserModal
                 user={userStore.user}
                 isOpen={isOpen}
-                closeModal={() => modalHandler(false)}
+                closeModal={modalHandler}
               />
             }
           </div>

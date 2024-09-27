@@ -1,18 +1,33 @@
-import { memo, FC } from 'react'
+import { memo, FC, useCallback } from 'react'
+import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'framer-motion'
 import defaultImage from '../../../../assets/icons/User-icon.svg'
-import { IUser } from '../../../../store';
+import { IUser, userStore } from '../../../../store';
 import classes from './HeaderUserModal.module.scss'
 import { userLevel } from '../../../../utils/function';
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
+import { NavLink } from 'react-router-dom';
+import { ID_PARAM, IS_WRITING_PARAM, REVIEWS_ROUTE, SETTINGS_ROUTE, USER_ROUTE } from '../../../../utils/const/routes';
+import Button from '../../../../UI/Button/Button';
+import { WEBSITE_ADDRESS } from '../../../../utils/const/main';
 
 interface IHeaderUser {
     user: IUser | null;
     isOpen: boolean;
-    closeModal: () => void;
+    closeModal: (isOpen: boolean) => void;
 }
 
-export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal }) => {
+export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal}) => {
+
+    const onLinkClick = useCallback(() => {
+        closeModal(false)
+        window.scrollTo(0, 0);
+    }, [])
+    const onExitClick = useCallback(() => {
+        userStore.setUser(null)
+        closeModal(false)
+        window.scrollTo(0, 0);
+    }, [])
     return (
         <AnimatePresence>
             {
@@ -29,7 +44,7 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
                             className={classes.headerUserModal__close}
                             type='delete'
                             title='Закрыть окно'
-                            onClick={closeModal}
+                            onClick={() => closeModal(false)}
                         />
 
                         <div className={classes.headerUserModal__imageBox}>
@@ -38,26 +53,71 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
                                 src={user?.imageSrc || defaultImage}
                                 alt={user?.name || 'Ваш аккаунт'}
                             />
-                            <ControllerButton
-                                className={classes.headerUserModal__edit}
-                                type='edit'
-                                title='Редактировать фото'
-                                onClick={() => console.log('Редактирование фото')}
-                            />
                         </div>
                         <p className={classes.headerUserModal__level}>
                             {userLevel(user?.visitsNumber)}
                         </p>
-                        <div className={classes.headerUserModal__content}>
-                            <h4 className={classes.headerUserModal__name}>
-                                {user?.name}
-                            </h4>
-                            <p>{`Количество посещений: ${user?.visitsNumber || 0}`}</p>
-                            <p>Ваш отзыв</p>
-                            <p>Редактирование профиля</p>
-                            <p>Выйти</p>
-                            <p>QR-kode</p>
+                        <p className={classes.headerUserModal__name}>
+                            {user?.name}
+                        </p>
+                        <nav className={classes.headerUserModal__content}>
+                            <p
+                                className={classes.headerUserModal__navItem}
+                            >
+                                {`Количество посещений: ${user?.visitsNumber || 0}`}
+                            </p>
+                            <NavLink
+                                className={classes.headerUserModal__navLink}
+                                to={SETTINGS_ROUTE}
+                                onClick={onLinkClick}
+                            >
+                                Настройки
+                            </NavLink>
+                            {
+                                user?.review?.id
+                                    ? <NavLink
+                                        className={classes.headerUserModal__navLink}
+                                        to={`${REVIEWS_ROUTE}/?${ID_PARAM}=${user?.review?.id}`}
+                                        onClick={onLinkClick}
+                                    >
+                                        Ваш отзыв
+                                    </NavLink>
+                                    : <NavLink
+                                        className={classes.headerUserModal__navLink}
+                                        to={`${REVIEWS_ROUTE}/?${IS_WRITING_PARAM}=${true}`}
+                                        onClick={onLinkClick}
+                                    >
+                                        Написать отзыв
+                                    </NavLink>
+                            }
+
+                            <Button
+                                className={classes.headerUserModal__navButton}
+                                onClick={onExitClick}
+                            >
+                                Выйти
+                            </Button>
+
+                        </nav>
+                        <div
+                            className={classes.headerUserModal__qrBox}
+                        >
+                            <p className={classes.headerUserModal__qrText}>
+                                Покажите QR-код мастеру
+                            </p>
+                            <QRCodeSVG
+                                value={`${WEBSITE_ADDRESS}${USER_ROUTE}/${user?.id}`}
+                                title={"Ваш QR Code"}
+                                size={260}
+                                fgColor={"#000000"}
+                                level={"L"}
+                                marginSize={0}
+                            />
+                            <p className={classes.headerUserModal__qrText}>
+                                или сделайте скриншот
+                            </p>
                         </div>
+
                     </div>
                 </motion.div>
             }

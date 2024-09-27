@@ -9,7 +9,6 @@
     min-height: 100dvh;
     max-width: $container-width;
     margin: 0 auto;
-
     &::before {
         content: '';
         position: absolute;
@@ -30,7 +29,12 @@
         flex-direction: column;
         gap: 20px;
     }
-    &__review_selected{
-        border: 2px solid $active-color;
+    &__review{
+        background-color: #FFF;
+        border: 2px solid #FFF;
+        box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+        &_selected{
+            border: 2px solid $active-color;
+        }
     }
 }

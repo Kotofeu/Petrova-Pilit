@@ -35,12 +35,12 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
         >
             <header className={classes.reviewCard__header}>
                 <div className={classes.reviewCard__userIcon}>
-                    <img src={user.imageSrc || defaultUSerIcon} alt={user.name} />
+                    <img src={user?.imageSrc || defaultUSerIcon} alt={user?.name} />
                 </div>
                 <div className={classes.reviewCard__reviewInfo}>
                     <div className={classes.reviewCard__reviewUser}>
-                        <h6 className={classes.reviewCard__userName} title={user.name}>{user.name}</h6>
-                        <p className={classes.reviewCard__level}>{`(${userLevel(user.visitsNumber)})`}</p>
+                        <h6 className={classes.reviewCard__userName} title={user?.name}>{user?.name}</h6>
+                        <p className={classes.reviewCard__level}>{`(${userLevel(user?.visitsNumber)})`}</p>
                     </div>
                     <div className={classes.reviewCard__reviewUser}>
                         <DateTime className={classes.reviewCard__date} date={time} />

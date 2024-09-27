@@ -3,12 +3,17 @@ import classes from './ReviewsSection.module.scss'
 import { ReviewCardImages } from '../ReviewCardImages/ReviewCardImages'
 import { reviewsStore } from '../../../../store'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
+import { ID_PARAM } from '../../../../utils/const/routes'
+import { classConnection } from '../../../../utils/function'
 export const ReviewsSection = observer(() => {
-    const params = useParams();
-    const selectedReview = useRef<HTMLDivElement>(null)
-    const id: number | undefined = params.id ? +params.id : undefined
+
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get(ID_PARAM);
+    const parsedId = id ? parseInt(id) : undefined;
+    const selectedReview = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         if (selectedReview.current) {
             selectedReview.current.scrollIntoView(
@@ -27,11 +32,16 @@ export const ReviewsSection = observer(() => {
                 {
                     reviewsStore.reviews.map(review =>
                         <div
-                            ref={id === review.id ? selectedReview : undefined}
+                            ref={parsedId === review.id ? selectedReview : undefined}
                             key={review.id}
                         >
                             <ReviewCardImages
-                                className={id === review.id ? classes.reviewsSection__review_selected : ''}
+                                className={
+                                    classConnection(
+                                        classes.reviewsSection__review,
+                                        parsedId === review.id ? classes.reviewsSection__review_selected : ''
+                                    )
+                                }
                                 review={review}
                             />
                         </div>

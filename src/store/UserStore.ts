@@ -4,19 +4,24 @@ import { makeAutoObservable } from 'mobx'
 
 import adminImage from '../assets/images/12_11zon.jpg'
 import userImage from '../assets/images/main.png'
+import { IReviews } from './ReviewsStore';
 export interface IUser {
     id: number;
     name?: string;
     imageSrc?: string;
     role?: 'USER' | 'ADMIN';
     visitsNumber?: number;
+    review?: IReviews;
 }
 const mockUser: IUser = {
     id: 1,
     name: 'Бурятский Бублик',
     imageSrc: userImage,
     role: 'USER',
-    visitsNumber: 1
+    visitsNumber: 1,
+    review: {
+        id: 1
+    }
 }
 const mockAdmin: IUser = {
     id: 1,
@@ -37,11 +42,12 @@ export class UserStore {
         this._isAuth = isAuth
     }
     setIsAdmin(role: string) {
-        this.setIsAuth(true)
         this._isAdmin = role === "ADMIN" ? true : false
     }
     setUser(user: IUser | null) {
         this._user = user
+        this.setIsAuth(user ? true : false)
+        this.setIsAdmin(user?.role || 'USER')
     }
 
     get isAuth() {

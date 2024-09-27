@@ -5,7 +5,6 @@ import { classConnection } from '../../utils/function';
 interface IMultipleFileInput {
     className?: string;
     title?: string;
-    showFileName?: boolean;
     handleFilesChange: (images: FileList | null) => void
     maxFileSize?: number;
     maxTotalSize?: number;

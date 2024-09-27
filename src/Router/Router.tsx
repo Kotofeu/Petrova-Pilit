@@ -6,6 +6,8 @@ import {
   HOME_ROUTE,
   POLICY_ROUTE,
   REVIEWS_ROUTE,
+  SETTINGS_ROUTE,
+  USER_ROUTE,
   WORKS_ROUTE
 } from '../utils/const/routes'
 import Home from '../pages/Home'
@@ -15,6 +17,8 @@ import Works from '../pages/Works'
 import Work from '../pages/Work'
 import Reviews from '../pages/Reviews'
 import Policy from '../pages/Policy'
+import Settings from '../pages/Settings'
+import User from '../pages/User'
 
 export const Router = () => {
   return (
@@ -26,13 +30,15 @@ export const Router = () => {
           <Route path={ABOUT_ROUTE} element={<AboutMe />} />
           <Route path={WORKS_ROUTE}>
             <Route index element={<Works />} />
-            <Route path=':id' element={<Work/>} />
+            <Route path=':id' element={<Work />} />
           </Route>
-          <Route path={REVIEWS_ROUTE}>
-            <Route index element={<Reviews />} />
-            <Route path=':id' element={<Reviews />} />
+          <Route path={REVIEWS_ROUTE} element ={<Reviews />}/>
+          <Route path={POLICY_ROUTE} element={<Policy />} />
+          <Route path={SETTINGS_ROUTE} element={<Settings />} />
+          <Route path={USER_ROUTE}>
+            <Route index element={<User />} />
+            <Route path=':id' element={<User />} />
           </Route>
-          <Route path={POLICY_ROUTE} element={<Policy/>} />
         </Route>
       </Routes>
     </BrowserRouter>

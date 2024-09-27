@@ -13,10 +13,10 @@ import { IUser } from './UserStore';
 
 export interface IReviews {
     id: number;
-    user: IUser;
+    user?: IUser;
     comment?: string;
-    time: number;
-    rating: number;
+    time?: number;
+    rating?: number;
     images?: IImages[];
 }
 export class ReviewsStore {
