@@ -23,6 +23,7 @@
     &__close {
         width: 30px;
         height: 30px;
+        flex-shrink: 0;
     }
 
     &__imageBox {
@@ -115,6 +116,7 @@
         align-items: center;
         justify-content: center;
         gap: 5px;
+        padding-top: 10px;
     }
     &__qrText{
         font-size: 16px;

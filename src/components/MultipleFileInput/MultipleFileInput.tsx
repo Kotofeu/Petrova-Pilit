@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react';
 import classes from './MultipleFileInput.module.scss';
 import { classConnection } from '../../utils/function';
+import Message from '../../UI/Message/Message';
 
 interface IMultipleFileInput {
     className?: string;
@@ -68,7 +69,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
         }
     };
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
         event.preventDefault();
         setIsHovering(false);
         const files = event.dataTransfer.files;
@@ -79,7 +80,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
         }
     };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
         event.preventDefault();
         setIsHovering(true);
     };
@@ -89,11 +90,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
     };
 
     return (
-        <div
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-        >
+        <>
             <label
                 className={classConnection(
                     classes.multipleFileInput,
@@ -101,20 +98,25 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
                     isHovering ? classes.multipleFileInput_hover : '',
                     className
                 )}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
             >
                 <span className={classes.multipleFileInput__cam} />
                 <span className={classes.multipleFileInput__text}>
-                    {error || title}
+                    {title}
                 </span>
                 <input
                     name={name}
                     type="file"
-                    multiple accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff"
+                    multiple = {maxFilesCount > 1}
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff"
                     onChange={handleInputChange}
                     style={{ display: 'none' }}
                 />
             </label>
-        </div>
+            <Message type='error' text={error}/>
+        </>
     );
 });
 

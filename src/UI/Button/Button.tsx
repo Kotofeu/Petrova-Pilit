@@ -6,6 +6,7 @@ interface IButton {
     onClick?: React.MouseEventHandler<HTMLButtonElement>,
     children?: string | ReactNode,
     type?: "button" | "submit" | "reset";
+    title?: string;
 }
 const Button: FC<IButton> = memo((props) => {
     return (
@@ -13,6 +14,7 @@ const Button: FC<IButton> = memo((props) => {
             className={classConnection(classes.button, props.className)}
             onClick={props.onClick}
             type={props.type ? props.type : 'button'}
+            title={props.title}
         >
             {props.children}
         </button>
