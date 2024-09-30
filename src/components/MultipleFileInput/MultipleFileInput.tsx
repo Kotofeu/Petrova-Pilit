@@ -1,7 +1,8 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import classes from './MultipleFileInput.module.scss';
 import { classConnection } from '../../utils/function';
 import Message from '../../UI/Message/Message';
+import { useMessage } from '../../modules/MessageContext';
 
 interface IMultipleFileInput {
     className?: string;
@@ -25,7 +26,10 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
     const [error, setError] = useState<string>('');
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
-
+    const { addMessage } = useMessage();
+    useEffect(() => {
+        if (error) addMessage(error, 'error')
+    }, [error])
     const validateFiles = (files: FileList) => {
         const totalSize = Array.from(files).reduce((acc, curr) => acc + curr.size, 0);
 
@@ -115,7 +119,6 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
                     style={{ display: 'none' }}
                 />
             </label>
-            <Message type='error' text={error}/>
         </>
     );
 });

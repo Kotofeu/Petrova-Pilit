@@ -1,65 +1,37 @@
 import classes from './SettingsSection.module.scss'
+import { motion, AnimatePresence } from 'framer-motion'
 import Section from '../../../../components/Section/Section'
 import { observer } from 'mobx-react-lite'
 import { userStore } from '../../../../store'
-import defaultUser from '../../../../assets/icons/User-icon.svg'
 import { useCallback, useEffect, useState } from 'react'
-import Button from '../../../../UI/Button/Button'
-import FileInput from '../../../../components/FileInput/FileInput'
+import { UserCropper } from '../UserCropper/UserCropper'
+import { useMessage } from '../../../MessageContext'
 export const SettingsSection = observer(() => {
-    const [image, setImage] = useState<File | null>(null)
-
+    const { addMessage } = useMessage();
+    const [userImage, setUserImage] = useState<File | null>()
+    useEffect(() => {
+        if (userImage !== undefined) {
+            userStore.setUserImage(userImage)
+        }
+    }, [userImage])
+    const userImageHandler = useCallback((image: File | null) => {
+        image
+            ? addMessage('Новое фото загружено', 'complete')
+            : addMessage('Фото удалено', 'complete')
+        setUserImage(image)
+    }, [])
     return (
         <Section className={classes.settings}>
             <div className={classes.settings__inner}>
                 <div className={classes.settings__content}>
-                    <div className={classes.settings__cropperBox}>
-                        <div className={classes.settings__cropper}>
-                            <div className={classes.settings__imageBox}>
-                                {
-                                    image
-                                        ? <img
-                                            className={classes.settings__cropperImage}
-                                            src={URL.createObjectURL(image)}
-                                            alt="Изображение для закгрузки"
-                                        />
-                                        : <img
-                                            className={classes.settings__image}
-                                            src={userStore.user?.imageSrc || defaultUser}
-                                            alt="User icon"
-                                        />
+                    <UserCropper
+                        onImageSave={userImageHandler}
+                        userIcon={userStore.user?.imageSrc}
+                        className={classes.settings__userCropper}
+                    />
+                    <div>
 
-                                }
-
-                            </div>
-                        </div>
-                        <div className={classes.settings__cropperBtn}>
-                            {
-                                !image
-                                    ? <FileInput
-                                        className={classes.settings__cropperInput}
-                                        handleFileChange={setImage}
-                                    />
-                                    : <>
-                                        <Button
-                                            className={classes.settings__cropperButton}
-                                            type='button'
-                                            onClick={() => setImage(null)}
-                                            title='Отмена'>
-                                            Отмена
-                                        </Button>
-                                        <Button
-                                            className={classes.settings__cropperButton}
-                                            type='button'
-                                            onClick={() => console.log(image)}
-                                            title='Сохранить'>
-                                            Сохранить
-                                        </Button>
-                                    </>
-                            }
-                        </div>
                     </div>
-
                 </div>
             </div>
         </Section>

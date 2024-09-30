@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { classConnection } from '../../utils/function';
 
 import classes from './Message.module.scss'
+export type MessageType = 'error' | 'message' | 'complete'
 interface IMessage {
-    type?: 'error' | 'message' | 'complete';
+    type?: MessageType;
     text: string;
     liveTime?: number;
 }
@@ -29,9 +30,9 @@ const Message: FC<IMessage> = memo(({
             {
                 isOpen &&
                 <motion.div
-                    animate={{ y: 0, opacity: 0.8, scale: 1 }}
-                    exit={{ y: 100, opacity: 0, scale: 0.6 }}
-                    initial={{ y: 100, opacity: 0, scale: 0.6 }}
+                    animate={{ x: 0, opacity: 0.8}}
+                    exit={{ x: 100, opacity: 0 }}
+                    initial={{ x: 100, opacity: 0}}
                     className={classConnection(classes.message, classes[`message_${type}`])}
                 >
                     <p

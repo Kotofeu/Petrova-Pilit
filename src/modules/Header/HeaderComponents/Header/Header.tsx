@@ -40,7 +40,7 @@ export const Header: FC = observer(() => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
-
+  
   return (
     <header className={classes.header}>
       <motion.div className={
@@ -73,7 +73,8 @@ export const Header: FC = observer(() => {
             <Button className={classes.header__button}>ЗАПИСАТЬСЯ НА ПРИЁМ</Button>
             <HeaderUser
               className={classes.header__user}
-              user={userStore.user}
+              name={userStore.user?.name}
+              imageSrc={userStore.user?.imageSrc}
               isAdmin={userStore.isAdmin}
               isAuth={userStore.isAuth}
               openModal={modalHandler}

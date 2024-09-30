@@ -49,6 +49,11 @@ export class UserStore {
         this.setIsAuth(user ? true : false)
         this.setIsAdmin(user?.role || 'USER')
     }
+    setUserImage(image: File | null) {
+        if (this._user) {
+            this._user.imageSrc = image ? URL.createObjectURL(image) : undefined
+        }
+    }
 
     get isAuth() {
         return this._isAuth

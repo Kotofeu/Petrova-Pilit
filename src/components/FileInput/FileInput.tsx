@@ -1,7 +1,8 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import classes from './FileInput.module.scss';
 import { classConnection } from '../../utils/function';
 import Message from '../../UI/Message/Message';
+import { useMessage } from '../../modules/MessageContext';
 
 interface IFileInput {
     className?: string;
@@ -21,6 +22,10 @@ const FileInput: React.FC<IFileInput> = memo(({
     const [error, setError] = useState<string>('');
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
+    const { addMessage } = useMessage();
+    useEffect(() => {
+        if (error) addMessage(error, 'error')
+    }, [error])
     const validateFile = (file: File) => {
 
         if (file.size > maxFileSize) {
@@ -87,7 +92,6 @@ const FileInput: React.FC<IFileInput> = memo(({
                     style={{ display: 'none' }}
                 />
             </label>
-            <Message type='error' text={error} />
         </>
     );
 });
