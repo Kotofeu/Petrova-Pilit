@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import classes from './FileInput.module.scss';
 import { classConnection } from '../../utils/function';
-import Message from '../../UI/Message/Message';
 import { useMessage } from '../../modules/MessageContext';
 
 interface IFileInput {
@@ -19,22 +18,20 @@ const FileInput: React.FC<IFileInput> = memo(({
     maxFileSize = 4194304,
     name,
 }) => {
-    const [error, setError] = useState<string>('');
+    const [isError, setIsError] = useState<boolean>(false);
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
     const { addMessage } = useMessage();
-    useEffect(() => {
-        if (error) addMessage(error, 'error')
-    }, [error])
     const validateFile = (file: File) => {
-
         if (file.size > maxFileSize) {
-            setError(`Превышен максимальный размер (${maxFileSize / 1024 / 1024}Мб) файла: "${file.name}" (${Math.round(file.size / 1024 / 1024 * 100) / 100}Мб.)`);
+            addMessage(`Превышен максимальный размер (${maxFileSize / 1024 / 1024}Мб) файла: "${file.name}" (${Math.round(file.size / 1024 / 1024 * 100) / 100}Мб.)`, 'error')
+            setIsError(true);
             handleFileChange(null);
             return false;
         }
         if (!allowedExtensions.exec(file.name)) {
-            setError(`Неподдерживаемый формат файла ${file.name}`);
+            addMessage(`Неподдерживаемый формат файла ${file.name}`, 'error')
+            setIsError(true);
             handleFileChange(null);
             return false;
         }
@@ -42,11 +39,14 @@ const FileInput: React.FC<IFileInput> = memo(({
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const image = event.target.files ? event.target.files[0] : null
-        if (image && validateFile(image)) {
-            handleFileChange(image);
-            setError('');
+        const image = event.target.files ? event.target.files[0] : null;
+        if (image) {
+            if (validateFile(image)) {
+                handleFileChange(image);
+                setIsError(false);
+            }
         }
+        event.target.value = '';
     };
 
     const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -55,7 +55,7 @@ const FileInput: React.FC<IFileInput> = memo(({
         const image = event.dataTransfer.files ? event.dataTransfer.files[0] : null
         if (image && validateFile(image)) {
             handleFileChange(image);
-            setError('');
+            setIsError(false);
         }
     };
 
@@ -73,7 +73,7 @@ const FileInput: React.FC<IFileInput> = memo(({
             <label
                 className={classConnection(
                     classes.fileInput,
-                    error ? classes.fileInput_error : '',
+                    isError ? classes.fileInput_error : '',
                     isHovering ? classes.fileInput_hover : '',
                     className
                 )}

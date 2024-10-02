@@ -23,24 +23,24 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
     maxFilesCount = 10,
     name,
 }) => {
-    const [error, setError] = useState<string>('');
+    const [isError, setIsError] = useState<boolean>(false);
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
     const { addMessage } = useMessage();
-    useEffect(() => {
-        if (error) addMessage(error, 'error')
-    }, [error])
+
     const validateFiles = (files: FileList) => {
         const totalSize = Array.from(files).reduce((acc, curr) => acc + curr.size, 0);
 
         if (totalSize > maxTotalSize) {
-            setError(`Превышен максимальный общий размер файлов: ${maxTotalSize / 1024 / 1024}Мб`);
+            addMessage(`Превышен максимальный общий размер файлов: ${maxTotalSize / 1024 / 1024}Мб`, 'error');
+            setIsError(true)
             handleFilesChange(null);
             return false;
         }
 
         if (files.length > maxFilesCount) {
-            setError(`Превышено максимальное количество файлов: ${maxFilesCount}шт.`);
+            addMessage(`Превышено максимальное количество файлов: ${maxFilesCount}шт.`, 'error');
+            setIsError(true)
             handleFilesChange(null);
             return false;
         }
@@ -49,13 +49,15 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
             const file = files[i];
 
             if (file.size > maxFileSize) {
-                setError(`Превышен размер файла ${file.name}.Максимальный размер: ${maxFileSize / 1024 / 1024}Мб`);
+                addMessage(`Превышен размер файла ${file.name}.Максимальный размер: ${maxFileSize / 1024 / 1024}Мб`, 'error');
+                setIsError(true)
                 handleFilesChange(null);
                 return false;
             }
 
             if (!allowedExtensions.exec(file.name)) {
-                setError(`Неподдерживаемый формат файла ${file.name}`);
+                addMessage(`Неподдерживаемый формат файла ${file.name}`, 'error');
+                setIsError(true)
                 handleFilesChange(null);
                 return false;
             }
@@ -69,7 +71,8 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
 
         if (files && validateFiles(files)) {
             handleFilesChange(files);
-            setError('');
+            setIsError(false)
+
         }
     };
 
@@ -80,7 +83,8 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
 
         if (files && validateFiles(files)) {
             handleFilesChange(files);
-            setError('');
+            setIsError(false)
+
         }
     };
 
@@ -98,7 +102,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
             <label
                 className={classConnection(
                     classes.multipleFileInput,
-                    error ? classes.multipleFileInput_error : '',
+                    isError ? classes.multipleFileInput_error : '',
                     isHovering ? classes.multipleFileInput_hover : '',
                     className
                 )}

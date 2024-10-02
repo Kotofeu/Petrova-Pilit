@@ -10,11 +10,9 @@ export const ReviewsNavbar: React.FC = memo(() => {
     const [isOpen, setIsOpen] = useState<boolean>(searchParams.get(IS_WRITING_PARAM) === 'true');
     const openModal = () => {
         setIsOpen(true)
-        document.body.style.overflowY = 'hidden';
     }
     const closeModal = () => {
         setIsOpen(false)
-        document.body.style.overflowY = 'auto';
     }
     return (
         <>

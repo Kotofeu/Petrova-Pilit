@@ -78,6 +78,123 @@
 
 }
 
+.modalBlock{
+    display: block;
+    padding: 22px 25px 30px;
+    background-color: #FFF;
+    &__title{
+        text-align: center;
+        font-size: 36px;
+        font-weight: 500;
+        padding-bottom: 8px;
+        color: $text-color;
+        text-align: center;
+
+    }
+    &__subtitle{
+        padding-bottom: 20px;
+        font-size: 22px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.2em;
+    }
+    &__buttons{
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__button{
+        width: 100%;
+        background-color: transparent;
+        padding: 8px 15px;
+        border-width: 2px;
+        border-radius: 10px;
+        font-size: 20px;
+        &_ok {
+            color: $active-color;
+            border-color: $active-color;
+            opacity: .8;
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
+}
+.modalEmailConfirm{
+    display: block;
+    padding: 15px 20px 12px;
+    background-color: #FFF;
+    &__title{
+        text-align: center;
+        font-size: 22px;
+        font-weight: 500;
+        padding-bottom: 15px;
+        color: $text-color;
+        text-align: center;
+        line-height: 1.2em;
+    }
+    &__input{
+        width: 100%;
+        background-color: transparent !important;
+        padding: 8px 25px;
+        text-align: center;
+        font-size: 18px;
+        display: block;
+        border: 2px solid rgba($text-color, .7) !important;
+
+        &:hover,
+        &:focus {
+            border-color: $title-color !important;
+        }
+    }
+    &__buttons{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    &__confirm{
+        display: block;
+        border-color: $blue-color-600 !important;
+        background-color: $blue-color-600;
+        color: #FFF !important;
+        opacity: .8;
+        width: 100%;
+        @media (hover: hover) {
+            &:hover {
+                opacity: 1;
+            }
+    
+        }
+    
+        @media (hover: none) {
+            &:active {
+                opacity: 1;
+            }
+        }
+    }
+    &__send{
+        display: block;
+        color: $title-color;
+        border: none;
+        padding: 0;
+        &:disabled{
+            cursor: default;
+            pointer-events: none;
+            color: $text-color;
+        }
+    }
+    &__loader{
+        position: fixed !important;
+        top: 15px;
+        right: 15px;
+        font-size:  50px;
+
+    }
+}
 @keyframes crossShow {
     0% {
         rotate: 0;

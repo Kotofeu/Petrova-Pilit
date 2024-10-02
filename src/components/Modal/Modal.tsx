@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useEffect} from 'react'
 import classes from './Modal.module.scss'
 import { classConnection } from '../../utils/function';
 interface IModal {
@@ -10,6 +10,14 @@ interface IModal {
 }
 const Modal: FC<IModal> = (props) => {
     const { className, isOpen, children, closeModal } = props
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflowY = 'hidden';
+        }
+        else {
+            document.body.style.overflowY = 'auto';
+        }
+    }, [isOpen])
     return (
         <AnimatePresence>
             {isOpen && (

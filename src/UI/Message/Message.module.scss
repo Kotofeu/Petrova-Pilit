@@ -2,27 +2,29 @@
 
 .message {
     width: auto;
-    padding: 15px;
-    border-radius: 10px;
-    &_error {
-        background-color: $active-color;
-    }
-
-    &_message {
-        background-color: $blue-color-600;
-
-    }
-
-    &_complete {
-        background-color: $green-color-600;
-    }
+    pointer-events: all;
 
     &__text {
+        padding: 15px;
+        border-radius: 10px;
         font-size: 18px;
         color: $primary-color;
         font-weight: 600;
         height: 100%;
         white-space: pre-wrap;
         text-align: justify;
+        &_error {
+            background-color: $active-color;
+        }
+    
+        &_message {
+            background-color: $blue-color-600;
+    
+        }
+    
+        &_complete {
+            background-color: $green-color-600;
+        }
+    
     }
 }

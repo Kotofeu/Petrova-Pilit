@@ -29,3 +29,6 @@ declare module "*.mp4" {
   const value: any;
   export = value;
 }
+declare module 'react-email-validator' {
+  export function validate(email: string): boolean;
+}

@@ -1,6 +1,7 @@
-import { memo, FC, ChangeEvent, HTMLInputTypeAttribute } from 'react'
-import classes from './Input.module.scss'
+import React, { memo, FC, ChangeEvent, HTMLInputTypeAttribute, LegacyRef, forwardRef } from 'react';
+import classes from './Input.module.scss';
 import { classConnection } from '../../utils/function';
+
 export interface IInput {
     className?: string;
     value: string;
@@ -10,8 +11,10 @@ export interface IInput {
     autoComplete?: string;
     name?: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    style?: React.CSSProperties;
 }
-const Input: FC<IInput> = memo((props) => {
+
+const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
     const {
         className = '',
         title,
@@ -21,9 +24,13 @@ const Input: FC<IInput> = memo((props) => {
         autoComplete = 'off',
         name,
         onChange,
-    } = props
+        style
+    } = props;
+
     return (
         <input
+            ref={ref}
+            style={style}
             name={name}
             className={classConnection(classes.input, className)}
             type={type}
@@ -32,7 +39,9 @@ const Input: FC<IInput> = memo((props) => {
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-        />)
-})
+            aria-label={title}
+        />
+    );
+});
 
-export default Input
+export default memo(Input);

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 
 import Message, { MessageType } from '../../../UI/Message/Message';
 import classes from './MessageContext.module.scss'
@@ -25,6 +25,7 @@ export const useMessage = () => {
 
 export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [messages, setMessages] = useState<Message[]>([]);
+    const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
     const addMessage = (text: string, type: MessageType) => {
         const id = Date.now().toString();
@@ -35,13 +36,22 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
         }, LIVE_TIME);
     };
 
+    useEffect(() => {
+        if (messageContainerRef.current) {
+            messageContainerRef.current.scrollTo({
+                top: messageContainerRef.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
+    }, [messages]);
+
     return (
         <MessageContext.Provider value={{ addMessage }}>
             {children}
-            <div className={classes.messageProvider}>
+            <div className={classes.messageProvider}  ref={messageContainerRef}>
                 <div className={classes.messageProvider__inner}>
                     {messages.map((msg) => (
-                        <Message key={msg.id} text={msg.text} type={msg.type} liveTime={LIVE_TIME - 500} />
+                        <Message className={classes.messageProvider__message} key={msg.id} text={msg.text} type={msg.type} liveTime={LIVE_TIME - 500} />
                     ))}
                 </div>
             </div>

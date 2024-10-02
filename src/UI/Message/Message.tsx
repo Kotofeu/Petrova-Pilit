@@ -5,11 +5,13 @@ import { classConnection } from '../../utils/function';
 import classes from './Message.module.scss'
 export type MessageType = 'error' | 'message' | 'complete'
 interface IMessage {
+    className?: string;
     type?: MessageType;
     text: string;
     liveTime?: number;
 }
 const Message: FC<IMessage> = memo(({
+    className,
     type = 'message',
     text,
     liveTime = 3000
@@ -30,13 +32,14 @@ const Message: FC<IMessage> = memo(({
             {
                 isOpen &&
                 <motion.div
-                    animate={{ x: 0, opacity: 0.8}}
+                    animate={{ x: 0, opacity: 0.8 }}
                     exit={{ x: 100, opacity: 0 }}
-                    initial={{ x: 100, opacity: 0}}
-                    className={classConnection(classes.message, classes[`message_${type}`])}
+                    initial={{ x: 100, opacity: 0 }}
+                    className={classConnection(classes.message, className)}
                 >
                     <p
-                        className={classes.message__text}
+                        className={classConnection(classes.message__text, classes[`message__text_${type}`])}
+
                     >
                         {text}
                     </p>

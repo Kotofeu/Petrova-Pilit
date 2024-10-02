@@ -12,6 +12,8 @@ export interface IUser {
     role?: 'USER' | 'ADMIN';
     visitsNumber?: number;
     review?: IReviews;
+    email?: string;
+    phone?: string;
 }
 const mockUser: IUser = {
     id: 1,
@@ -19,6 +21,8 @@ const mockUser: IUser = {
     imageSrc: userImage,
     role: 'USER',
     visitsNumber: 1,
+    email: 'cras.petrov@yandex.ru',
+    phone: '+79114968216',
     review: {
         id: 1
     }
@@ -54,7 +58,22 @@ export class UserStore {
             this._user.imageSrc = image ? URL.createObjectURL(image) : undefined
         }
     }
+    setUserName(userName: string) {
+        if (this._user) {
+            this._user.name = userName
+        }
+    }
+    setUserPhone(phone: string) {
+        if (this._user) {
+            this._user.phone = phone
+        }
+    }
+    setUserEmail(email: string){
+        if (this._user){
 
+            this._user.email = email
+        }
+    }
     get isAuth() {
         return this._isAuth
     }

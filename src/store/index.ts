@@ -12,6 +12,7 @@ export type {IUser} from './UserStore'
 export type {IService} from './ServicesStore'
 export type {IWorks} from './WorksStore'
 
+
 export interface IGetAllJSON<T> {
     count: number;
     rows: T[];

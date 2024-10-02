@@ -10,12 +10,10 @@ export const OfficeSection = memo(() => {
     const [activeImage, setActiveImage] = useState<number>(0)
     const openModal = (index: number) => {
         setIsOpen(true)
-        document.body.style.overflowY = 'hidden';
         setActiveImage(index)
     }
     const closeModal = () => {
         setIsOpen(false)
-        document.body.style.overflowY = 'auto';
         setActiveImage(0)
     }
     return (
