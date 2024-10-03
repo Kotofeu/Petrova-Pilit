@@ -11,25 +11,55 @@ import Input from '../../../../UI/Input/Input'
 import { SettingsFooter } from '../SettingsFooter/SettingsFooter'
 import { SettingsRow } from '../SettingsRow/SettingsRow'
 import { SettingsEmailInput } from '../SettingsEmailInput/SettingsEmailInput'
+import { useNavigate } from 'react-router-dom'
+import { HOME_ROUTE } from '../../../../utils/const/routes'
+import useDebounce from '../../../../utils/hooks/useDebounce'
+import { MAX_COMMENT_NAME } from '../../../Reviews/ReviewsComponents/ReviewModal/const'
 export const SettingsSection = observer(() => {
+    const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
+    const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name
     const { addMessage } = useMessage();
     const [userImage, setUserImage] = useState<File | null>()
-    const [userName, setUserName] = useState<string>(userStore.user?.name || '')
+    const [userName, setUserName] = useState<string>(startName || '')
     const [userPhone, setUserPhone] = useState<string>(userStore.user?.phone || '')
-    const [isUserPhoneChange, setIsUserPhoneChange] = useState<boolean>(false)
     const [areUShure, setAreUShure] = useState<boolean>(false)
+    const router = useNavigate();
+
+    const debouncePhone = useDebounce<string>(userPhone, 800)
+    const debounceName = useDebounce<string>(userName, 1500)
     useEffect(() => {
         if (userImage !== undefined) {
             userStore.setUserImage(userImage)
         }
-    }, [userImage,])
+    }, [userImage])
+
     useEffect(() => {
-        if (userPhone && isValidPhoneNumber(userPhone) && isUserPhoneChange && userStore.user?.phone !== userPhone) {
-            userStore.setUserPhone(userPhone)
-            addMessage('Номер телефона обновлён', 'complete')
-            setIsUserPhoneChange(false)
+        if (debounceName) {
+            if (userStore.user?.name !== debounceName) {
+                if (debounceName.length >= 2 && debounceName.length <= MAX_COMMENT_NAME) {
+                    userStore.setUserName(debounceName)
+                    addMessage(`Ваше имя обновлено, ${debounceName}`, 'complete')
+                }
+                else {
+                    addMessage(`Ваше имя должно состоять от 2 до 80 символов`, 'message')
+                }
+            }
         }
-    }, [userPhone, isUserPhoneChange])
+        else {
+            if (userStore.user?.name !== userStore.user?.email) {
+                userStore.setUserName(userStore.user?.email || '')
+                addMessage(`Ваше имя заменено на электронную почту`, 'complete')
+            }
+
+        }
+
+    }, [debounceName])
+    useEffect(() => {
+        if (debouncePhone && isValidPhoneNumber(debouncePhone) && userStore.user?.phone !== debouncePhone) {
+            userStore.setUserPhone(debouncePhone)
+            addMessage('Номер телефона обновлён', 'complete')
+        }
+    }, [debouncePhone])
     const userImageHandler = useCallback((image: File | null) => {
         image
             ? addMessage('Новое фото загружено', 'complete')
@@ -38,31 +68,37 @@ export const SettingsSection = observer(() => {
     }, [])
 
     const userNameHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value.length > MAX_COMMENT_NAME) {
+            return
+        }
         setUserName(event.target.value)
+
     }, [])
 
     const userPhoneHandler = useCallback((value: any) => {
         setUserPhone(value)
-        setIsUserPhoneChange(true)
     }, [])
-
-
-
     const userEmailHandler = useCallback((email: string) => {
         userStore.setUserEmail(email)
     }, [])
 
     const onExitClick = useCallback(() => {
-
+        router(`${HOME_ROUTE}`);
+        userStore.setUser(null)
+        addMessage('Ждём вашего возвращения!', 'complete')
+        // Удаление токенов
     }, [])
 
     const onChangePasswordClick = useCallback(() => {
-
+        addMessage('Фото удалено', 'complete')
     }, [])
 
 
     const deleteAccount = useCallback(() => {
+        router(`${HOME_ROUTE}`);
         userStore.setUser(null)
+        addMessage('Ваш аккаунт удалён(', 'complete')
+        // Запрос на удаление аккаунта
     }, [])
 
     return (
@@ -79,7 +115,7 @@ export const SettingsSection = observer(() => {
                             <SettingsRow
                                 className={classes.settings__inputRow}
                                 title='Ваше имя'
-                                subtitle={'* до 80 символов'}
+                                subtitle={'* от 2 до 80 символов'}
                             >
                                 <Input
                                     className={classes.settings__input}
@@ -88,13 +124,14 @@ export const SettingsSection = observer(() => {
                                     onChange={userNameHandler}
                                     name='username'
                                     type='text'
+                                    placeholder={userStore.user?.email}
                                 />
                             </SettingsRow>
                             <SettingsRow
                                 className={classes.settings__inputRow}
                                 title='Номер телефона'
                                 subtitle={'* Это необязательно, но так вас легче найти мастеру'}
-                                error={!isValidPhoneNumber(userPhone? userPhone : '+7') && isUserPhoneChange ? 'Номер телефона некорректный' : ''}
+                                error={!isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone ? 'Номер телефона некорректный' : ''}
                             >
                                 <PhoneInput
                                     className={classes.settings__input}

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, ReactNode, useEffect, useRe
 
 import Message, { MessageType } from '../../../UI/Message/Message';
 import classes from './MessageContext.module.scss'
+import { AnimatePresence } from 'framer-motion';
 
 interface Message {
     id: string;
@@ -12,7 +13,7 @@ interface Message {
 interface MessageContextType {
     addMessage: (text: string, type: MessageType) => void;
 }
-const LIVE_TIME = 3500
+const LIVE_TIME = 3000
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
 
 export const useMessage = () => {
@@ -48,11 +49,20 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
     return (
         <MessageContext.Provider value={{ addMessage }}>
             {children}
-            <div className={classes.messageProvider}  ref={messageContainerRef}>
+            <div className={classes.messageProvider} ref={messageContainerRef}>
                 <div className={classes.messageProvider__inner}>
-                    {messages.map((msg) => (
-                        <Message className={classes.messageProvider__message} key={msg.id} text={msg.text} type={msg.type} liveTime={LIVE_TIME - 500} />
-                    ))}
+                    <AnimatePresence mode='sync'>
+                        {messages.map((msg) => (
+                            <Message
+                                className={classes.messageProvider__message}
+                                key={msg.id}
+                                text={msg.text}
+                                type={msg.type}
+                                onClose={() => setMessages((prev) => prev.filter(m => m.id !== msg.id))}
+                            />
+                        ))}
+                    </AnimatePresence>
+
                 </div>
             </div>
         </MessageContext.Provider>

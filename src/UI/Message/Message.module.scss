@@ -3,7 +3,7 @@
 .message {
     width: auto;
     pointer-events: all;
-
+    cursor: pointer;
     &__text {
         padding: 15px;
         border-radius: 10px;
@@ -12,7 +12,8 @@
         font-weight: 600;
         height: 100%;
         white-space: pre-wrap;
-        text-align: justify;
+        overflow-wrap: break-word;
+        word-break: break-all;
         &_error {
             background-color: $active-color;
         }
