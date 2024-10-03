@@ -9,7 +9,7 @@ import Loader from '../../UI/Loader/Loader';
 import Input from '../../UI/Input/Input';
 
 interface IModalConfirm {
-    email: string;
+    email?: string;
     isOpen: boolean;
     closeModal: () => void;
     onConfirm: () => void;
@@ -26,7 +26,10 @@ const ModalConfirm: FC<IModalConfirm> = memo(({ email, isOpen, closeModal, onCon
             startCounting(30)
             addMessage('Код отправлен', 'message')
         }, 600)
-
+        if(!email?.length) {
+            addMessage('Электронная почта не найдена!', 'error')
+            closeModal()
+        }
     }, [email])
     const confirmCode = useCallback(() => {
         setIsLoading(true)
@@ -48,6 +51,8 @@ const ModalConfirm: FC<IModalConfirm> = memo(({ email, isOpen, closeModal, onCon
         setCode('')
         if (isOpen && countdown === 0) sendCode()
     }, [isOpen])
+
+
     return (
         <Modal
             isOpen={isOpen}
@@ -67,13 +72,15 @@ const ModalConfirm: FC<IModalConfirm> = memo(({ email, isOpen, closeModal, onCon
                     <Button
                         className={classes.modalEmailConfirm__confirm}
                         onClick={confirmCode}
+                        disabled = {isLoading}
                     >
                         Подтвердить
                     </Button>
                     <Button
                         className={classes.modalEmailConfirm__send}
                         onClick={sendCode}
-                        disabled={countdown > 0}
+                        disabled={countdown > 0 || isLoading}
+                        
                     >
                         {countdown > 0 ? `Повторно через: ${countdown}с.` : 'Отправить код снова'}
                     </Button>

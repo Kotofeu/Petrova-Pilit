@@ -80,8 +80,35 @@
 
 .modalBlock{
     display: block;
-    padding: 22px 25px 30px;
+    padding: 20px 22px 22px;
     background-color: #FFF;
+    &__confirm{
+        border-radius: 0 !important;
+        border-color: $blue-color-600 !important;
+        background-color: $blue-color-600 !important;
+        color: #FFF !important;
+        opacity: .8;
+        width: 100%;
+        &:disabled{
+            cursor: default;
+            pointer-events: none;
+            filter: grayscale(50%);
+        }
+        @media (hover: hover) {
+            &:hover {
+                opacity: 1;
+            }
+    
+        }
+    
+        @media (hover: none) {
+            &:active {
+                opacity: 1;
+            }
+        }
+    }
+
+
     &__title{
         text-align: center;
         font-size: 36px;

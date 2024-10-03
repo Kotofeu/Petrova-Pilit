@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom'
 import { HOME_ROUTE } from '../../../../utils/const/routes'
 import useDebounce from '../../../../utils/hooks/useDebounce'
 import { MAX_COMMENT_NAME } from '../../../Reviews/ReviewsComponents/ReviewModal/const'
+import ModalSend from '../../../../components/Modal/ModalSend'
+import NewPassword from '../../../../components/NewPassword/NewPassword'
 export const SettingsSection = observer(() => {
     const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
     const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name
@@ -27,12 +29,13 @@ export const SettingsSection = observer(() => {
 
     const debouncePhone = useDebounce<string>(userPhone, 800)
     const debounceName = useDebounce<string>(userName, 1500)
+
+    const [password, setPassword] = useState<string>('')
     useEffect(() => {
         if (userImage !== undefined) {
             userStore.setUserImage(userImage)
         }
     }, [userImage])
-
     useEffect(() => {
         if (debounceName) {
             if (userStore.user?.name !== debounceName) {
@@ -88,9 +91,8 @@ export const SettingsSection = observer(() => {
         addMessage('Ждём вашего возвращения!', 'complete')
         // Удаление токенов
     }, [])
+    const onChangePasswordConfirm = useCallback(() => {
 
-    const onChangePasswordClick = useCallback(() => {
-        addMessage('Фото удалено', 'complete')
     }, [])
 
 
@@ -152,7 +154,7 @@ export const SettingsSection = observer(() => {
                         </div>
                     </div>
                     <SettingsFooter
-                        onChangePasswordClick={onChangePasswordClick}
+                        onChangePasswordClick={() => console.log()}
                         onDeleteClick={() => setAreUShure(true)}
                         onExitClick={onExitClick}
                     />
@@ -163,6 +165,17 @@ export const SettingsSection = observer(() => {
                 closeModal={() => setAreUShure(false)}
                 onOkClick={deleteAccount}
             />
+            <ModalSend
+                isOpen={true}
+                closeModal={() => console.log()}
+                send={() => console.log()}
+                isButtonDisabled
+            >
+                <NewPassword
+                    setNewPassword={setPassword}
+
+                />
+            </ModalSend>
         </Section>
     )
 })
