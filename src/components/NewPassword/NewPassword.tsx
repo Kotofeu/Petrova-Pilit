@@ -94,11 +94,11 @@ const NewPassword: FC<INewPassword> = memo(({
 
     const sortedParams = useMemo(() => {
         return [
-            { key: EIGHT_CHARS_OR_GREATER, label: '8' },
+            { key: EIGHT_CHARS_OR_GREATER, label: '>8' },
             { key: UPPERCASE, label: 'A-Z' },
             { key: NUMBER, label: '1-9' },
             { key: SPECIAL_CHAR, label: '#' },
-            { key: SIXTEEN_CHARS_OR_GREATER, label: '16' },
+            { key: SIXTEEN_CHARS_OR_GREATER, label: '>16' },
         ].sort((a, b) => {
             return (validParm[a.key as keyof ValidParams] ? -1 : 1) - (validParm[b.key as keyof ValidParams] ? -1 : 1);
         });
@@ -111,8 +111,9 @@ const NewPassword: FC<INewPassword> = memo(({
                     className={classConnection(
                         classes.newPassword__password,
                         classes.newPassword__password_new,
-                        isMatch ? classes.newPassword__password_match : '',
-                        confirmPassword && !isMatch ? classes.newPassword__password_unMatch : '')
+                        (!!debouncePassword && !error && !confirmPassword) || isMatch ? classes.newPassword__password_match : '',
+                        confirmPassword && !isMatch ? classes.newPassword__password_unMatch : ''
+                    )
                     }
                     value={password}
                     onChange={onChangePassword}
@@ -131,7 +132,7 @@ const NewPassword: FC<INewPassword> = memo(({
                 </Button>
             </div>
             <div className={classes.newPassword__passContent}>
-                <AnimatePresence mode={'wait'}>
+                <AnimatePresence mode={'wait'} initial = {false}>
                     {
                         (debouncePassword.length === 0 || error)
                         && <motion.span

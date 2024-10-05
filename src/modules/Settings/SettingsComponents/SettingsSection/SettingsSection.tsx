@@ -20,17 +20,19 @@ import NewPassword from '../../../../components/NewPassword/NewPassword'
 export const SettingsSection = observer(() => {
     const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
     const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name
+    const router = useNavigate();
     const { addMessage } = useMessage();
     const [userImage, setUserImage] = useState<File | null>()
     const [userName, setUserName] = useState<string>(startName || '')
     const [userPhone, setUserPhone] = useState<string>(userStore.user?.phone || '')
     const [areUShure, setAreUShure] = useState<boolean>(false)
-    const router = useNavigate();
+    const [isPasswordChange, setIsPasswordChange] = useState<boolean>(false)
 
     const debouncePhone = useDebounce<string>(userPhone, 800)
     const debounceName = useDebounce<string>(userName, 1500)
 
     const [password, setPassword] = useState<string>('')
+
     useEffect(() => {
         if (userImage !== undefined) {
             userStore.setUserImage(userImage)
@@ -83,6 +85,7 @@ export const SettingsSection = observer(() => {
     }, [])
     const userEmailHandler = useCallback((email: string) => {
         userStore.setUserEmail(email)
+        
     }, [])
 
     const onExitClick = useCallback(() => {
@@ -92,8 +95,14 @@ export const SettingsSection = observer(() => {
         // Удаление токенов
     }, [])
     const onChangePasswordConfirm = useCallback(() => {
+        console.log(password.length)
+        if (password.length) {
+            // Запрос на смену пароля
+            setIsPasswordChange(false)
+        }
 
-    }, [])
+
+    }, [password])
 
 
     const deleteAccount = useCallback(() => {
@@ -154,7 +163,7 @@ export const SettingsSection = observer(() => {
                         </div>
                     </div>
                     <SettingsFooter
-                        onChangePasswordClick={() => console.log()}
+                        onChangePasswordClick={() => setIsPasswordChange(true)}
                         onDeleteClick={() => setAreUShure(true)}
                         onExitClick={onExitClick}
                     />
@@ -166,14 +175,14 @@ export const SettingsSection = observer(() => {
                 onOkClick={deleteAccount}
             />
             <ModalSend
-                isOpen={true}
-                closeModal={() => console.log()}
-                send={() => console.log()}
-                isButtonDisabled
+                isOpen={isPasswordChange}
+                closeModal={() => setIsPasswordChange(false)}
+                send={onChangePasswordConfirm}
+                isButtonDisabled={password.length === 0}
+                buttonText='Отправить'
             >
                 <NewPassword
                     setNewPassword={setPassword}
-
                 />
             </ModalSend>
         </Section>

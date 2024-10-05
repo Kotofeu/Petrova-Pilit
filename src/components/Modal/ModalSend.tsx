@@ -12,7 +12,7 @@ interface IModalSend {
     buttonText?: string;
     isButtonDisabled?: boolean
     closeModal: () => void;
-    send: () => void;
+    send?: () => void;
 }
 const ModalSend: FC<IModalSend> = memo(({
     className,
@@ -24,7 +24,7 @@ const ModalSend: FC<IModalSend> = memo(({
     send
 }) => {
     const onSendClick = useCallback(() => {
-        if (!isButtonDisabled) send()
+        if (!isButtonDisabled && send) send()
     }, [isButtonDisabled, send])
     if (!children) return null
     return (
@@ -34,13 +34,18 @@ const ModalSend: FC<IModalSend> = memo(({
         >
             <div className={classConnection(classes.modalBlock, className)}>
                 {children}
-                <Button
-                    className={classes.modalBlock__confirm}
-                    onClick={onSendClick}
-                    disabled={isButtonDisabled}
-                >
-                    {buttonText}
-                </Button>
+                {
+                    send
+                        ? <Button
+                            className={classes.modalBlock__confirm}
+                            onClick={onSendClick}
+                            disabled={isButtonDisabled}
+                        >
+                            {buttonText}
+                        </Button>
+                        : null
+                }
+
             </div>
         </Modal>)
 })

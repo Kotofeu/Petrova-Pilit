@@ -5,6 +5,7 @@ import {WorksStore} from './WorksStore'
 import {ServicesStore} from './ServicesStore'
 import { ReviewsStore } from './ReviewsStore'
 import { UserStore } from './UserStore'
+import { EmailConfirmStore } from './EmailConfirmStore'
 
 export type {ILink} from './ApplicationStore'
 export type {IReviews} from './ReviewsStore'
@@ -30,3 +31,4 @@ export const worksStore = new WorksStore()
 export const servicesStore = new ServicesStore()
 export const reviewsStore = new ReviewsStore()
 export const userStore = new UserStore()
+export const emailConfirmStore = new EmailConfirmStore()

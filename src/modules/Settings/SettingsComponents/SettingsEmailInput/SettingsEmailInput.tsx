@@ -1,11 +1,14 @@
-import { useState, memo, FC, useCallback, ChangeEvent } from 'react'
+import { useState, FC, useCallback, ChangeEvent } from 'react'
 import { validate } from 'react-email-validator';
 import { SettingsRow } from '../SettingsRow/SettingsRow'
 import Button from '../../../../UI/Button/Button';
-import ModalConfirm from '../../../../components/Modal/ModalConfirm';
 import classes from './SettingsEmailInput.module.scss'
 import { useMessage } from '../../../MessageContext';
 import Input from '../../../../UI/Input/Input';
+import ModalSend from '../../../../components/Modal/ModalSend';
+import CodeConfirm from '../../../../components/CodeConfirm/CodeConfirm';
+import { emailConfirmStore } from '../../../../store';
+import { observer } from 'mobx-react-lite';
 
 interface ISettingsEmailInput {
     className?: string;
@@ -13,12 +16,12 @@ interface ISettingsEmailInput {
     email: string;
     setEmail: (email: string) => void
 }
-export const SettingsEmailInput: FC<ISettingsEmailInput> = memo(({
+export const SettingsEmailInput: FC<ISettingsEmailInput> = observer(({
     className, inputClassName, email, setEmail,
 }) => {
     const [userEmail, setUserEmail] = useState<string>(email || '')
     const [isEmailEdit, setIsEmailEdit] = useState<boolean>(false)
-    const [emailConfirmOpen, setEmailConfirmOpen] = useState(false)
+    const [emailConfirmOpen, setEmailConfirmOpen] = useState<boolean>(false)
     const { addMessage } = useMessage();
     const userEmailHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setIsEmailEdit(event.target.value !== email)
@@ -26,17 +29,18 @@ export const SettingsEmailInput: FC<ISettingsEmailInput> = memo(({
     }, [email])
     const onConfirmClick = useCallback(() => {
         if (validate(userEmail)) {
-            setEmailConfirmOpen(true)
+            emailConfirmStore.setEmail(userEmail)
+            setEmailConfirmOpen(true)   
         }
         else {
             addMessage('Неверный формат почты', 'error')
         }
 
     }, [userEmail])
-    const onConfirm = useCallback(() => {
-        setEmail(userEmail)
-        setIsEmailEdit(false)
-        setEmailConfirmOpen(false)
+    const onConfirm = useCallback((jwt: string) => {
+            setEmail(userEmail)
+            setIsEmailEdit(false)
+            setEmailConfirmOpen(false)
     }, [userEmail])
     return (
         <>
@@ -67,12 +71,15 @@ export const SettingsEmailInput: FC<ISettingsEmailInput> = memo(({
                     </>
                 }
             </SettingsRow>
-            <ModalConfirm
+            <ModalSend
                 isOpen={emailConfirmOpen}
-                email={userEmail}
                 closeModal={() => setEmailConfirmOpen(false)}
-                onConfirm={onConfirm}
-            />
+            >
+                <CodeConfirm
+                    isShowEmail
+                    onConfirm={onConfirm}
+                />
+            </ModalSend>
         </>
 
     )
