@@ -1,0 +1,9 @@
+@import '../../styles/settings.scss';
+
+.policyAgree {
+    font-size: 14px;
+
+    & a {
+        color: $active-color;
+    }
+}

@@ -26,7 +26,7 @@
         font-size: 18px;
         display: block;
         border: 2px solid rgba($text-color, .7) !important;
-
+        transition: all .2s ease-in-out;
         &:hover,
         &:focus {
             border-color: $title-color !important;

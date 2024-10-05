@@ -17,14 +17,18 @@ import useDebounce from '../../../../utils/hooks/useDebounce'
 import { MAX_COMMENT_NAME } from '../../../Reviews/ReviewsComponents/ReviewModal/const'
 import ModalSend from '../../../../components/Modal/ModalSend'
 import NewPassword from '../../../../components/NewPassword/NewPassword'
+import { classConnection } from '../../../../utils/function'
 export const SettingsSection = observer(() => {
     const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
     const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name
+
     const router = useNavigate();
     const { addMessage } = useMessage();
+
     const [userImage, setUserImage] = useState<File | null>()
     const [userName, setUserName] = useState<string>(startName || '')
     const [userPhone, setUserPhone] = useState<string>(userStore.user?.phone || '')
+
     const [areUShure, setAreUShure] = useState<boolean>(false)
     const [isPasswordChange, setIsPasswordChange] = useState<boolean>(false)
 
@@ -45,9 +49,6 @@ export const SettingsSection = observer(() => {
                     userStore.setUserName(debounceName)
                     addMessage(`Ваше имя обновлено, ${debounceName}`, 'complete')
                 }
-                else {
-                    addMessage(`Ваше имя должно состоять от 2 до 80 символов`, 'message')
-                }
             }
         }
         else {
@@ -57,7 +58,6 @@ export const SettingsSection = observer(() => {
             }
 
         }
-
     }, [debounceName])
     useEffect(() => {
         if (debouncePhone && isValidPhoneNumber(debouncePhone) && userStore.user?.phone !== debouncePhone) {
@@ -85,7 +85,7 @@ export const SettingsSection = observer(() => {
     }, [])
     const userEmailHandler = useCallback((email: string) => {
         userStore.setUserEmail(email)
-        
+
     }, [])
 
     const onExitClick = useCallback(() => {
@@ -111,7 +111,9 @@ export const SettingsSection = observer(() => {
         addMessage('Ваш аккаунт удалён(', 'complete')
         // Запрос на удаление аккаунта
     }, [])
-
+    
+    const isNameError = !(debounceName.length >= 2 && debounceName.length <= MAX_COMMENT_NAME) && debounceName
+    const isPhoneError = !isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone
     return (
         <Section >
             <div className={classes.settings}>
@@ -127,9 +129,12 @@ export const SettingsSection = observer(() => {
                                 className={classes.settings__inputRow}
                                 title='Ваше имя'
                                 subtitle={'* от 2 до 80 символов'}
+                                error={isNameError ? 'Ваше имя должно состоять от 2 до 80 символов' : ''}
                             >
                                 <Input
-                                    className={classes.settings__input}
+                                    className={classConnection(
+                                        classes.settings__input,
+                                        isNameError ? classes.settings__input_error : '')}
                                     title='Ваше имя'
                                     value={userName}
                                     onChange={userNameHandler}
@@ -142,10 +147,12 @@ export const SettingsSection = observer(() => {
                                 className={classes.settings__inputRow}
                                 title='Номер телефона'
                                 subtitle={'* Это необязательно, но так вас легче найти мастеру'}
-                                error={!isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone ? 'Номер телефона некорректный' : ''}
+                                error={isPhoneError ? 'Номер телефона некорректный' : ''}
                             >
                                 <PhoneInput
-                                    className={classes.settings__input}
+                                    className={classConnection(
+                                        classes.settings__input,
+                                        isPhoneError ? classes.settings__input_error : '')}
                                     value={userPhone}
                                     country="RU"
                                     international

@@ -54,6 +54,7 @@ const CodeConfirm: FC<ICodeConfirm> = observer(({
     }
   }, [emailConfirmStore.sendCode, error, email])
   useEffect(() => {
+    setCode('')
     if (!isCodeSent) {
       sendCode()
     }

@@ -5,8 +5,7 @@ import Button from '../../../../UI/Button/Button';
 import { IMAGES, IReviewForm } from './const';
 
 import classes from './ReviewModal.module.scss'
-import { Link } from 'react-router-dom';
-import { POLICY_ROUTE } from '../../../../utils/const/routes';
+import PolicyAgree from '../../../../UI/PolicyAgree/PolicyAgree';
 
 export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, formValues, setFormValues }) => {
 
@@ -47,18 +46,10 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, for
                 <Button className={classes.modalContent__send} onClick={closeModal}>
                     Отправить
                 </Button>
-                <p className={classes.modalContent__policy}>
-                    **Нажимая на кнопку "Отправить" Вы соглашаетесь с
-                    <Link
-                        to={POLICY_ROUTE}
-                        target="_blank"
-                        rel="noopener noreferrer"
-
-                    >
-                        <span> политикой конфиденциальности</span>
-                    </Link>
-                </p>
-
+                <PolicyAgree
+                    className={classes.modalContent__policy}
+                    buttonName='Отправить'
+                />
             </div>
         </motion.div>
     );

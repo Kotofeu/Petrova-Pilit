@@ -18,9 +18,7 @@ export const SettingsRow: FC<ISettingsInput> = memo(({
             <h6 className={classes.settingsRow__title}>
                 {title}
             </h6>
-            <div className={classes.settingsRow__inputBox}>
-                {children}
-            </div>
+            {children}
             <span className={classConnection(
                 classes.settingsRow__subtitle,
                 error ? classes.settingsRow__subtitle_error : ''
