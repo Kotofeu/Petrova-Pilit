@@ -11,9 +11,11 @@
     &__input {
         width: 100%;
         background-color: transparent !important;
+        padding: 5px 7px;
+        font-size: 18px;
         display: block;
         border: 2px solid rgba($text-color, .7);
-        transition: all .2s ease-in-out;
+        transition: border-color .2s ease-in-out, outline-color .2s ease-in-out;
 
         &:hover,
         &:focus {

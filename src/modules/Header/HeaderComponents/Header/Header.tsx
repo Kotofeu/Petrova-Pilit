@@ -2,7 +2,7 @@ import { useEffect, useState, FC, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 
-import { applicationStore, userStore } from '../../../../store'
+import { applicationStore, registrationStore, userStore } from '../../../../store'
 import { HeaderLink, LinkType } from '../HeaderLinks/HeaderLink'
 import Button from '../../../../UI/Button/Button'
 import { HOME_ROUTE } from '../../../../utils/const/routes'
@@ -25,22 +25,28 @@ export const Header: FC = observer(() => {
   };
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const modalHandler = useCallback((isOpen: boolean) => {
-    if (!isOpen) {
-      setIsOpen(false)
-      document.body.style.overflowY = 'auto';
+    if (userStore.user){
+      if (isOpen) {
+        setIsOpen(true)
+        document.body.style.overflowY = 'hidden';
+      }
+      else {
+        setIsOpen(false)
+        document.body.style.overflowY = 'auto';
+      }
     }
-    else {
-      setIsOpen(true)
-      document.body.style.overflowY = 'hidden';
+    else{
+      registrationStore.setIsOpen(true)
     }
-  }, [])
+
+  }, [userStore.user])
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
-  
+
   return (
     <header className={classes.header}>
       <motion.div className={
@@ -69,8 +75,6 @@ export const Header: FC = observer(() => {
             }
           </div>
           <div className={classes.header__buttons}>
-
-            <Button className={classes.header__button}>ЗАПИСАТЬСЯ НА ПРИЁМ</Button>
             <HeaderUser
               className={classes.header__user}
               name={userStore.user?.name}

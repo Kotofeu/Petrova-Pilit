@@ -1,7 +1,5 @@
 import { useState, FC, useCallback } from 'react'
-import { validate } from 'react-email-validator';
 import { SettingsRow } from '../SettingsRow/SettingsRow'
-import { useMessage } from '../../../MessageContext';
 import ModalSend from '../../../../components/Modal/ModalSend';
 import CodeConfirm from '../../../../components/CodeConfirm/CodeConfirm';
 import { emailConfirmStore } from '../../../../store';
@@ -21,42 +19,44 @@ export const SettingsEmailInput: FC<ISettingsEmailInput> = observer(({
 }) => {
     const [userEmail, setUserEmail] = useState<string>(email || '')
     const [emailConfirmOpen, setEmailConfirmOpen] = useState<boolean>(false)
-    const { addMessage } = useMessage();
+    const [error, setError] = useState<string>('')
 
     const onConfirmClick = useCallback((email: string) => {
-        if (validate(email)) {
-            emailConfirmStore.setEmail(email)
-            setUserEmail(email)
-            setEmailConfirmOpen(true)
-        }
-        else {
-            addMessage('Неверный формат почты', 'error')
-        }
-
+        emailConfirmStore.setEmail(email)
+        setUserEmail(email)
+        setEmailConfirmOpen(true)
+        setError('')
     }, [])
     const onConfirm = useCallback((jwt: string) => {
         setEmail(userEmail)
         setEmailConfirmOpen(false)
     }, [userEmail])
+    const onError = useCallback((error: string) => {
+        setError(error)
+    }, [])
     return (
         <>
             <SettingsRow
                 className={className}
                 title='Электронная почта'
+                subtitle='Вам будет отрпавлен код подтверждения'
+                error={error}
             >
                 <EmailField
                     className={classes.settingsEmailInput}
                     inputClassName={inputClassName}
                     email={email}
                     onConfirm={onConfirmClick}
+                    onError={onError}
                 />
             </SettingsRow>
             <ModalSend
                 isOpen={emailConfirmOpen}
                 closeModal={() => setEmailConfirmOpen(false)}
             >
+                <h4 className={classes.settingsEmailInput__modalTitle}>Мы отправили Вам<br />  код на электронную почту</h4>
+                <h5 className={classes.settingsEmailInput__modalEmail}>{emailConfirmStore.email}</h5>
                 <CodeConfirm
-                    isShowEmail
                     onConfirm={onConfirm}
                 />
             </ModalSend>

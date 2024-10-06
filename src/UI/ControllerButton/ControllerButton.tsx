@@ -1,11 +1,12 @@
 import { memo, FC } from 'react'
 import pencil from '../../assets/icons/pencil.svg'
+import arrow from '../../assets/icons/Arrow.svg'
 import { classConnection } from '../../utils/function';
 import classes from './ControllerButton.module.scss'
 interface IControllerButton {
     className?: string;
     title?: string
-    type: 'edit' | 'add' | 'delete'
+    type: 'edit' | 'add' | 'delete' | 'back'
     onClick: () => void
 }
 const ControllerButton: FC<IControllerButton> = memo(({ className, type, title, onClick }) => {
@@ -26,8 +27,17 @@ const ControllerButton: FC<IControllerButton> = memo(({ className, type, title, 
             onClick={onClick}
             title={title || 'Добавить'}
             aria-label={title || 'Добавить'}
+        />
+    )
+    if (type === 'back') return (
+        <button
+            className={classConnection(classes.button, classes.button_back, className)}
+            type='button'
+            onClick={onClick}
+            title={title || 'Назад'}
+            aria-label={title || 'Назад'}
         >
-            <span/>
+            <img src={arrow} alt="Назад" aria-hidden />
         </button>
     )
     return (

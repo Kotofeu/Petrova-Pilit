@@ -74,13 +74,13 @@
     &__navItem,
     &__navLink,
     &__navButton {
-        font-size: 18px;
-        font-weight: 500;
-        padding: 3px 0;
-        line-height: 1.2em;
-        width: 100%;
-        text-align: center;
-        color: $title-color;
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        padding: 3px 0 !important;
+        line-height: 1.2em !important;
+        width: 100% !important;
+        text-align: center !important;
+        color: $title-color !important;
     }
 
     &__navItem {
@@ -106,8 +106,8 @@
 
 
     &__navButton {
-        border: none;
-        background-color: transparent;
+        border: none !important;
+        background-color: transparent !important;
     }
 
     &__qrBox{

@@ -49,7 +49,7 @@
     }
 
     &__logo {
-        width: 225px;
+        min-width: 100px;
         font-family: 'GrandHotel' !important;
         font-size: 40px !important;
         line-height: 0 !important;
@@ -66,8 +66,10 @@
         margin: 0px 7px;
     }
     &__buttons{
+        min-width: 100px;
         align-items: center;
         display: flex;
+        justify-content: flex-end;
         gap: 25px;
     }
     &__button {

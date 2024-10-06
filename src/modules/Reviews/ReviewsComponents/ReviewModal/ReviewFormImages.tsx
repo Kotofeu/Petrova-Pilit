@@ -48,7 +48,7 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, for
                 </Button>
                 <PolicyAgree
                     className={classes.modalContent__policy}
-                    buttonName='Отправить'
+                    agreeWith={`Нажимая на кнопку "Отправить"`}
                 />
             </div>
         </motion.div>

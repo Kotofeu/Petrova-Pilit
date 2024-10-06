@@ -1,0 +1,65 @@
+@import '../../../../styles/settings.scss';
+
+.registrationModal {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px 25px 20px;
+
+    &__header {
+        margin-bottom: 11px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__back {
+        width: 18px;
+        height: 18px;
+        padding: 5px;
+        box-sizing: content-box;
+    }
+
+    &__title {
+        font-size: 28px;
+        line-height: 1em;
+    }
+
+    &__emailField {
+        font-size: 15px;
+        font-weight: 500;
+        flex-direction: column;
+        gap: 12px;
+
+    }
+
+    &__emailInput {
+        font-weight: 400;
+    }
+
+    &__authInput {
+        margin: 10px 0;
+        &_pass{
+            padding-right: 48px;
+        }
+    }
+
+    &__authPass {
+        width: 100%;
+        position: relative;
+    }
+
+    &__authPassShow {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0;
+        width: 36px;
+        padding-right: 6px;
+        padding-left: 6px;
+    }
+
+    &__policy {
+        padding-top: 10px;
+    }
+}

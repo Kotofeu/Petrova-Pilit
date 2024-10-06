@@ -34,7 +34,7 @@ export const HeaderLink: FC<IHeaderLink> = memo((props) => {
                     {title}
                     {children}
                     <ActiveLine
-                        className={classes.headerLink__activeLine}
+                        className={classes.headerLink__actijveLine}
                         layoutId='headerActiveLine'
                         isActive={isActive && type === LinkType.underline}
                     />

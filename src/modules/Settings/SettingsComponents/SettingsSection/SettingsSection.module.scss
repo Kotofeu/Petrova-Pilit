@@ -39,16 +39,18 @@
     &__input {
         width: 100%;
         background-color: transparent !important;
-        padding: 15px 20px;
-        font-size: 18px;
+        padding: 15px 20px !important;
+        font-size: 18px !important;
         display: block;
         border: 2px solid rgba($text-color, .7);
         transition: all .2s ease-in-out;
         font-weight: 400;
+
         &:hover,
         &:focus {
             border-color: $title-color;
         }
+
         &_error {
             border-color: $active-color !important;
             outline-color: $active-color !important;
@@ -56,4 +58,11 @@
         }
     }
 
+    &__modalTitle {
+        font-size: 22px;
+        line-height: 1.2em;
+        padding-bottom: 14px;
+        color: $text-color;
+        text-align: center;
+    }
 }

@@ -6,11 +6,11 @@ import { classConnection } from '../../utils/function';
 import classes from './PolicyAgree.module.scss'
 interface IPolicyAgree {
     className?: string;
-    buttonName?: string;
+    agreeWith?: string;
 }
 const PolicyAgree: FC<IPolicyAgree> = memo(({
     className,
-    buttonName,
+    agreeWith = '**Нажимая на эту кнопку',
 
 }) => {
     return (
@@ -18,9 +18,8 @@ const PolicyAgree: FC<IPolicyAgree> = memo(({
             className={classConnection(classes.policyAgree, className)}
             aria-label='Соглашение с политикой конфиденциальности'
         >
-            **Нажимая на
             {
-                !!buttonName ? ` кнопку "${buttonName}" ` : ' эту кнопку '
+                `${agreeWith} `
             }
             Вы соглашаетесь с
             <Link

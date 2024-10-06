@@ -106,12 +106,13 @@ export const SettingsSection = observer(() => {
 
 
     const deleteAccount = useCallback(() => {
-        router(`${HOME_ROUTE}`);
         userStore.setUser(null)
         addMessage('Ваш аккаунт удалён(', 'complete')
+
+        router(`${HOME_ROUTE}`);
         // Запрос на удаление аккаунта
     }, [])
-    
+
     const isNameError = !(debounceName.length >= 2 && debounceName.length <= MAX_COMMENT_NAME) && debounceName
     const isPhoneError = !isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone
     return (
@@ -188,6 +189,7 @@ export const SettingsSection = observer(() => {
                 isButtonDisabled={password.length === 0}
                 buttonText='Отправить'
             >
+                <h4 className={classes.settings__modalTitle}>Придумайте пароль</h4>
                 <NewPassword
                     setNewPassword={setPassword}
                 />

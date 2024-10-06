@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 import { ID_PARAM, IS_WRITING_PARAM, REVIEWS_ROUTE, SETTINGS_ROUTE, USER_ROUTE } from '../../../../utils/const/routes';
 import Button from '../../../../UI/Button/Button';
 import { WEBSITE_ADDRESS } from '../../../../utils/const/main';
+import { useMessage } from '../../../MessageContext';
 
 interface IHeaderUser {
     user: IUser | null;
@@ -18,14 +19,15 @@ interface IHeaderUser {
 }
 
 export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal}) => {
-
+    const { addMessage } = useMessage();
     const onLinkClick = useCallback(() => {
         closeModal(false)
         window.scrollTo(0, 0);
     }, [])
     const onExitClick = useCallback(() => {
-        userStore.setUser(null)
+        addMessage('Ждём вашего возвращения!', 'complete')
         closeModal(false)
+        userStore.setUser(null)
         window.scrollTo(0, 0);
     }, [])
     return (

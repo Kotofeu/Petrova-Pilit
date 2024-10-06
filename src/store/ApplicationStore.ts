@@ -77,20 +77,7 @@ export class ApplicationStore {
                 link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
                 imageSrc: Map,
                 imageLightSrc: MapLight,
-            },
-            /*
-            {
-                title: 'Телефон',
-                link: '+7 (981) 462 18-28',
-            },
-            {
-                title: 'Почта',
-                link: '',
-                imageSrc: 
-            },
-            
-            */
-
+            }
         ],
         addressMap: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2304.608889733823!2d20.522914741385073!3d54.71650388760703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e3160bea68a3bf%3A0x47e628c68d0b71c0!2z0YPQuy4g0JHQvtGC0LrQuNC90LAsIDLQkCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtNGB0LrQsNGPINC-0LHQuy4sIDIzNjAxNg!5e0!3m2!1sru!2sru!4v1724979269501!5m2!1sru!2sru',
         aboutMe: `Здравствуйте дамы и господа
@@ -191,28 +178,7 @@ export class ApplicationStore {
     get officeImages() {
         return this._generalData.officeImages
     }
-    /*
 
-        get email() {
-        return this._generalData.email
-    }
-    get vk() {
-        return this._generalData.vk
-    }
-    get whatsapp() {
-        return this._generalData.whatsapp
-    }
-    get instagram() {
-        return this._generalData.instagram
-    }
-    get addressName() {
-        return this._generalData.addressName
-    }
-    get addressLink() {
-        return this._generalData.addressLink
-    }
-
-     */
 
     get aboutMe() {
         return this._generalData.aboutMe

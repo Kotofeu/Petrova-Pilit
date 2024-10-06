@@ -12,8 +12,9 @@ interface IModal {
 }
 const ModalOk: FC<IModal> = memo(({ isOpen, onOkClick, closeModal }) => {
     const okClickHandler = () => {
-        onOkClick();
+        document.body.style.overflowY = 'auto';
         closeModal();
+        onOkClick();
     }
     return (
         <Modal

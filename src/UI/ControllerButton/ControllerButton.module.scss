@@ -5,6 +5,7 @@
     border: none;
     padding: 0;
     cursor: pointer;
+
     &_edit {
         &>img {
             width: 100%;
@@ -14,9 +15,21 @@
         }
     }
 
+    &_back {
+        position: relative;
+        &>img {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1/1;
+            display: block;
+            transform: rotate(90deg);
+        }
+    }
+
     &_add>span,
     &_delete {
         position: relative;
+
         &::before,
         &::after {
             position: absolute;
@@ -39,6 +52,7 @@
             height: 100%;
             display: block;
             position: relative;
+
             &::after {
                 transform: rotate(90deg);
             }

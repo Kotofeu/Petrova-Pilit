@@ -5,26 +5,31 @@ import { classConnection } from '../../utils/function';
 import { validate } from 'react-email-validator';
 
 import classes from './EmailField.module.scss'
+import { useMessage } from '../../modules/MessageContext';
 
 
 interface IEmailField {
     className?: string;
     inputClassName?: string;
     email?: string;
-    onConfirm: (email: string) => void
+    onConfirm: (email: string) => void;
+    onError?: (error: string) => void
 }
 const EmailField: FC<IEmailField> = memo(({
     className,
     inputClassName,
     email,
-    onConfirm
+    onConfirm,
+    onError
 }) => {
     const [userEmail, setUserEmail] = useState<string>(email || '')
     const [isEmailEdit, setIsEmailEdit] = useState<boolean>(false)
-    const [error, setError] = useState<string>('')
+    const [isError, setIsError] = useState<boolean>(false)
+    const { addMessage } = useMessage();
+
     const userEmailHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setUserEmail(event.target.value)
-        setError('')
+
     }, [email])
     useEffect(() => {
         setIsEmailEdit(userEmail !== email)
@@ -32,50 +37,43 @@ const EmailField: FC<IEmailField> = memo(({
     const onConfirmClick = useCallback(() => {
         if (validate(userEmail)) {
             onConfirm(userEmail)
+            setIsError(false)
         }
         else {
-            setError('Неверный формат почты')
+            if (onError) onError('Неверный формат почты')
+            setIsError(true)
+            addMessage('Неверный формат почты', 'error')
         }
     }, [userEmail])
     return (
-        <>
-            <div className={classConnection(classes.emailField, className)}>
-                <Input
-                    className={classConnection(
-                        classes.emailField__input,
-                        inputClassName,
-                        !!error ? classes.emailField__input_error : ""
-                    )}
-                    title='Электронная почта'
-                    value={userEmail}
-                    onChange={userEmailHandler}
-                    name='email'
-                    type='email'
-                />
-                {
-                    (isEmailEdit)
-                    &&
-                    <>
-                        <Button
-                            className={classes.emailField__confirmBtn}
-                            type='button'
-                            onClick={onConfirmClick}
-                        >
-                            Подтвердить
-                        </Button>
-                    </>
-                }
-            </div>
+        <div className={classConnection(classes.emailField, className)}>
+            <Input
+                className={classConnection(
+                    classes.emailField__input,
+                    inputClassName,
+                    isError ? classes.emailField__input_error : ""
+                )}
+                value={userEmail}
+                onChange={userEmailHandler}
+                name='email'
+                type='email'
+                title='Электронная почта'
+                placeholder='Электронная почта'
+            />
             {
-                isEmailEdit &&
-                <span className={classConnection(
-                    classes.emailField__subtitle,
-                    !!error ? classes.emailField__subtitle_error : ""
-                )}>
-                    {error || 'Вам будет отрпавлен код подтверждени'}
-                </span>
+                (isEmailEdit)
+                &&
+                <>
+                    <Button
+                        className={classes.emailField__confirmBtn}
+                        type='button'
+                        onClick={onConfirmClick}
+                    >
+                        Подтвердить
+                    </Button>
+                </>
             }
-        </>
+        </div>
 
     )
 })

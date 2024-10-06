@@ -6,6 +6,7 @@ import { classConnection } from '../../utils/function';
 import classes from './NewPassword.module.scss'
 import { AnimatePresence, motion } from 'framer-motion';
 import Button from '../../UI/Button/Button';
+import PasswordShowButton from './PasswordShowButton';
 interface INewPassword {
     className?: string;
     setNewPassword: (password: string) => void;
@@ -105,7 +106,6 @@ const NewPassword: FC<INewPassword> = memo(({
     }, [validParm])
     return (
         <div className={classConnection(classes.newPassword, className)}>
-            <h5 className={classes.newPassword__title}>Придумайте пароль</h5>
             <div className={classes.newPassword__passBox}>
                 <Input
                     className={classConnection(
@@ -119,20 +119,17 @@ const NewPassword: FC<INewPassword> = memo(({
                     onChange={onChangePassword}
                     type={isShowPass ? 'text' : 'password'}
                     placeholder='Новый пароль'
+                    name='password'
+                    title='Новый пароль'
                 />
-                <Button
-                    className={classConnection(
-                        classes.newPassword__showPass,
-                        isShowPass ? classes.newPassword__showPass_show : '',
-                    )}
-                    onClick={() => setIsShowPass(prev => !prev)}
-                    title='Показать пароль'
-                >
-                    <span></span>
-                </Button>
+                <PasswordShowButton
+                    className={classes.newPassword__showPass}
+                    isShowPass={isShowPass}
+                    setIsShowPass={setIsShowPass}
+                />
             </div>
             <div className={classes.newPassword__passContent}>
-                <AnimatePresence mode={'wait'} initial = {false}>
+                <AnimatePresence mode={'wait'} initial={false}>
                     {
                         (debouncePassword.length === 0 || error)
                         && <motion.span
@@ -199,6 +196,8 @@ const NewPassword: FC<INewPassword> = memo(({
                             onChange={onChangeConfirmPassword}
                             type={isShowPass ? 'text' : 'password'}
                             placeholder='Повторите пароль'
+                            name='confirm-password'
+                            title='Повторите пароль'
                         />
                     </motion.div>
                 }

@@ -15,13 +15,11 @@ import classes from './CodeConfirm.module.scss'
 
 interface ICodeConfirm {
   className?: string;
-  isShowEmail?: boolean;
   onConfirm: (jwt: string) => void
 }
 
 const CodeConfirm: FC<ICodeConfirm> = observer(({
   className,
-  isShowEmail,
   onConfirm,
 
 }) => {
@@ -67,25 +65,17 @@ const CodeConfirm: FC<ICodeConfirm> = observer(({
         {
           email ?
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
+              initial={{ opacity: 1,  height: 'auto' }}
               exit={{ opacity: 0,  height: 0  }}
-              animate={{ opacity: 1,  height: 'auto' }}
               layout
               className={classConnection(classes.codeConfirm, className)}
             >
-
-              <h2 className={classes.codeConfirm__title}>Мы отправили Вам<br />  код на электронную почту</h2>
-              {
-                isShowEmail
-                  ? <h3 className={classes.codeConfirm__email}>{email}</h3>
-                  : null
-              }
               <Input
                 className={classes.codeConfirm__input}
                 type="text"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="Введите код из письма"
+                placeholder="Введите код"
               />
 
               <Button
