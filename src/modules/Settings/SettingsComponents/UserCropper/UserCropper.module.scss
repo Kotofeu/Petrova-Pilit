@@ -4,11 +4,18 @@
     display: flex;
     flex-direction: column;
 
-    &__cropper {
+    &__inner{
         flex-grow: 1;
         position: relative;
         width: 100%;
         overflow: hidden;
+    }
+
+    &__cropper{
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
     }
 
     &__cropperBtn {
@@ -93,36 +100,25 @@
         padding: 8px;
         border: none;
     }
-    &__cropperBtn {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-    }
 
     &__cropperInput {
+        position: absolute;
+        right: 0;
+        left: 0;
+        bottom: 0px;
+        z-index: 2;
         background-color: transparent !important;
         border: none !important;
         font-size: 16px;
         text-align: center;
-        padding: 8px 8px !important;
+        padding: 12px !important;
         width: 100%;
         display: block;
-        margin-top: 5px;
+
 
         &:hover {
             color: $active-color;
         }
-    }
-
-    &__cropperButton {
-        background-color: transparent !important;
-        font-size: 16px;
-        text-align: center;
-        padding: 8px 8px;
-        margin-top: 5px;
-        width: 100%;
-        display: block;
     }
 
 }

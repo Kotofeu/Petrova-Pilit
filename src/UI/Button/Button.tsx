@@ -20,6 +20,7 @@ const Button: FC<IButton> = memo((props) => {
             type={props.type ? props.type : 'button'}
             title={props.title}
             disabled={props.disabled}
+            aria-label={props.title}
         >
             {props.children}
         </button>

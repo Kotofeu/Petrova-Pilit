@@ -6,7 +6,7 @@ import Button from '../../../../UI/Button/Button'
 
 import classes from './UserCropper.module.scss'
 import { classConnection } from '../../../../utils/function'
-import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
+import ImageCropper from '../../../../components/ImageCropper/ImageCropper'
 
 
 interface IUserCropper {
@@ -21,7 +21,7 @@ export const UserCropper: FC<IUserCropper> = memo(({
 }) => {
 
     const [image, setImage] = useState<File | null>(null)
-    const imageSave = useCallback(() => {
+    const imageSave = useCallback((image: File | null) => {
         onImageSave(image)
         setImage(null)
     }, [image])
@@ -30,14 +30,18 @@ export const UserCropper: FC<IUserCropper> = memo(({
     }, [image])
     return (
         <div className={classConnection(classes.userCropper, className)}>
-            <div className={classes.userCropper__cropper}>
+            <div className={classes.userCropper__inner}>
                 <div className={classes.userCropper__imageBox}>
                     {
                         image
-                            ? <img
-                                className={classes.userCropper__cropperImage}
-                                src={URL.createObjectURL(image)}
-                                alt="Изображение для закгрузки"
+                            ?
+                            <ImageCropper
+                                className={classes.userCropper__cropper}
+                                image={URL.createObjectURL(image)}
+                                aspect={1}
+                                onClose={() => setImage(null)}
+                                onSave={imageSave}
+                                cropShape='round'
                             />
                             : <>
                                 {
@@ -58,33 +62,16 @@ export const UserCropper: FC<IUserCropper> = memo(({
                                 />
                             </>
                     }
+                    {
+                        !image
+                            ? <FileInput
+                                className={classes.userCropper__cropperInput}
+                                handleFileChange={setImage}
+                                title='Загрузить фото'
+                            />
+                            : null
+                    }
                 </div>
-            </div>
-            <div className={classes.userCropper__cropperBtn}>
-                {
-                    !image
-                        ? <FileInput
-                            className={classes.userCropper__cropperInput}
-                            handleFileChange={setImage}
-                            title='Загрузить фото'
-                        />
-                        : <>
-                            <Button
-                                className={classes.userCropper__cropperButton}
-                                type='button'
-                                onClick={() => setImage(null)}
-                                title='Отмена'>
-                                Отмена
-                            </Button>
-                            <Button
-                                className={classes.userCropper__cropperButton}
-                                type='button'
-                                onClick={imageSave}
-                                title='Сохранить'>
-                                Сохранить
-                            </Button>
-                        </>
-                }
             </div>
         </div>
     )
