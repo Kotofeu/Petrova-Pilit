@@ -27,7 +27,9 @@ const ControllerButton: FC<IControllerButton> = memo(({ className, type, title, 
             onClick={onClick}
             title={title || 'Добавить'}
             aria-label={title || 'Добавить'}
-        />
+        >
+            <span></span>
+        </button>
     )
     if (type === 'back') return (
         <button

@@ -32,3 +32,7 @@ declare module "*.mp4" {
 declare module 'react-email-validator' {
   export function validate(email: string): boolean;
 }
+declare module "*.module.scss" {
+  const value: any;
+  export = value;
+}

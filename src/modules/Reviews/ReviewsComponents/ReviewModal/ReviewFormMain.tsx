@@ -1,22 +1,23 @@
-import { memo, FC, useState, useCallback } from 'react'
+import { FC, useState, useCallback } from 'react'
 import { motion } from 'framer-motion';
 import Input from '../../../../UI/Input/Input';
 import StarRating from '../../../../UI/StarRating/StarRating';
 import Button from '../../../../UI/Button/Button';
-import { COMMENT, MAX_COMMENT_NAME, MAX_COMMENT_LENGTH, NAME, RATING, IReviewForm } from './const';
+import { COMMENT, MAX_NAME_LENGTH, MAX_COMMENT_LENGTH, NAME, RATING, IReviewForm } from './const';
 
 import classes from './ReviewModal.module.scss'
 import { classConnection } from '../../../../utils/function';
+import { observer } from 'mobx-react-lite';
+import { useMessage } from '../../../MessageContext';
 
 
-export const ReviewFormMain: FC<IReviewForm> = memo(({ isUserAuth, isOpen, closeModal, formValues, setFormValues }) => {
+export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, closeModal, formValues, setFormValues, startAuth }) => {
     const [commentError, setCommentError] = useState(false);
     const [nameError, setNameError] = useState(false);
-
+    const { addMessage } = useMessage();
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { value } = e.target;
-        if (value.length > MAX_COMMENT_NAME) {
-            setNameError(true)
+        if (value.length > MAX_NAME_LENGTH) {
             return
         }
         setNameError(false)
@@ -36,9 +37,26 @@ export const ReviewFormMain: FC<IReviewForm> = memo(({ isUserAuth, isOpen, close
     const handleRatingChange = useCallback((rating: number) => {
         setFormValues(prev => ({ ...prev, [RATING]: rating }));
     }, []);
-
+    const onContinueClick = useCallback(() => {
+        if (!isUserAuth) {
+            if (formValues[NAME].length < 2){
+                setNameError(true)
+                addMessage('Имя должно быть больше 2 символов', 'error')
+                return
+            }
+            if (formValues[NAME].length > MAX_NAME_LENGTH){
+                setNameError(true)
+                addMessage(`Имя должно быть меньше ${MAX_NAME_LENGTH} символов`, 'error')
+                return
+            }
+        }
+        if(formValues[RATING] === 0){
+            addMessage(`Укажите вашу оценку`, 'error')
+            return
+        }
+        closeModal()
+    }, [isUserAuth, formValues])
     if (!isOpen) return null
-
     return (
 
         <motion.div
@@ -66,7 +84,10 @@ export const ReviewFormMain: FC<IReviewForm> = memo(({ isUserAuth, isOpen, close
                                 onChange={handleInputChange}
                             />
                             <span>или</span>
-                            <Button className={classes.modalContent__registerButton}>
+                            <Button
+                                className={classes.modalContent__registerButton}
+                                onClick={startAuth}
+                            >
                                 Зарегистрируйтесь
                             </Button>
                         </div>
@@ -106,7 +127,7 @@ export const ReviewFormMain: FC<IReviewForm> = memo(({ isUserAuth, isOpen, close
 
                 <Button
                     className={classes.modalContent__send}
-                    onClick={closeModal}
+                    onClick={onContinueClick}
                 >
                     Далее
                 </Button>

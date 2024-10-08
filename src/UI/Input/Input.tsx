@@ -1,4 +1,4 @@
-import React, { memo, FC, ChangeEvent, HTMLInputTypeAttribute, LegacyRef, forwardRef } from 'react';
+import React, { memo, ChangeEvent, HTMLInputTypeAttribute, forwardRef } from 'react';
 import classes from './Input.module.scss';
 import { classConnection } from '../../utils/function';
 
@@ -12,6 +12,7 @@ export interface IInput {
     name?: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     style?: React.CSSProperties;
+    disabled?: boolean
 }
 
 const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
@@ -24,7 +25,8 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
         autoComplete = 'off',
         name,
         onChange,
-        style
+        style,
+        disabled = false
     } = props;
 
     return (
@@ -40,6 +42,7 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
             onChange={onChange}
             placeholder={placeholder}
             aria-label={title}
+            disabled = {disabled}
         />
     );
 });

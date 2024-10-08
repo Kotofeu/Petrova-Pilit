@@ -4,6 +4,7 @@
     width: auto;
     pointer-events: all;
     cursor: pointer;
+
     &__text {
         padding: 15px;
         border-radius: 10px;
@@ -13,19 +14,19 @@
         height: 100%;
         white-space: pre-wrap;
         overflow-wrap: break-word;
-        word-break: break-all;
+
         &_error {
             background-color: $active-color;
         }
-    
+
         &_message {
             background-color: $blue-color-600;
-    
+
         }
-    
+
         &_complete {
             background-color: $green-color-600;
         }
-    
+
     }
 }

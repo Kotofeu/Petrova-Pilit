@@ -5,6 +5,8 @@ import { makeAutoObservable } from 'mobx'
 import adminImage from '../assets/images/12_11zon.jpg'
 import userImage from '../assets/images/main.png'
 import { IReviews } from './ReviewsStore';
+
+
 export interface IUser {
     id: number;
     name?: string;
@@ -24,7 +26,7 @@ const mockUser: IUser = {
     email: 'cras.petrov@yandex.ru',
     phone: '+79114968216',
     review: {
-        id: 1
+        id: 1,
     }
 }
 const mockAdmin: IUser = {
@@ -68,12 +70,27 @@ export class UserStore {
             this._user.phone = phone
         }
     }
-    setUserEmail(email: string){
-        if (this._user){
+    setUserEmail(email: string) {
+        if (this._user) {
 
             this._user.email = email
         }
     }
+
+    getUserById(id: number) {
+        return mockUser
+    }
+
+    deleteUserById(id: number) {
+
+    }
+    giveRoleForUser(id: number, role: "ADMIN" | "USER") {
+
+    }
+    changeUserById(user: IUser) {
+
+    }
+
     get isAuth() {
         return this._isAuth
     }

@@ -89,8 +89,8 @@
             outline-color .2s ease-in-out;
 
         &_error {
-            border-color: $active-color;
-            outline-color: $active-color;
+            border-color: $active-color !important;
+            outline-color: $active-color !important;
         }
     }
 

@@ -14,7 +14,7 @@ import { SettingsEmailInput } from '../SettingsEmailInput/SettingsEmailInput'
 import { useNavigate } from 'react-router-dom'
 import { HOME_ROUTE } from '../../../../utils/const/routes'
 import useDebounce from '../../../../utils/hooks/useDebounce'
-import { MAX_COMMENT_NAME } from '../../../Reviews/ReviewsComponents/ReviewModal/const'
+import { MAX_NAME_LENGTH } from '../../../Reviews/ReviewsComponents/ReviewModal/const'
 import ModalSend from '../../../../components/Modal/ModalSend'
 import NewPassword from '../../../../components/NewPassword/NewPassword'
 import { classConnection } from '../../../../utils/function'
@@ -45,7 +45,7 @@ export const SettingsSection = observer(() => {
     useEffect(() => {
         if (debounceName) {
             if (userStore.user?.name !== debounceName) {
-                if (debounceName.length >= 2 && debounceName.length <= MAX_COMMENT_NAME) {
+                if (debounceName.length >= 2 && debounceName.length <= MAX_NAME_LENGTH) {
                     userStore.setUserName(debounceName)
                     addMessage(`Ваше имя обновлено, ${debounceName}`, 'complete')
                 }
@@ -73,7 +73,7 @@ export const SettingsSection = observer(() => {
     }, [])
 
     const userNameHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value.length > MAX_COMMENT_NAME) {
+        if (event.target.value.length > MAX_NAME_LENGTH) {
             return
         }
         setUserName(event.target.value)
@@ -113,7 +113,7 @@ export const SettingsSection = observer(() => {
         // Запрос на удаление аккаунта
     }, [])
 
-    const isNameError = !(debounceName.length >= 2 && debounceName.length <= MAX_COMMENT_NAME) && debounceName
+    const isNameError = !(debounceName.length >= 2 && debounceName.length <= MAX_NAME_LENGTH) && debounceName
     const isPhoneError = !isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone
     return (
         <Section >

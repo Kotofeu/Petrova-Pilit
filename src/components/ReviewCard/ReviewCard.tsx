@@ -22,7 +22,7 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
         return children;
     }, [children]);
 
-    if (!comment || !rating || !time) return null;
+    if (!rating || !time) return null;
 
     return (
         <article
@@ -48,9 +48,14 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
                     </div>
                 </div>
             </header>
-            <div className={classes.reviewCard__text}>
-                {comment}
-            </div>
+            {
+                isShortCard || comment
+                    ? <div className={classes.reviewCard__text}>
+                        {comment}
+                    </div>
+                    : null
+            }
+
             <footer className={classes.reviewCard__footer}>
                 {
                     memoizedChildren

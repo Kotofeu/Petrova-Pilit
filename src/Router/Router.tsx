@@ -19,6 +19,7 @@ import Reviews from '../pages/Reviews'
 import Policy from '../pages/Policy'
 import Settings from '../pages/Settings'
 import User from '../pages/User'
+import Users from '../pages/Users'
 
 export const Router = () => {
   return (
@@ -36,7 +37,7 @@ export const Router = () => {
           <Route path={POLICY_ROUTE} element={<Policy />} />
           <Route path={SETTINGS_ROUTE} element={<Settings />} />
           <Route path={USER_ROUTE}>
-            <Route index element={<User />} />
+            <Route index element={<Users />} />
             <Route path=':id' element={<User />} />
           </Route>
         </Route>

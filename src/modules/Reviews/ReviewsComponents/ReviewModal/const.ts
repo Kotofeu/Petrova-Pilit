@@ -3,7 +3,7 @@ export const RATING = 'rating'
 export const COMMENT = 'comment'
 export const IMAGES = 'images'
 export const MAX_COMMENT_LENGTH = 2000
-export const MAX_COMMENT_NAME = 50
+export const MAX_NAME_LENGTH = 50
 
 
 export interface IValues {
@@ -19,4 +19,5 @@ export interface IReviewForm {
     formValues: IValues;
     closeModal: () => void;
     setFormValues: React.Dispatch<React.SetStateAction<IValues>>
+    startAuth?: () => void;
 }

@@ -8,7 +8,7 @@
     font-size: 18px;
     display: block;
     border: 2px solid rgba($text-color, .7);
-    transition: border-color .2s ease-in-out, outline-color .2s ease-in-out;
+    transition: border-color .2s ease-in-out, outline-color .2s ease-in-out, opacity .2s ease-in-out;
 
 
     &:hover,
@@ -19,6 +19,9 @@
         &~.form_button {
             background-color: $primary-color ;
         }
+    }
+    &:disabled{
+        opacity: .8;
     }
 }
 

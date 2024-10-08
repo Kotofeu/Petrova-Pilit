@@ -168,7 +168,18 @@ export class ReviewsStore {
                     visitsNumber: 5
                 }
 
-            }]
+            },
+            {
+                id: 8,
+                time: 1723233268040,
+                rating: 1,
+            },
+            {
+                id: 9,
+                time: 1723233268040,
+                rating: 1,
+            },
+        ]
     }
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
@@ -188,6 +199,25 @@ export class ReviewsStore {
     }
     get error() {
         return this._error
+    }
+    createReview(review: IReviews) {
+        this._reviews.rows.push(review)
+    }
+    getReviewById (id: number | undefined) {
+        if (!id) return
+        // Логика загрузки
+        return this._reviews.rows.find(review => review.id === id)
+
+    }
+
+    deleteReviewById(id: number) {
+        alert(`Удален отзыв: ${id}`)
+
+    }
+
+
+    deleteReviewImageById(id: number) {
+        alert(`Удалено изображение: ${id}`)
     }
 
     private setIsLoading(isLoading: boolean) {

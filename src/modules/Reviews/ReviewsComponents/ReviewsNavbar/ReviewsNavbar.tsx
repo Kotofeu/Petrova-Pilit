@@ -1,11 +1,13 @@
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import classes from './ReviewsNavbar.module.scss';
 import Button from '../../../../UI/Button/Button';
 import { ReviewModal } from '../ReviewModal/ReviewModal';
 import { useSearchParams } from 'react-router-dom';
 import { IS_WRITING_PARAM } from '../../../../utils/const/routes';
+import { userStore } from '../../../../store';
+import { observer } from 'mobx-react-lite';
 
-export const ReviewsNavbar: React.FC = memo(() => {
+export const ReviewsNavbar: React.FC = observer(() => {
     const [searchParams] = useSearchParams();
     const [isOpen, setIsOpen] = useState<boolean>(searchParams.get(IS_WRITING_PARAM) === 'true');
     const openModal = () => {
@@ -26,7 +28,9 @@ export const ReviewsNavbar: React.FC = memo(() => {
                         className={classes.reviewsNavbar__button}
                         onClick={openModal}
                     >
-                        Напишите и свой
+                        {
+                            userStore.user?.review ? 'Редактируйте отзыв' : 'Напишите и свой'
+                        }
                     </Button>
 
                 </div>
