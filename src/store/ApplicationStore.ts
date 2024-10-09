@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
-import { ABOUT_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
+import { ABOUT_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, USER_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
 
 import Instagram from '../assets/icons/social/instagram.svg'
 import Whatsapp from '../assets/icons/social/whatsapp.svg'
@@ -58,6 +58,7 @@ export class ApplicationStore {
             { title: "Обо мне", link: ABOUT_ROUTE },
             { title: "Мои работы", link: WORKS_ROUTE },
             { title: "Отзывы", link: REVIEWS_ROUTE },
+            { title: "Клиенты", link: USER_ROUTE },
         ],
         contactLinks: [
             {

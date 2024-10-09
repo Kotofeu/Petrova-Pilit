@@ -4,10 +4,10 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate, useParams } from 'react-router-dom';
 import { reviewsStore, userStore } from '../../../../store';
 import classes from './UserByIdSection.module.scss';
-import { UserCard } from '../UserCard/UserCard';
 import { UserReview } from '../UserReview/UserReview';
 import { USER_ROUTE } from '../../../../utils/const/routes';
 import Button from '../../../../UI/Button/Button';
+import UserCard from '../../../../components/UserCard/UserCard';
 
 export const UserByIdSection: FC = observer(() => {
 

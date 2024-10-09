@@ -5,6 +5,7 @@ import { makeAutoObservable } from 'mobx'
 import adminImage from '../assets/images/12_11zon.jpg'
 import userImage from '../assets/images/main.png'
 import { IReviews } from './ReviewsStore';
+import { IGetAllJSON } from '.';
 
 
 export interface IUser {
@@ -19,7 +20,7 @@ export interface IUser {
 }
 const mockUser: IUser = {
     id: 1,
-    name: 'Бурятский Бублик',
+    name: 'Анастасия Петрова',
     imageSrc: userImage,
     role: 'USER',
     visitsNumber: 1,
@@ -30,11 +31,21 @@ const mockUser: IUser = {
     }
 }
 const mockAdmin: IUser = {
-    id: 1,
+    id: 2,
     name: 'Бурятский Бублик',
+    email: 'buryat@gmail.ru',
     imageSrc: adminImage,
     role: 'ADMIN',
     visitsNumber: 0
+}
+const allUsers: IGetAllJSON<IUser> = {
+    count: 6,
+    rows: [mockAdmin, mockUser, 
+        { ...mockAdmin, id: 3, name: 'Данил Петров'}, 
+        { ...mockUser, id: 4, name: 'Константин Петров' }, 
+        { ...mockUser, id: 5, name: 'Анна Борисова Петрова'  }, 
+        { ...mockUser, id: 6, name: 'Петрова Анастасия' }
+    ]
 }
 export class UserStore {
     private _user: IUser | null = mockUser;
@@ -76,9 +87,12 @@ export class UserStore {
             this._user.email = email
         }
     }
+    getAllUsers() {
+        return allUsers
+    }
 
     getUserById(id: number) {
-        return mockUser
+        return allUsers.rows.find(user => user.id === id)
     }
 
     deleteUserById(id: number) {

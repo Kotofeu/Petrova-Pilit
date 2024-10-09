@@ -1,25 +1,25 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { IUser, userStore } from '../../../../store';
 
-import { classConnection, userLevel } from '../../../../utils/function';
-import { useMessage } from '../../../MessageContext';
-import useDebounce from '../../../../utils/hooks/useDebounce';
-
-import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
-import ModalOk from '../../../../components/Modal/ModalOk';
-import Input from '../../../../UI/Input/Input';
-import Counter, { CounterButtonType } from '../../../../components/Counter/Counter';
-import Button from '../../../../UI/Button/Button';
-
-import defaultUSerIcon from '../../../../assets/icons/User-icon.svg';
+import defaultUSerIcon from '../../assets/icons/User-icon.svg';
 import classes from './UserCard.module.scss';
+import { IUser, userStore } from '../../store';
+import useDebounce from '../../utils/hooks/useDebounce';
+import { useMessage } from '../../modules/MessageContext';
+import { classConnection, userLevel } from '../../utils/function';
+import Input from '../../UI/Input/Input';
+import ControllerButton from '../../UI/ControllerButton/ControllerButton';
+import Counter, { CounterButtonType } from '../Counter/Counter';
+import Button from '../../UI/Button/Button';
+import ModalOk from '../Modal/ModalOk';
 
 
 interface IUserCard {
-    user?: IUser
+    className?: string;
+    user?: IUser;
+    isShortCard?: boolean
 }
-export const UserCard: FC<IUserCard> = observer(({ user }) => {
+const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false }) => {
 
     const [action, setAction] = useState<'delete' | 'admin' | undefined>()
     const [newUserName, setNewUserName] = useState<string>('')
@@ -80,7 +80,20 @@ export const UserCard: FC<IUserCard> = observer(({ user }) => {
     }, [user])
     return (
         <>
-            <article className={classes.userCard}>
+            <article className={classConnection(
+                classes.userCard,
+                isShortCard ? classes.userCard_short : '',
+                className
+
+            )}>
+                {
+                    isShortCard && user?.visitsNumber
+                        ? <span className={classes.userCard__userVisits}>
+                            {user.visitsNumber}
+                        </span>
+                        : null
+
+                }
                 <div
                     className={classes.userCard__imageBox}
                 >
@@ -92,6 +105,7 @@ export const UserCard: FC<IUserCard> = observer(({ user }) => {
                     <p className={classes.userCard__userLevel}>
                         {userLevel(user?.visitsNumber)}
                     </p>
+
                 </div>
                 <div className={classes.userCard__content}>
                     <div className={classes.userCard__fields}>
@@ -99,21 +113,24 @@ export const UserCard: FC<IUserCard> = observer(({ user }) => {
                             <p className={classes.userCard__fieldName}>
                                 Имя:
                             </p>
-                            <div className={classes.userCard__fieldFlex}>
-                                <Input
-                                    className={classes.userCard__fieldValue}
-                                    value={newUserName}
-                                    onChange={(event) => setNewUserName(event.target.value)}
-                                    disabled={!isNewName}
-                                />
-                                <ControllerButton
-                                    className={classes.userCard__nameBtn}
-                                    type={isNewName ? 'add' : 'edit'}
-                                    title='Задать новое имя пользователю'
-                                    onClick={newNameHandler}
-                                />
-                            </div>
-
+                            {
+                                !isShortCard
+                                    ? <div className={classes.userCard__fieldFlex}>
+                                        <Input
+                                            className={classes.userCard__fieldValue}
+                                            value={newUserName}
+                                            onChange={(event) => setNewUserName(event.target.value)}
+                                            disabled={!isNewName}
+                                        />
+                                        <ControllerButton
+                                            className={classes.userCard__nameBtn}
+                                            type={isNewName ? 'add' : 'edit'}
+                                            title='Задать новое имя пользователю'
+                                            onClick={newNameHandler}
+                                        />
+                                    </div>
+                                    : <p className={classes.userCard__fieldValue}>{user?.name}</p>
+                            }
                         </div>
                         {
                             user?.email
@@ -154,43 +171,47 @@ export const UserCard: FC<IUserCard> = observer(({ user }) => {
                                 : null
                         }
                     </div>
-
-                    <footer
-                        className={classes.userCard__footer}
-                    >
-
-                        <Counter
-                            className={classes.userCard__counter}
-                            count={visits}
-                            setCount={setVisits}
-                            step={1}
-                            minCount={0}
-                            maxCount={99}
-                            counterButtonType={CounterButtonType.arrow}
-
-                        />
-
-                        <div className={classes.userCard__buttons}>
-                            <Button
-                                className={classes.userCard__button}
-                                onClick={() => setAction('delete')}
-                                title='Удалить пользователя'
+                    {
+                        !isShortCard
+                            ? <footer
+                                className={classes.userCard__footer}
                             >
-                                Удалить
-                            </Button>
-                            <Button
-                                className={
-                                    classConnection(
-                                        user?.role === 'ADMIN' ? classes.userCard__button_active : '',
-                                        classes.userCard__button)
-                                }
-                                onClick={() => setAction('admin')}
-                                title='Назначить админом'
-                            >
-                                Админ
-                            </Button>
-                        </div>
-                    </footer>
+
+                                <Counter
+                                    className={classes.userCard__counter}
+                                    count={visits}
+                                    setCount={setVisits}
+                                    step={1}
+                                    minCount={0}
+                                    maxCount={99}
+                                    counterButtonType={CounterButtonType.arrow}
+
+                                />
+
+                                <div className={classes.userCard__buttons}>
+                                    <Button
+                                        className={classes.userCard__button}
+                                        onClick={() => setAction('delete')}
+                                        title='Удалить пользователя'
+                                    >
+                                        Удалить
+                                    </Button>
+                                    <Button
+                                        className={
+                                            classConnection(
+                                                user?.role === 'ADMIN' ? classes.userCard__button_active : '',
+                                                classes.userCard__button)
+                                        }
+                                        onClick={() => setAction('admin')}
+                                        title='Назначить админом'
+                                    >
+                                        Админ
+                                    </Button>
+                                </div>
+                            </footer>
+                            : null
+                    }
+
 
                 </div>
 
@@ -203,3 +224,5 @@ export const UserCard: FC<IUserCard> = observer(({ user }) => {
         </>
     )
 })
+
+export default UserCard
