@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './Layout'
 import {
   ABOUT_ROUTE,
+  ADMIN_ROUTE,
   HOME_ROUTE,
   POLICY_ROUTE,
   REVIEWS_ROUTE,
@@ -20,6 +21,7 @@ import Policy from '../pages/Policy'
 import Settings from '../pages/Settings'
 import User from '../pages/User'
 import Users from '../pages/Users'
+import Admin from '../pages/Admin'
 
 export const Router = () => {
   return (
@@ -40,6 +42,8 @@ export const Router = () => {
             <Route index element={<Users />} />
             <Route path=':id' element={<User />} />
           </Route>
+          <Route path={ADMIN_ROUTE} element ={<Admin />}/>
+
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,27 +1,52 @@
-import { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { FC, memo, useState } from 'react'
 import classes from './WorkByIdSection.module.scss'
 import Section from '../../../../components/Section/Section'
-import { observer } from 'mobx-react-lite'
-import { worksStore } from '../../../../store'
+import { IWorks } from '../../../../store'
 import DateTime from '../../../../UI/DateTime/DateTime'
 import BeforeAfterSlider from '../../../../components/BeforeAfterSlider/BeforeAfterSlider'
 import { WorkImagesGrid } from '../WorkImagesGrid/WorkImagesGrid'
+import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
+import ModalOk from '../../../../components/Modal/ModalOk'
 
-export const WorkByIdSection = observer(() => {
-    const params = useParams();
+interface IWorkByIdSection {
+    work?: IWorks;
+    isAdmin?: boolean;
+    openModal: () => void;
+    deleteWork: (id: number) => void;
+}
 
-    const work = useMemo(() => {
-        if (params.id) return worksStore.loadWorkById(+params.id)
-    }, [params])
-
-
+export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
+    work,
+    isAdmin = false,
+    openModal,
+    deleteWork
+}) => {
+    const [isDelete, setIsDelete] = useState<boolean>(false)
     if (!work) return null
     if (!work.afterImage?.imageSrc && !work.beforeImage?.imageSrc) return null
     if (!work.title) return null
     return (
         <>
             <Section className={classes.workById} isUnderline={!!work.othersImage?.length}>
+                {
+                    isAdmin
+                        ? <div className={classes.workById__buttons}>
+                            <ControllerButton
+                                className={classes.workById__button}
+                                onClick={openModal}
+                                title='Редактировать пост'
+                                type='edit'
+                            />
+                            <ControllerButton
+                                className={classes.workById__button}
+                                onClick={() => setIsDelete(true)}
+                                title='Удалить пост'
+                                type='delete'
+                            />
+                        </div>
+                        : null
+                }
+
                 <div className={classes.workById__inner}>
                     {
                         (work.afterImage?.imageSrc && work.beforeImage?.imageSrc)
@@ -59,7 +84,6 @@ export const WorkByIdSection = observer(() => {
                             }
                         </div>
                     </div>
-
                 </div>
             </Section>
             {
@@ -69,6 +93,11 @@ export const WorkByIdSection = observer(() => {
                     />
                     : null
             }
+            <ModalOk
+                isOpen = {isDelete}
+                closeModal={() => setIsDelete(false)}
+                onOkClick={() => deleteWork(work.id)}
+            />
         </>
 
 

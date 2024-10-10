@@ -3,8 +3,7 @@
 .works {
     min-height: 100vh;
     min-height: 100dvh;
-    
-    padding-top: 125px;
+    padding-top: 120px;
     padding-bottom: 80px;
     &__inner {
         position: relative;
@@ -17,11 +16,10 @@
         font-size: 75px;
         font-weight: 600;
         white-space: nowrap;
-        margin-right: 50px;
         text-align: center;
         letter-spacing: 3px;
         position: relative;
-        padding-bottom: .4em;
+        padding-bottom: .3em;
         &::after{
             content: '';
             position: absolute;
@@ -36,9 +34,21 @@
             background-color: $title-color;
         }
     }
-
+    &__buttons{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 15px 15px;
+        background-color: $secondary-color;
+        gap: 25px;
+    }
+    &__button{
+        font-size: 16px;
+        padding: 0;
+        border: none;
+    }
     &__tabs {
-        padding-top: 45px;
+        margin-top: 30px;
         justify-content: center;
         display: flex;
         align-items: center;

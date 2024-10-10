@@ -193,6 +193,8 @@ export class WorksStore {
 
     private _worksCache: IWorks[] = [...this._works];
 
+    private _isWorkCreating: boolean = false
+
     get works() {
         return this._works;
     }
@@ -220,6 +222,15 @@ export class WorksStore {
     get limit() {
         return this._limit;
     }
+
+    get isWorkCreating() {
+        return this._isWorkCreating
+    }
+
+    setIsWorkCreating(isOpen: boolean) {
+        this._isWorkCreating = isOpen
+    }
+
     setWorkType(typeId: number | null) {
         this._activeWorkType = typeId;
         this._page = 1;
@@ -241,6 +252,33 @@ export class WorksStore {
     loadWorkById(id: number) {
         // Тут совершено другая логика
         return mockWorks.rows.find(work => work.id === id)
+    }
+
+    deleteWork(id: number) {
+
+    }
+
+    editWork(work: IWorks) {
+
+    }
+    addWork() {
+
+    }
+
+    deleteType(id: number) {
+        this._workTypes = this._workTypes.filter(type => type.id !== id)
+    }
+
+    editType(type: IWorksType) {
+
+    }
+    addType(title: string) {
+        const id = Date.now()
+        this._workTypes.push({
+            id: id,
+            title: title
+        })
+        return id
     }
     private setIsLoading(isLoading: boolean) {
         this._isLoading = isLoading

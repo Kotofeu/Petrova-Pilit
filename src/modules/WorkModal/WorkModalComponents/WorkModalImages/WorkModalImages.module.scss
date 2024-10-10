@@ -1,0 +1,53 @@
+@import '../../../../styles/settings.scss';
+
+.workModalImages{
+    width: 100%;
+
+    &__previews{
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 6px;
+    }
+    &__previewBox{
+        width: 100%;
+        height: 300px;
+    }
+    &__othersPhotos{
+        margin-top: 10px;
+
+    }
+    &__photosInput{
+        width: 100%;
+        margin-bottom: 7px;
+    }
+    &__photosList{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    &__photosItem{
+        height: 100%;
+        width: 100%;
+        position: relative;
+
+        &>img {
+            background-color: $secondary-color;
+            width: 100%;
+            object-fit: contain;
+            height: 200px;
+        }
+    }
+    &__photosDelete{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background-color: #FFF;
+    }
+}

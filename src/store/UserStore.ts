@@ -22,7 +22,7 @@ const mockUser: IUser = {
     id: 1,
     name: 'Анастасия Петрова',
     imageSrc: userImage,
-    role: 'USER',
+    role: 'ADMIN',
     visitsNumber: 1,
     email: 'cras.petrov@yandex.ru',
     phone: '+79114968216',
@@ -40,31 +40,21 @@ const mockAdmin: IUser = {
 }
 const allUsers: IGetAllJSON<IUser> = {
     count: 6,
-    rows: [mockAdmin, mockUser, 
-        { ...mockAdmin, id: 3, name: 'Данил Петров'}, 
-        { ...mockUser, id: 4, name: 'Константин Петров' }, 
-        { ...mockUser, id: 5, name: 'Анна Борисова Петрова'  }, 
+    rows: [mockAdmin, mockUser,
+        { ...mockAdmin, id: 3, name: 'Данил Петров' },
+        { ...mockUser, id: 4, name: 'Константин Петров' },
+        { ...mockUser, id: 5, name: 'Анна Борисова Петрова' },
         { ...mockUser, id: 6, name: 'Петрова Анастасия' }
     ]
 }
 export class UserStore {
     private _user: IUser | null = mockUser;
-    private _isAuth: boolean = true;
-    private _isAdmin: boolean = false;
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
 
-    setIsAuth(isAuth: boolean) {
-        this._isAuth = isAuth
-    }
-    setIsAdmin(role: string) {
-        this._isAdmin = role === "ADMIN" ? true : false
-    }
     setUser(user: IUser | null) {
         this._user = user
-        this.setIsAuth(user ? true : false)
-        this.setIsAdmin(user?.role || 'USER')
     }
     setUserImage(image: File | null) {
         if (this._user) {
@@ -105,11 +95,11 @@ export class UserStore {
 
     }
 
-    get isAuth() {
-        return this._isAuth
+    get isAuth(): boolean {
+        return this._user !== null
     }
     get isAdmin() {
-        return this._isAdmin
+        return this._user?.role === "ADMIN" ? true : false
     }
     get user() {
         return this._user

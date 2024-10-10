@@ -5,8 +5,6 @@ import Map from '../../../../UI/Map/Map';
 import Section from '../../../../components/Section/Section';
 import HowToGet from '../../../../assets/video/howToGet.png';
 
-import HowToGetMp4 from '../../../../assets/video/howToGet.mp4';
-
 import classes from './HowToGetSection.module.scss';
 import { applicationStore } from '../../../../store';
 import { observer } from 'mobx-react-lite';
@@ -26,15 +24,20 @@ export const HowToGetSection = observer(() => {
           width='200%'
         />
 
-        <ReactPlayer
-          width='100%'
-          height='100%'
-          playing
-          style={{ aspectRatio: "3/4", backgroundColor: '#F2F1F0' }}
-          url={HowToGetMp4}
-          controls
-          light={HowToGet}
-        />
+        {
+          applicationStore.howToGetVideo && applicationStore.howToGetPreview
+            ? <ReactPlayer
+              width='100%'
+              height='100%'
+              playing
+              style={{ aspectRatio: "3/4", backgroundColor: '#F2F1F0' }}
+              url={applicationStore.howToGetVideo}
+              controls
+              light={applicationStore.howToGetPreview}
+            />
+            : null
+        }
+
       </div>
     </Section >
   );

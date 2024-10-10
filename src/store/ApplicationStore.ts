@@ -1,6 +1,9 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
-import { ABOUT_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, USER_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
+import { ABOUT_ROUTE, ADMIN_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, USER_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
+
+import HowToGetMp4 from '../assets/video/howToGet.mp4';
+import HowToGet from '../assets/video/howToGet.png';
 
 import Instagram from '../assets/icons/social/instagram.svg'
 import Whatsapp from '../assets/icons/social/whatsapp.svg'
@@ -30,7 +33,10 @@ export interface IContactLink extends ILink {
     imageLightSrc?: string;
 
 }
-
+interface IHowToGet {
+    video: string;
+    preview: string;
+}
 interface IAdvantages {
     id: number;
     title: string;
@@ -39,27 +45,28 @@ interface IAdvantages {
 }
 interface IGeneralData {
     promoBanner?: string;
-    headerLinks: ILink[];
     aboutMe: string;
     addressMap?: string;
     contactLinks: IContactLink[];
     homeSlider: IImages[];
     officeImages: IImages[];
     advantages: IAdvantages[];
+    howToGet?: IHowToGet;
 }
 export class ApplicationStore {
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
+    private _headerLinks: ILink[] = [
+        { title: "Главная", link: HOME_ROUTE },
+        { title: "Обо мне", link: ABOUT_ROUTE },
+        { title: "Мои работы", link: WORKS_ROUTE },
+        { title: "Отзывы", link: REVIEWS_ROUTE },
+        { title: "Клиенты", link: USER_ROUTE },
+        { title: "Админка", link: ADMIN_ROUTE }
+    ];
     private _generalData: IGeneralData = {
         promoBanner: 'Скидка 50% на первый маникюр!',
-        headerLinks: [
-            { title: "Главная", link: HOME_ROUTE },
-            { title: "Обо мне", link: ABOUT_ROUTE },
-            { title: "Мои работы", link: WORKS_ROUTE },
-            { title: "Отзывы", link: REVIEWS_ROUTE },
-            { title: "Клиенты", link: USER_ROUTE },
-        ],
         contactLinks: [
             {
                 title: 'WhatsApp',
@@ -154,7 +161,11 @@ export class ApplicationStore {
                 title: 'Комфортно',
                 description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!'
             }
-        ]
+        ],
+        howToGet: {
+            video: HowToGetMp4,
+            preview: HowToGet
+        }
     }
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
@@ -162,7 +173,7 @@ export class ApplicationStore {
         return this._generalData.promoBanner;
     }
     get headerLinks() {
-        return this._generalData.headerLinks
+        return this._headerLinks
     }
     get contactLinks() {
         return this._generalData.contactLinks
@@ -180,7 +191,13 @@ export class ApplicationStore {
         return this._generalData.officeImages
     }
 
+    get howToGetVideo() {
+        return this._generalData.howToGet?.video
+    }
 
+    get howToGetPreview() {
+        return this._generalData.howToGet?.preview
+    }
     get aboutMe() {
         return this._generalData.aboutMe
     }
