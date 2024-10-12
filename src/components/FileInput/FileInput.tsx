@@ -9,6 +9,7 @@ interface IFileInput {
     handleFileChange: (images: File | null) => void
     maxFileSize?: number;
     name?: string;
+    type?: 'photo' | 'icon' | 'video'
 }
 
 const FileInput: React.FC<IFileInput> = memo(({
@@ -17,10 +18,15 @@ const FileInput: React.FC<IFileInput> = memo(({
     handleFileChange,
     maxFileSize = 4194304,
     name,
+    type = 'photo',
 }) => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isHovering, setIsHovering] = useState<boolean>(false);
-    const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
+    const allowedExtensions = type === 'photo' 
+        ? /.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i 
+        : type === 'icon' 
+            ? /.(svg|png|ico)$/i 
+            : /.(mp4|mov|mp3|wmv|avi|mpeg)$/i;
     const { addMessage } = useMessage();
     const validateFile = (file: File) => {
         if (file.size > maxFileSize) {
@@ -87,7 +93,10 @@ const FileInput: React.FC<IFileInput> = memo(({
                 <input
                     name={name}
                     type="file"
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff"
+                    accept={
+                        type === 'photo' ? '.jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff' :
+                        type === 'icon' ? '.svg,.png,.ico' : '.mp4,.mov,.mp3,.wmv,.avi,.mpeg'
+                    }
                     onChange={handleInputChange}
                     style={{ display: 'none' }}
                 />

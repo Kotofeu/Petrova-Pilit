@@ -29,29 +29,39 @@ export interface ILink {
     link: string;
 }
 export interface IContactLink extends ILink {
+    id: number;
     imageSrc?: string;
     imageLightSrc?: string;
+}
+export interface ICreateContactLink extends ILink {
+    imageFile?: File;
+    imageLightFile?: File;
+}
+export interface IChooseContactLink extends IContactLink, ICreateContactLink {
+    imageFile?: File;
+    imageLightFile?: File;
+}
 
-}
-interface IHowToGet {
-    video: string;
-    preview: string;
-}
-interface IAdvantages {
+
+
+export interface IAdvantages {
     id: number;
     title: string;
     imageSrc: string;
     description: string;
 }
+export interface IWorkSchedule {
+    id: number;
+    title: string;
+    shortTitle: string;
+    value: string;
+}
 interface IGeneralData {
     promoBanner?: string;
     aboutMe: string;
     addressMap?: string;
-    contactLinks: IContactLink[];
-    homeSlider: IImages[];
-    officeImages: IImages[];
-    advantages: IAdvantages[];
-    howToGet?: IHowToGet;
+    howToGetVideo?: string;
+    howToGetPreview?: string;
 }
 export class ApplicationStore {
     constructor() {
@@ -67,26 +77,6 @@ export class ApplicationStore {
     ];
     private _generalData: IGeneralData = {
         promoBanner: 'Скидка 50% на первый маникюр!',
-        contactLinks: [
-            {
-                title: 'WhatsApp',
-                link: 'https://wa.me/+79814621828',
-                imageSrc: Whatsapp,
-                imageLightSrc: WhatsappLight,
-            },
-            {
-                title: 'Instagram',
-                link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
-                imageSrc: Instagram,
-                imageLightSrc: InstagramLight,
-            },
-            {
-                title: 'Калининград, Боткина 2А',
-                link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
-                imageSrc: Map,
-                imageLightSrc: MapLight,
-            }
-        ],
         addressMap: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2304.608889733823!2d20.522914741385073!3d54.71650388760703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e3160bea68a3bf%3A0x47e628c68d0b71c0!2z0YPQuy4g0JHQvtGC0LrQuNC90LAsIDLQkCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtNGB0LrQsNGPINC-0LHQuy4sIDIzNjAxNg!5e0!3m2!1sru!2sru!4v1724979269501!5m2!1sru!2sru',
         aboutMe: `Здравствуйте дамы и господа
 Сертифицированный и ответственный мастер Hacтacья приглашает вас на маникюр 👐
@@ -95,78 +85,148 @@ export class ApplicationStore {
 💪 вcе включено в cтoимоcть по комплексу: cнятиe, рeмoнт, пoстaнoвкa формы, укрепление + выравнивание, дизайн (френч, слайдеры, втирка, стемпинг, блестки)
 🗣️ нахожусь в центре города; вода/чай/сладкое предложу в процессе
 🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях (терпеть их не могу)`,
-        homeSlider: [
-            {
-                id: 1,
-                imageSrc: sliderImage1,
-            },
-            {
-                id: 2,
-                imageSrc: sliderImage2,
-            },
-            {
-                id: 3,
-                imageSrc: sliderImage3,
-            },
-        ],
-        officeImages: [
-            {
-                id: 1,
-                imageSrc: sliderImage1,
-            },
-            {
-                id: 2,
-                imageSrc: sliderImage2,
-            },
-            {
-                id: 3,
-                imageSrc: sliderImage3,
-            },
-            {
-                id: 5,
-                imageSrc: sliderImage3,
-            },
-            {
-                id: 6,
-                imageSrc: sliderImage1,
-            },
-            {
-                id: 7,
-                imageSrc: sliderImage3,
-            },
+        howToGetPreview: HowToGetMp4,
+        howToGetVideo: HowToGet,
 
-        ],
-        advantages: [
-            {
-                id: 1,
-                imageSrc: fast,
-                title: 'Быстро',
-                description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!'
-            },
-            {
-                id: 2,
-                imageSrc: quality,
-                title: 'Качественно',
-                description: 'Качество на первом месте — ваши ногти заслуживают лучшего!'
-            },
-            {
-                id: 3,
-                imageSrc: beautifully,
-                title: 'Красиво',
-                description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!'
-            },
-            {
-                id: 4,
-                imageSrc: comfortable,
-                title: 'Комфортно',
-                description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!'
-            }
-        ],
-        howToGet: {
-            video: HowToGetMp4,
-            preview: HowToGet
-        }
     }
+    private _contactLinks: IContactLink[] = [
+        {
+            id: 1,
+            title: 'WhatsApp',
+            link: 'https://wa.me/+79814621828',
+            imageSrc: Whatsapp,
+            imageLightSrc: WhatsappLight,
+        },
+        {
+            id: 2,
+            title: 'Instagram',
+            link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
+            imageSrc: Instagram,
+            imageLightSrc: InstagramLight,
+        },
+        {
+            id: 3,
+            title: 'Калининград, Боткина 2А',
+            link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
+            imageSrc: Map,
+            imageLightSrc: MapLight,
+        }
+    ]
+    private _homeSlider: IImages[] = [
+        {
+            id: 1,
+            imageSrc: sliderImage1,
+        },
+        {
+            id: 2,
+            imageSrc: sliderImage2,
+        },
+        {
+            id: 3,
+            imageSrc: sliderImage3,
+        },
+    ]
+    private _officeImages: IImages[] = [
+        {
+            id: 1,
+            imageSrc: sliderImage1,
+        },
+        {
+            id: 2,
+            imageSrc: sliderImage2,
+        },
+        {
+            id: 3,
+            imageSrc: sliderImage3,
+        },
+        {
+            id: 5,
+            imageSrc: sliderImage3,
+        },
+        {
+            id: 6,
+            imageSrc: sliderImage1,
+        },
+        {
+            id: 7,
+            imageSrc: sliderImage3,
+        },
+
+    ]
+    private _advantages: IAdvantages[] = [
+        {
+            id: 1,
+            imageSrc: fast,
+            title: 'Быстро',
+            description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!'
+        },
+        {
+            id: 2,
+            imageSrc: quality,
+            title: 'Качественно',
+            description: 'Качество на первом месте — ваши ногти заслуживают лучшего!'
+        },
+        {
+            id: 3,
+            imageSrc: beautifully,
+            title: 'Красиво',
+            description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!'
+        },
+        {
+            id: 4,
+            imageSrc: comfortable,
+            title: 'Комфортно',
+            description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!'
+        }
+    ]
+    private _workSchedule: IWorkSchedule[] = [
+        {
+            id: 1,
+            title: 'Понеденьник',
+            shortTitle: 'Пн',
+            value: '08:00 - 20:00',
+        },
+        {
+            id: 2,
+            title: 'Вторник',
+            shortTitle: 'Вт',
+            value: '08:00 - 20:00',
+        },
+        {
+            id: 3,
+            title: 'Среда',
+            shortTitle: 'Ср',
+            value: '08:00 - 20:00',
+        },
+        {
+            id: 4,
+            title: 'Четверг',
+            shortTitle: 'Чт',
+            value: '08:00 - 20:00',
+        },
+        {
+            id: 5,
+            title: 'Пятница',
+            shortTitle: 'Пт',
+            value: '08:00 - 20:00',
+        },
+        {
+            id: 6,
+            title: 'Суббота',
+            shortTitle: 'Сб',
+            value: '08:00 - 20:00',
+        },
+        {
+            id: 7,
+            title: 'Воскресенье',
+            shortTitle: 'Вс',
+            value: 'Выходной',
+        },
+
+    ]
+
+
+
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
     get promoBanner() {
@@ -176,30 +236,33 @@ export class ApplicationStore {
         return this._headerLinks
     }
     get contactLinks() {
-        return this._generalData.contactLinks
+        return this._contactLinks
     }
     get homeSlider() {
-        return this._generalData.homeSlider
+        return this._homeSlider
     }
     get advantages() {
-        return this._generalData.advantages
+        return this._advantages
     }
     get addressMap() {
         return this._generalData.addressMap
     }
     get officeImages() {
-        return this._generalData.officeImages
+        return this._officeImages
     }
 
     get howToGetVideo() {
-        return this._generalData.howToGet?.video
+        return this._generalData.howToGetVideo
     }
 
     get howToGetPreview() {
-        return this._generalData.howToGet?.preview
+        return this._generalData.howToGetPreview
     }
     get aboutMe() {
         return this._generalData.aboutMe
+    }
+    get workSchedule() {
+        return this._workSchedule
     }
 
     get isLoading() {
@@ -208,6 +271,42 @@ export class ApplicationStore {
     get error() {
         return this._error
     }
+    changeWorkSchedule(workDay: IWorkSchedule) {
+        this._workSchedule = this._workSchedule.map(WD => (
+            WD.id === workDay.id ? workDay : WD
+        ))
+    }
+    changeContactLink(id: number, { title, link, imageFile, imageLightFile, imageSrc, imageLightSrc }: IChooseContactLink) {
+        const imageLight = imageLightFile ? URL.createObjectURL(imageLightFile) : imageLightSrc
+        const image = imageFile ? URL.createObjectURL(imageFile) : imageSrc
+
+        this._contactLinks = this._contactLinks.map(CL => (
+            CL.id === id ? {
+                id: id,
+                title: title,
+                link: link,
+                imageLightSrc: imageLight,
+                imageSrc: image,
+            } : CL
+        ))
+    }
+    addContactLink({ title, link, imageFile, imageLightFile }: ICreateContactLink): IContactLink {
+        const imageLightSrc = imageLightFile ? URL.createObjectURL(imageLightFile) : ''
+        const imageSrc = imageFile ? URL.createObjectURL(imageFile) : ''
+        const newContactLink: IContactLink = {
+            id: Date.now(),
+            title: title,
+            link: link,
+            imageLightSrc: imageLightSrc,
+            imageSrc: imageSrc,
+        }
+        this._contactLinks.push(newContactLink)
+        return newContactLink;;
+    }
+    deleteContactLink(id: number) {
+        this._contactLinks = this._contactLinks.filter(link => link.id !== id)
+    }
+
 
     private setIsLoading(isLoading: boolean) {
         this._isLoading = isLoading

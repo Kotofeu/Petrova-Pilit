@@ -1,13 +1,14 @@
 import { memo, FC } from 'react'
 import pencil from '../../assets/icons/pencil.svg'
 import arrow from '../../assets/icons/Arrow.svg'
+import save from '../../assets/icons/save.svg'
 import { classConnection } from '../../utils/function';
 import classes from './ControllerButton.module.scss'
 interface IControllerButton {
     className?: string;
     title?: string
-    type: 'edit' | 'add' | 'delete' | 'back'
-    onClick: () => void
+    type: 'edit' | 'add' | 'delete' | 'back' | 'save'
+    onClick: (param?: any) => void
 }
 const ControllerButton: FC<IControllerButton> = memo(({ className, type, title, onClick }) => {
     if (type === 'edit') return (
@@ -40,6 +41,17 @@ const ControllerButton: FC<IControllerButton> = memo(({ className, type, title, 
             aria-label={title || 'Назад'}
         >
             <img src={arrow} alt="Назад" aria-hidden />
+        </button>
+    )
+    if (type === 'save') return (
+        <button
+            className={classConnection(classes.button, classes.button_edit, className)}
+            type='button'
+            onClick={onClick}
+            title={title || 'Сохранить'}
+            aria-label={title || 'Сохранить'}
+        >
+            <img src={save} alt="Сохранить" aria-hidden />
         </button>
     )
     return (

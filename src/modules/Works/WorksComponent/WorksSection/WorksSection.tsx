@@ -25,6 +25,17 @@ export const WorksSection: FC = observer(() => {
         >
 
             <div className={classes.works__inner}>
+
+                <h1 className={classes.works__title}>Мои работы</h1>
+
+                <Tabs
+                    className={classes.works__tabs}
+                    name='Выбор вида работы'
+                    tabs={worksStore.workTypes}
+                    addAll
+                    activeId={workTypes}
+                    setActiveID={setActiveType}
+                />
                 {
                     userStore.isAdmin
                         ? <div className={classes.works__buttons}>
@@ -43,17 +54,6 @@ export const WorksSection: FC = observer(() => {
                         </div>
                         : null
                 }
-                <h1 className={classes.works__title}>Мои работы</h1>
-
-                <Tabs
-                    className={classes.works__tabs}
-                    name='Выбор вида работы'
-                    tabs={worksStore.workTypes}
-                    addAll
-                    activeId={workTypes}
-                    setActiveID={setActiveType}
-                />
-
                 <WorksGrid className={classes.works__grid} works={worksStore.works} />
                 {
                     worksStore.hasMoreWorks &&

@@ -13,6 +13,12 @@ export type { IReviews } from './ReviewsStore'
 export type { IUser } from './UserStore'
 export type { IService } from './ServicesStore'
 export type { IWorks } from './WorksStore'
+export type {IWorkSchedule} from './ApplicationStore'
+export type {IAdvantages} from './ApplicationStore'
+export type {IContactLink} from './ApplicationStore'
+export type {ICreateContactLink} from './ApplicationStore'
+export type {IChooseContactLink} from './ApplicationStore'
+
 export { REGISTRATION, AUTHORIZATION, PASSWORD_RECOVERY } from './RegistrationStore'
 
 

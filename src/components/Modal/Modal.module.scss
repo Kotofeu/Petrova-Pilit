@@ -21,7 +21,7 @@
     margin: auto;
     z-index: 1;
     overflow: hidden;
-    margin: 60px;
+    margin: 60px 10px;
 }
 
 .modal_close {
@@ -81,6 +81,9 @@
 .modalBlock{
     display: block;
     padding: 20px 22px 22px;
+    max-height: calc(100vh - 120px);
+    overflow-x: hidden;
+    overflow-y: auto;
     background-color: #FFF;
     &__confirm{
         border-radius: 0 !important;

@@ -18,7 +18,7 @@ const ContactList: FC<IContactList> = observer((props) => {
                     return (
                         <ContactLink
                             className={classes.contactList__link}
-                            key={link.title}
+                            key={link.id}
                             href={link.link}
                             title={link.title}
                             linkType="socialLink"

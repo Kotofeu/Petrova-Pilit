@@ -26,18 +26,21 @@ export const Footer = observer(() => {
                 </div>
                 <ContactLinks />
                 <PageLinks onLinkClick={onLinkClick} />
-                <div className={classes.footer__workSchedule}>
-                    <h6 className={classes.footer__columnTitle}>График работы</h6>
-                    <div className={classes.footer__linksList}>
-                        <p className={classes.footer__workDay}><span>Понеденьник</span><span>08:00 - 20:00</span></p>
-                        <p className={classes.footer__workDay}><span>Вторник</span><span>08:00 - 20:00</span></p>
-                        <p className={classes.footer__workDay}><span>Среда</span><span>08:00 - 20:00</span></p>
-                        <p className={classes.footer__workDay}><span>Четвер:</span><span>08:00 - 20:00</span></p>
-                        <p className={classes.footer__workDay}><span>Пятница</span><span>08:00 - 20:00</span></p>
-                        <p className={classes.footer__workDay}><span>Суббота</span><span>08:00 - 18:00</span></p>
-                        <p className={classes.footer__workDay}><span>Воскресенье</span><span>Выходной</span></p>
-                    </div>
-                </div>
+                {
+                    applicationStore.workSchedule
+                        ? <div className={classes.footer__workSchedule}>
+                            <h6 className={classes.footer__columnTitle}>График работы</h6>
+                            <div className={classes.footer__linksList}>
+                                {
+                                    applicationStore.workSchedule.map(workDay => (
+                                        <p className={classes.footer__workDay} key={workDay.id}><span>{workDay.title}</span><span>{workDay.value}</span></p>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                        : null
+                }
+
             </div>
             <div className={classes.footer__copyrighting}>© Petrova Pilit, 2024</div>
         </footer >

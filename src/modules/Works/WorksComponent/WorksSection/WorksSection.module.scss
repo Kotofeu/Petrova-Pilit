@@ -37,10 +37,11 @@
     &__buttons{
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        padding: 15px 15px;
-        background-color: $secondary-color;
+        justify-content: center;
         gap: 25px;
+        padding-bottom: 15px;
+        margin-top: 20px;
+        
     }
     &__button{
         font-size: 16px;
@@ -55,11 +56,10 @@
         gap: 10px;
         font-size: 18px;
         font-weight: 600;
-
+        margin-bottom: 20px;
     }
 
     &__grid {
-        padding-top: 20px;
     }
 
     &__showMore {

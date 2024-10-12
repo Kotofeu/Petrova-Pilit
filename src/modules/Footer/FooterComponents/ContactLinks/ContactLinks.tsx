@@ -10,7 +10,7 @@ export const ContactLinks = observer(() => (
             {applicationStore.contactLinks.map(link => (
                 <ContactLink
                     className={classes.footer__link}
-                    key={link.title}
+                    key={link.id}
                     href={link.link}
                     title={link.title}
                     linkType="socialLink"

@@ -124,7 +124,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                                         />
                                         <ControllerButton
                                             className={classes.userCard__nameBtn}
-                                            type={isNewName ? 'add' : 'edit'}
+                                            type={isNewName ? 'save' : 'edit'}
                                             title='Задать новое имя пользователю'
                                             onClick={newNameHandler}
                                         />

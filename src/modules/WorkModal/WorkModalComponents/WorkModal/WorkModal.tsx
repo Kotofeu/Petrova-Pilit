@@ -58,10 +58,13 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
 
         }
         else {
-            if (work?.afterImage) {
+            if (work?.afterImage?.imageSrc) {
 
             }
-            if (work?.beforeImage) {
+            if (work?.beforeImage?.imageSrc) {
+
+            }
+            if (otherImages?.length) {
 
             }
         }

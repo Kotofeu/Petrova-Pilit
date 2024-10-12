@@ -270,7 +270,9 @@ export class WorksStore {
     }
 
     editType(type: IWorksType) {
-
+        this._workTypes = this._workTypes.map(tag => (
+            tag.id === type.id? {id: type.id, title: type.title}: tag
+        ))
     }
     addType(title: string) {
         const id = Date.now()
