@@ -28,6 +28,7 @@ export interface ILink {
     title: string;
     link: string;
 }
+
 export interface IContactLink extends ILink {
     id: number;
     imageSrc?: string;
@@ -37,11 +38,6 @@ export interface ICreateContactLink extends ILink {
     imageFile?: File;
     imageLightFile?: File;
 }
-export interface IChooseContactLink extends IContactLink, ICreateContactLink {
-    imageFile?: File;
-    imageLightFile?: File;
-}
-
 
 
 export interface IAdvantages {
@@ -50,6 +46,13 @@ export interface IAdvantages {
     imageSrc: string;
     description: string;
 }
+export interface ICreateAdvantages{
+    title: string;
+    description: string;
+    imageFile?: File;
+}
+
+
 export interface IWorkSchedule {
     id: number;
     title: string;
@@ -272,39 +275,72 @@ export class ApplicationStore {
         return this._error
     }
     changeWorkSchedule(workDay: IWorkSchedule) {
-        this._workSchedule = this._workSchedule.map(WD => (
-            WD.id === workDay.id ? workDay : WD
-        ))
+        this._workSchedule = this.updateArray(this._workSchedule, workDay, 'id');
     }
-    changeContactLink(id: number, { title, link, imageFile, imageLightFile, imageSrc, imageLightSrc }: IChooseContactLink) {
-        const imageLight = imageLightFile ? URL.createObjectURL(imageLightFile) : imageLightSrc
-        const image = imageFile ? URL.createObjectURL(imageFile) : imageSrc
 
-        this._contactLinks = this._contactLinks.map(CL => (
-            CL.id === id ? {
-                id: id,
-                title: title,
-                link: link,
-                imageLightSrc: imageLight,
-                imageSrc: image,
-            } : CL
-        ))
+    changeContactLink(contactLink: IContactLink & ICreateContactLink) {
+        const { id, title, link, imageFile, imageLightFile, imageSrc, imageLightSrc } = contactLink;
+        const newContactLink = {
+            id,
+            title,
+            link,
+            imageLightSrc: this.createImageSrc(imageLightFile, imageLightSrc),
+            imageSrc: this.createImageSrc(imageFile, imageSrc),
+        };
+        this._contactLinks = this.updateArray(this._contactLinks, newContactLink, 'id');
     }
+
     addContactLink({ title, link, imageFile, imageLightFile }: ICreateContactLink): IContactLink {
-        const imageLightSrc = imageLightFile ? URL.createObjectURL(imageLightFile) : ''
-        const imageSrc = imageFile ? URL.createObjectURL(imageFile) : ''
         const newContactLink: IContactLink = {
             id: Date.now(),
-            title: title,
-            link: link,
-            imageLightSrc: imageLightSrc,
-            imageSrc: imageSrc,
-        }
-        this._contactLinks.push(newContactLink)
-        return newContactLink;;
+            title,
+            link,
+            imageLightSrc: this.createImageSrc(imageLightFile),
+            imageSrc: this.createImageSrc(imageFile),
+        };
+        this._contactLinks.push(newContactLink);
+        return newContactLink;
     }
+
     deleteContactLink(id: number) {
-        this._contactLinks = this._contactLinks.filter(link => link.id !== id)
+        this._contactLinks = this._contactLinks.filter(link => link.id !== id);
+    }
+
+    changeAdvantages(advantage: IAdvantages & ICreateAdvantages) {
+        const { id, title, description, imageFile, imageSrc } = advantage;
+        const newAdvantage = {
+            id,
+            title,
+            description,
+            imageSrc: this.createImageSrc(imageFile, imageSrc),
+        };
+        this._advantages = this.updateArray(this._advantages, newAdvantage, 'id');
+    }
+
+    addAdvantage({ title, description, imageFile }: ICreateAdvantages): IAdvantages {
+        const newAdvantage: IAdvantages = {
+            id: Date.now(),
+            title,
+            description,
+            imageSrc: this.createImageSrc(imageFile),
+        };
+        this._advantages.push(newAdvantage);
+        return newAdvantage;
+    }
+
+    deleteAdvantages(id: number) {
+        this._advantages = this._advantages.filter(advantage => advantage.id !== id);
+    }
+
+
+
+    
+    setAddressMap(address: string){
+        this._generalData.addressMap = address
+    }
+
+    setAboutMe(aboutMe: string){
+        this._generalData.aboutMe = aboutMe
     }
 
 
@@ -315,4 +351,16 @@ export class ApplicationStore {
     private setErrore(error: AxiosError) {
         this._error = error
     }
+
+    private createImageSrc(imageFile?: File, imageSrc?: string): string {
+        return imageFile ? URL.createObjectURL(imageFile) : imageSrc || '';
+    }
+
+    private updateArray<T>(array: T[], item: T, idKey: keyof T): T[] {
+        return array.map(existingItem => (
+            existingItem[idKey] === item[idKey] ? { ...existingItem, ...item } : existingItem
+        ));
+    }
+
+
 }

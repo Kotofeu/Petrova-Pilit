@@ -9,6 +9,7 @@ import { WorkModalTag } from '../WorkModalTag/WorkModalTag'
 import Input from '../../../../UI/Input/Input'
 import { useMessage } from '../../../MessageContext'
 import { WorkModalImages } from '../WorkModalImages/WorkModalImages'
+import TextArea from '../../../../UI/TextArea/TextArea'
 
 interface IWorkModal {
     work?: IWorks;
@@ -143,7 +144,8 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                                     title='Заголовок публикации'
                                     placeholder='Заголовок публикации'
                                 />
-                                <textarea className={classes.workModal__description}
+                                <TextArea
+                                    className={classes.workModal__description}
                                     value={description}
                                     onChange={(event) => setDescription(event.target.value)}
                                     name='description'

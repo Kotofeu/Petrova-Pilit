@@ -9,6 +9,7 @@ import classes from './ReviewModal.module.scss'
 import { classConnection } from '../../../../utils/function';
 import { observer } from 'mobx-react-lite';
 import { useMessage } from '../../../MessageContext';
+import TextArea from '../../../../UI/TextArea/TextArea';
 
 
 export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, closeModal, formValues, setFormValues, startAuth }) => {
@@ -110,7 +111,7 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
                 <div className={classes.modalContent__inputRow}>
                     <h6 className={classes.modalContent__label}>Комментарий</h6>
                     <div className={classes.modalContent__commentContainer}>
-                        <textarea
+                        <TextArea
                             className={classes.modalContent__textArea}
                             name="comment"
                             value={formValues.comment}

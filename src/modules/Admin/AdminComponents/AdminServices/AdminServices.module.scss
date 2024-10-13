@@ -1,6 +1,6 @@
 @import '../../../../styles/settings.scss';
 
-.adminSocial {
+.adminServices {
     &__item {
         background-color: $secondary-color;
         padding: 10px 15px !important;
@@ -20,11 +20,19 @@
         font-size: 14px;
         width: 100%;
     }
-
-    &__name {
-        flex-shrink: 0;
-        font-weight: 600;
-        min-width: 120px;
+    &__inputs {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
+    }
+    &__inputsRow{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
     }
 
     &__value {
@@ -40,45 +48,17 @@
 
     }
 
-    &__icons {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: row;
-        gap: 15px;
-    }
-
-    &__inputs {
-        width: 100%;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        flex-direction: column;
-        gap: 10px;
-    }
 
     &__textArea {
-        
+        min-height: 6em !important;
+        max-height: 12em !important;
 
     }
 
-    &__icon {
-        width: 80px;
-        height: 80px;
-        flex-shrink: 0;
-
-    }
-
-
-    &__button {
-        width: 25px;
-        height: 25px;
-        flex-shrink: 0;
-    }
 }
 
 @media (min-width: 479.98px) {
-    .adminSocial {
+    .adminServices {
         &__row {
             gap: 10px;
             font-size: 16px;
@@ -88,19 +68,23 @@
 }
 
 @media (min-width: 767.98px) {
-    .adminSocial {
+    .adminServices {
         &__item {
             align-items: center !important;
         }
 
-        &__row {
-            flex-direction: row;
-
+        &__inputs {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 10px;
         }
-
-        &__icons {}
-
-        &__inputs {}
-
+        &__inputsRow{
+            flex-direction: row;
+            gap: 10px;
+        }
+        &__textArea {
+            min-height: 4em !important;
+            max-height: 8em !important;
+        }
     }
 }

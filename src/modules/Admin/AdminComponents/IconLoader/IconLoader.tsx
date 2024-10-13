@@ -1,8 +1,8 @@
-import { memo, FC } from 'react'
-import FileInput from '../../../../components/FileInput/FileInput'
-import { classConnection } from '../../../../utils/function'
+import { memo, FC} from 'react';
+import FileInput from '../../../../components/FileInput/FileInput';
+import { classConnection } from '../../../../utils/function';
 
-import classes from './IconLoader.module.scss'
+import classes from './IconLoader.module.scss';
 
 interface IIconLoader {
     className?: string;
@@ -13,21 +13,18 @@ interface IIconLoader {
 }
 
 export const IconLoader: FC<IIconLoader> = memo(({ className, image, setImage, type = 'dark', title }) => {
+
     return (
         <div className={classConnection(classes.icon, className)}>
-            {
-                image
-                    ?
-                    <div className={classes.icon__iconBox}>
-                        <img
-                            className={classes.icon__iconImage}
-                            src={image}
-                            alt={title || type}
-                        />
-                    </div>
-                    : null
-
-            }
+            {image && (
+                <div className={classes.icon__iconBox}>
+                    <img
+                        className={classes.icon__iconImage}
+                        src={image}
+                        alt={title || 'Icon'}
+                    />
+                </div>
+            )}
             <FileInput
                 className={classConnection(
                     classes.icon__iconInput,
@@ -35,8 +32,8 @@ export const IconLoader: FC<IIconLoader> = memo(({ className, image, setImage, t
                 )}
                 handleFileChange={setImage}
                 type='icon'
-                title={title || type}
+                title={title || 'Upload Icon'}
             />
         </div>
-    )
-})
+    );
+});

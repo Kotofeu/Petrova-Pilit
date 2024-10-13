@@ -5,6 +5,11 @@ import classes from './AdminSection.module.scss'
 import Button from '../../../../UI/Button/Button';
 import { AdminWorkDay } from '../AdminWorkDay/AdminWorkDay';
 import { AdminSocial } from '../AdminSocial/AdminSocial';
+import { AdminAdvantages } from '../AdminAdvantages/AdminAdvantages';
+import { AdminTextArea } from '../AdminTextArea/AdminTextArea';
+import { observer } from 'mobx-react-lite';
+import { applicationStore } from '../../../../store';
+import { AdminServices } from '../AdminServices/AdminServices';
 
 interface IParagraph {
     title: string;
@@ -16,34 +21,48 @@ interface IContent {
     paragraphs: IParagraph[];
 }
 
-const content: IContent[] = [
-    {
-        title: 'Основные настройки',
-        paragraphs: [
-            { title: 'Социальные сети/адрес', item: < AdminSocial /> },
-            { title: 'График работы', item: <AdminWorkDay /> },
-            { title: 'Твои преимущества', item: <div /> },
-            { title: 'Ссылка на карту', item: <div /> },
-            { title: 'Видео как добраться', item: <div /> },
-        ],
-    },
-    {
-        title: 'Главная страница',
-        paragraphs: [
-            { title: 'Главный слайдер', item: <div /> },
-            { title: 'Услуги', item: <div /> },
-        ],
-    },
-    {
-        title: 'Данные "Обо мне"',
-        paragraphs: [
-            { title: 'Текст', item: <div /> },
-            { title: 'Фотографии мастерской', item: <div /> },
-        ],
-    },
-];
 
-export const AdminSection = () => {
+export const AdminSection = observer(() => {
+
+    const content: IContent[] = [
+        {
+            title: 'Основные настройки',
+            paragraphs: [
+                { title: 'Социальные сети/адрес', item: < AdminSocial /> },
+                { title: 'График работы', item: <AdminWorkDay /> },
+                { title: 'Твои преимущества', item: <AdminAdvantages /> },
+                {
+                    title: 'Ссылка на карту', item: <AdminTextArea
+                        initialValue={applicationStore.addressMap}
+                        saveValue={(address) => applicationStore.setAddressMap(address)}
+                    />
+                },
+                { title: 'Видео как добраться', item: <div /> },
+            ],
+        },
+        {
+            title: 'Главная страница',
+            paragraphs: [
+                { title: 'Главный слайдер', item: <div /> },
+                { title: 'Услуги', item: <AdminServices /> },
+            ],
+        },
+        {
+            title: 'Данные "Обо мне"',
+            paragraphs: [
+                {
+                    title: 'Текст', item: <AdminTextArea
+                        initialValue={applicationStore.aboutMe}
+                        saveValue={(aboutMe) => applicationStore.setAboutMe(aboutMe)}
+                    />
+                },
+                { title: 'Фотографии мастерской', item: <div /> },
+            ],
+        },
+    ];
+
+
+
     const sectionRefs = useRef<(HTMLDivElement | null)[][]>(Array(content.length).fill(null).map(() => Array(0)));
 
     const scrollToSection = (sectionIndex: number, paraIndex?: number) => {
@@ -128,4 +147,4 @@ export const AdminSection = () => {
             </div>
         </Section>
     );
-};
+});

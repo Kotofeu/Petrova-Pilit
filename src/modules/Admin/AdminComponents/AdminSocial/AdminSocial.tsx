@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { useMessage } from '../../../MessageContext'
-import { applicationStore, IChooseContactLink, ICreateContactLink } from '../../../../store'
+import { applicationStore, IContactLink, ICreateContactLink } from '../../../../store'
 
 import ListItemController from '../../../../components/ListItemController/ListItemController'
 import Input from '../../../../UI/Input/Input'
@@ -10,8 +10,11 @@ import classes from './AdminSocial.module.scss'
 
 
 import { IconLoader } from '../IconLoader/IconLoader'
+import TextArea from '../../../../UI/TextArea/TextArea'
 
+interface IChooseContactLink extends IContactLink, ICreateContactLink {
 
+}
 export const AdminSocial: FC = observer(() => {
     const [socialLinks, setSocialLinks] = useState<IChooseContactLink[]>([]);
     const [newSocialLinks, setNewSocialLinks] = useState<ICreateContactLink>({
@@ -28,7 +31,7 @@ export const AdminSocial: FC = observer(() => {
         return null;
     };
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, id: number, type: 'title' | 'link') => {
+    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'title' | 'link') => {
         const { value } = event.target;
         setSocialLinks(prev => prev.map(contactLink =>
             contactLink.id === id ? { ...contactLink, [type]: value } : contactLink
@@ -49,8 +52,8 @@ export const AdminSocial: FC = observer(() => {
             return;
         }
         applicationStore.addContactLink(newSocialLinks)
-        setNewSocialLinks({ title: '', link: '', imageFile: undefined, imageLightFile: undefined })
         addMessage(`Ссылка на ${newSocialLinks.title} добавлена`, 'complete')
+        setNewSocialLinks({ title: '', link: '', imageFile: undefined, imageLightFile: undefined })
     }, [newSocialLinks])
 
 
@@ -60,7 +63,7 @@ export const AdminSocial: FC = observer(() => {
             addMessage(errorMessage, 'error');
             return;
         }
-        applicationStore.changeContactLink(contactLink.id, { ...contactLink })
+        applicationStore.changeContactLink(contactLink)
         addMessage(`Ссылка на ${contactLink.title} обновлена`, 'complete')
     }, [])
 
@@ -68,7 +71,7 @@ export const AdminSocial: FC = observer(() => {
     useEffect(() => {
         setSocialLinks(applicationStore.contactLinks)
     }, [applicationStore.contactLinks])
-    
+
     return (
         <ListItemController
             className={classes.adminSocial}
@@ -100,14 +103,12 @@ export const AdminSocial: FC = observer(() => {
                             placeholder='Заголовок ссылки'
                             title='Заголовок ссылки'
                         />
-                        <Input
-                            className={classes.adminSocial__input}
+                        <TextArea
+                            className={classes.adminSocial__textArea}
                             value={socialLink.link || ''}
                             onChange={(event) => handleChange(event, socialLink.id, 'link')}
                             placeholder='Ссылка'
                             title='Ссылка'
-
-
                         />
 
                     </div>
@@ -143,8 +144,8 @@ export const AdminSocial: FC = observer(() => {
                             placeholder='Заголовок ссылки'
                             title='Заголовок ссылки'
                         />
-                        <Input
-                            className={classes.adminSocial__input}
+                        <TextArea
+                            className={classes.adminSocial__textArea}
                             value={newSocialLinks?.link || ''}
                             onChange={(event) => setNewSocialLinks(prev => ({ ...prev, link: event.target.value }))}
                             placeholder='Ссылка'

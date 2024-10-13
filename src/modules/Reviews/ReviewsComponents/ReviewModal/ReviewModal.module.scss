@@ -99,16 +99,9 @@
     &__commentContainer {}
 
     &__textArea {
-        width: 100%;
-        min-width: 100%;
-        max-width: 100%;
-        min-height: 8em;
-        max-height: 14em;
-        resize: vertical;
+        min-height: 8em !important;
+        max-height: 14em !important;
         font-size: 16px;
-        padding: 3px 5px;
-        border: 1px solid $title-color;
-        border-radius: 5px;
         color: $title-color;
         font-weight: 500;
     }
