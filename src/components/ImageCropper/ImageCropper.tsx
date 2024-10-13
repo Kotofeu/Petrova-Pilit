@@ -63,7 +63,7 @@ const ImageCropper: React.FC<CropperProps> = ({
                 aspect={aspect}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
-                onRotationChange={setRotation}
+                onRotationChange={(rotate) => setRotation(rotate <= 180 && rotate >= -180? rotate: rotation )}
                 onCropComplete={handleCropComplete}
                 ref={cropperRef}
                 zoomWithScroll={true}
@@ -98,8 +98,8 @@ const ImageCropper: React.FC<CropperProps> = ({
                     className={classes.imageCropper__button}
                     type='button'
                     onClick={handleSave}
-                    title='Сохранить'>
-                    Сохранить
+                    title='Добавить'>
+                    Добавить
                 </Button>
             </div>
 

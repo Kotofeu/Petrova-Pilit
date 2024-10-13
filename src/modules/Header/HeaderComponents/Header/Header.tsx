@@ -52,7 +52,7 @@ export const Header: FC = observer(() => {
       <motion.div className={
         classConnection(
           classes.header__banner,
-          scrollingDown ? classes.header__banner_hidden : ''
+          scrollingDown || !applicationStore.promoBanner ? classes.header__banner_hidden : ''
         )}
         initial={{ opacity: 1 }}
         animate={{ opacity: scrollingDown ? 0 : 1 }}
@@ -62,7 +62,7 @@ export const Header: FC = observer(() => {
       <nav className={
         classConnection(
           classes.header__navigation,
-          scrollingDown ? classes.header__navigation_upper : ''
+          scrollingDown || !applicationStore.promoBanner ? classes.header__navigation_upper : ''
         )}
       >
         <div className={classes.header__navigationInner}>

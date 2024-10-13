@@ -46,7 +46,7 @@ export interface IAdvantages {
     imageSrc: string;
     description: string;
 }
-export interface ICreateAdvantages{
+export interface ICreateAdvantages {
     title: string;
     description: string;
     imageFile?: File;
@@ -60,7 +60,7 @@ export interface IWorkSchedule {
     value: string;
 }
 interface IGeneralData {
-    promoBanner?: string;
+    promoBanner: string;
     aboutMe: string;
     addressMap?: string;
     howToGetVideo?: string;
@@ -88,8 +88,8 @@ export class ApplicationStore {
 💪 вcе включено в cтoимоcть по комплексу: cнятиe, рeмoнт, пoстaнoвкa формы, укрепление + выравнивание, дизайн (френч, слайдеры, втирка, стемпинг, блестки)
 🗣️ нахожусь в центре города; вода/чай/сладкое предложу в процессе
 🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях (терпеть их не могу)`,
-        howToGetPreview: HowToGetMp4,
-        howToGetVideo: HowToGet,
+        howToGetPreview: HowToGet,
+        howToGetVideo: HowToGetMp4,
 
     }
     private _contactLinks: IContactLink[] = [
@@ -274,10 +274,19 @@ export class ApplicationStore {
     get error() {
         return this._error
     }
+
+    changeHowToGetPreview(preview: File) {
+        this._generalData.howToGetPreview = this.createImageSrc(preview)
+    }
+    changeHowToGetVideo(video: File) {
+        this._generalData.howToGetVideo = this.createImageSrc(video)
+    }
+    changePromoBanner(text: string) {
+        this._generalData.promoBanner = text
+    }
     changeWorkSchedule(workDay: IWorkSchedule) {
         this._workSchedule = this.updateArray(this._workSchedule, workDay, 'id');
     }
-
     changeContactLink(contactLink: IContactLink & ICreateContactLink) {
         const { id, title, link, imageFile, imageLightFile, imageSrc, imageLightSrc } = contactLink;
         const newContactLink = {
@@ -334,12 +343,42 @@ export class ApplicationStore {
 
 
 
-    
-    setAddressMap(address: string){
+
+    addMainSlider(image: File): IImages {
+
+        const newImage: IImages = {
+            id: Date.now(),
+            imageSrc: this.createImageSrc(image),
+        };
+        this._homeSlider.push(newImage);
+        return newImage;
+    }
+
+    deleteMainSlider(id: number) {
+        this._homeSlider = this._homeSlider.filter(image => image.id !== id);
+    }
+
+
+    addOfficeImage(image: File): IImages {
+
+        const newImage: IImages = {
+            id: Date.now(),
+            imageSrc: this.createImageSrc(image),
+        };
+        this._officeImages.push(newImage);
+        return newImage;
+    }
+
+    deleteOfficeImage(id: number) {
+        this._officeImages = this._officeImages.filter(image => image.id !== id);
+    }
+
+
+    setAddressMap(address: string) {
         this._generalData.addressMap = address
     }
 
-    setAboutMe(aboutMe: string){
+    setAboutMe(aboutMe: string) {
         this._generalData.aboutMe = aboutMe
     }
 

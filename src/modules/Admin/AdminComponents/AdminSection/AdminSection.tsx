@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import Section from '../../../../components/Section/Section'
 
-import classes from './AdminSection.module.scss'
 import Button from '../../../../UI/Button/Button';
 import { AdminWorkDay } from '../AdminWorkDay/AdminWorkDay';
 import { AdminSocial } from '../AdminSocial/AdminSocial';
@@ -10,6 +9,11 @@ import { AdminTextArea } from '../AdminTextArea/AdminTextArea';
 import { observer } from 'mobx-react-lite';
 import { applicationStore } from '../../../../store';
 import { AdminServices } from '../AdminServices/AdminServices';
+import { AdminImages } from '../AdminImages/AdminImages';
+import { AdminHowToGet } from '../AdminHowToGet/AdminHowToGet';
+
+import classes from './AdminSection.module.scss'
+
 
 interface IParagraph {
     title: string;
@@ -28,6 +32,14 @@ export const AdminSection = observer(() => {
         {
             title: 'Основные настройки',
             paragraphs: [
+                {
+                    title: 'Промо баннер', item: <AdminTextArea
+                        initialValue={applicationStore.promoBanner}
+                        saveValue={(promo) => applicationStore.changePromoBanner(promo)}
+                        minHeight='2.3em'
+                        maxHeight='4em'
+                    />
+                },
                 { title: 'Социальные сети/адрес', item: < AdminSocial /> },
                 { title: 'График работы', item: <AdminWorkDay /> },
                 { title: 'Твои преимущества', item: <AdminAdvantages /> },
@@ -37,13 +49,22 @@ export const AdminSection = observer(() => {
                         saveValue={(address) => applicationStore.setAddressMap(address)}
                     />
                 },
-                { title: 'Видео как добраться', item: <div /> },
+                { title: 'Видео как добраться', item: <AdminHowToGet /> },
             ],
         },
         {
             title: 'Главная страница',
             paragraphs: [
-                { title: 'Главный слайдер', item: <div /> },
+                {
+                    title: 'Главный слайдер',
+                    item: <AdminImages
+                        images={applicationStore.homeSlider}
+                        addImage={(image) => applicationStore.addMainSlider(image)}
+                        deleteImage={(id) => applicationStore.deleteMainSlider(id)}
+                        title='Добавить фото'
+                        aspect={16 / 9}
+                    />
+                },
                 { title: 'Услуги', item: <AdminServices /> },
             ],
         },
@@ -56,7 +77,15 @@ export const AdminSection = observer(() => {
                         saveValue={(aboutMe) => applicationStore.setAboutMe(aboutMe)}
                     />
                 },
-                { title: 'Фотографии мастерской', item: <div /> },
+                {
+                    title: 'Фотографии мастерской', item: <AdminImages
+                        images={applicationStore.officeImages}
+                        addImage={(image) => applicationStore.addOfficeImage(image)}
+                        deleteImage={(id) => applicationStore.deleteOfficeImage(id)}
+                        title='Добавить фото мастерской'
+                        aspect={3 / 4}
+                    />
+                },
             ],
         },
     ];
