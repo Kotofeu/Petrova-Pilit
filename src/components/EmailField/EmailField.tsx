@@ -2,7 +2,6 @@ import { memo, FC, useState, useCallback, ChangeEvent, useEffect } from 'react'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 import { classConnection } from '../../utils/function';
-import { validate } from 'react-email-validator';
 
 import classes from './EmailField.module.scss'
 import { useMessage } from '../../modules/MessageContext';
@@ -26,7 +25,10 @@ const EmailField: FC<IEmailField> = memo(({
     const [isEmailEdit, setIsEmailEdit] = useState<boolean>(false)
     const [isError, setIsError] = useState<boolean>(false)
     const { addMessage } = useMessage();
-
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+        return emailRegex.test(email);
+    };
     const userEmailHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setUserEmail(event.target.value)
 
@@ -35,7 +37,7 @@ const EmailField: FC<IEmailField> = memo(({
         setIsEmailEdit(userEmail !== email)
     }, [email, userEmail])
     const onConfirmClick = useCallback(() => {
-        if (validate(userEmail)) {
+        if (validateEmail(userEmail)) {
             onConfirm(userEmail)
             setIsError(false)
         }
@@ -56,7 +58,7 @@ const EmailField: FC<IEmailField> = memo(({
                 value={userEmail}
                 onChange={userEmailHandler}
                 name='email'
-                type='email'
+                type='text'
                 title='Электронная почта'
                 placeholder='Электронная почта'
             />

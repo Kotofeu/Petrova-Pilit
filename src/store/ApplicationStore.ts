@@ -8,9 +8,6 @@ import HowToGet from '../assets/video/howToGet.png';
 import Instagram from '../assets/icons/social/instagram.svg'
 import Whatsapp from '../assets/icons/social/whatsapp.svg'
 import Map from '../assets/icons/social/map.svg'
-import InstagramLight from '../assets/icons/social/instagram light.svg'
-import WhatsappLight from '../assets/icons/social/whatsapp light.svg'
-import MapLight from '../assets/icons/social/map light.svg'
 
 import sliderImage1 from '../assets/images/12_11zon.jpg'
 import sliderImage2 from '../assets/images/background/1.png'
@@ -32,11 +29,9 @@ export interface ILink {
 export interface IContactLink extends ILink {
     id: number;
     imageSrc?: string;
-    imageLightSrc?: string;
 }
 export interface ICreateContactLink extends ILink {
     imageFile?: File;
-    imageLightFile?: File;
 }
 
 
@@ -98,21 +93,18 @@ export class ApplicationStore {
             title: 'WhatsApp',
             link: 'https://wa.me/+79814621828',
             imageSrc: Whatsapp,
-            imageLightSrc: WhatsappLight,
         },
         {
             id: 2,
             title: 'Instagram',
             link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
             imageSrc: Instagram,
-            imageLightSrc: InstagramLight,
         },
         {
             id: 3,
             title: 'Калининград, Боткина 2А',
             link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
             imageSrc: Map,
-            imageLightSrc: MapLight,
         }
     ]
     private _homeSlider: IImages[] = [
@@ -288,23 +280,21 @@ export class ApplicationStore {
         this._workSchedule = this.updateArray(this._workSchedule, workDay, 'id');
     }
     changeContactLink(contactLink: IContactLink & ICreateContactLink) {
-        const { id, title, link, imageFile, imageLightFile, imageSrc, imageLightSrc } = contactLink;
+        const { id, title, link, imageFile, imageSrc } = contactLink;
         const newContactLink = {
             id,
             title,
             link,
-            imageLightSrc: this.createImageSrc(imageLightFile, imageLightSrc),
             imageSrc: this.createImageSrc(imageFile, imageSrc),
         };
         this._contactLinks = this.updateArray(this._contactLinks, newContactLink, 'id');
     }
 
-    addContactLink({ title, link, imageFile, imageLightFile }: ICreateContactLink): IContactLink {
+    addContactLink({ title, link, imageFile }: ICreateContactLink): IContactLink {
         const newContactLink: IContactLink = {
             id: Date.now(),
             title,
             link,
-            imageLightSrc: this.createImageSrc(imageLightFile),
             imageSrc: this.createImageSrc(imageFile),
         };
         this._contactLinks.push(newContactLink);

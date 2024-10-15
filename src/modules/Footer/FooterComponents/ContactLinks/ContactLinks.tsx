@@ -14,7 +14,7 @@ export const ContactLinks = observer(() => (
                     href={link.link}
                     title={link.title}
                     linkType="socialLink"
-                    imageSrc={link.imageLightSrc}
+                    imageSrc={link.imageSrc}
                 >
                     {link.title}
                 </ContactLink>

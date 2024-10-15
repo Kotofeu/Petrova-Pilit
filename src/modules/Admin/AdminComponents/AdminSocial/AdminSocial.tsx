@@ -26,7 +26,6 @@ export const AdminSocial: FC = observer(() => {
     const validateLink = (link: IChooseContactLink) => {
         if (link.title.length < 2) return 'Заголовок должен быть длиннее 2 символов';
         if (link.link.length < 2) return 'Ссылка отсутствует';
-        if (!link.imageLightFile && !link.imageLightSrc) return 'Отсутствует светлая иконка';
         if (!link.imageFile && !link.imageSrc) return 'Отсутствует тёмная иконка';
         return null;
     };
@@ -38,9 +37,9 @@ export const AdminSocial: FC = observer(() => {
         ));
     }, []);
 
-    const handleImageChange = useCallback((file: File | null, id: number, type: 'imageFile' | 'imageLightFile') => {
+    const handleImageChange = useCallback((file: File | null, id: number) => {
         setSocialLinks(prev => prev.map(contactLink =>
-            contactLink.id === id ? { ...contactLink, [type]: file || undefined } : contactLink
+            contactLink.id === id ? { ...contactLink, imageFile: file || undefined } : contactLink
         ));
     }, []);
 
@@ -53,7 +52,7 @@ export const AdminSocial: FC = observer(() => {
         }
         applicationStore.addContactLink(newSocialLinks)
         addMessage(`Ссылка на ${newSocialLinks.title} добавлена`, 'complete')
-        setNewSocialLinks({ title: '', link: '', imageFile: undefined, imageLightFile: undefined })
+        setNewSocialLinks({ title: '', link: '', imageFile: undefined})
     }, [newSocialLinks])
 
 
@@ -83,16 +82,9 @@ export const AdminSocial: FC = observer(() => {
                         <IconLoader
                             className={classes.adminSocial__icon}
                             type='dark'
-                            setImage={(image) => handleImageChange(image, socialLink.id, 'imageFile')}
+                            setImage={(image) => handleImageChange(image, socialLink.id)}
                             image={socialLink.imageFile ? URL.createObjectURL(socialLink.imageFile) : socialLink.imageSrc}
-                            title='Тёмная'
-                        />
-                        <IconLoader
-                            className={classes.adminSocial__icon}
-                            type='light'
-                            setImage={(image) => handleImageChange(image, socialLink.id, 'imageLightFile')}
-                            image={socialLink.imageLightFile ? URL.createObjectURL(socialLink.imageLightFile) : socialLink.imageLightSrc}
-                            title='Светлая'
+                            title='Иконка'
                         />
                     </div>
                     <div className={classes.adminSocial__inputs}>
@@ -126,14 +118,7 @@ export const AdminSocial: FC = observer(() => {
                             type='dark'
                             setImage={(image) => setNewSocialLinks(prev => ({ ...prev, imageFile: image || undefined }))}
                             image={newSocialLinks.imageFile ? URL.createObjectURL(newSocialLinks.imageFile) : undefined}
-                            title='Тёмная'
-                        />
-                        <IconLoader
-                            className={classes.adminSocial__icon}
-                            type='light'
-                            setImage={(image) => setNewSocialLinks(prev => ({ ...prev, imageLightFile: image || undefined }))}
-                            image={newSocialLinks.imageLightFile ? URL.createObjectURL(newSocialLinks.imageLightFile) : undefined}
-                            title='Светлая'
+                            title='Иконка'
                         />
                     </div>
                     <div className={classes.adminSocial__inputs}>

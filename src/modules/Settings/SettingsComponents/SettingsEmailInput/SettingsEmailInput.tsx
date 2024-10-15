@@ -20,7 +20,7 @@ export const SettingsEmailInput: FC<ISettingsEmailInput> = observer(({
     const [userEmail, setUserEmail] = useState<string>(email || '')
     const [emailConfirmOpen, setEmailConfirmOpen] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
-
+    
     const onConfirmClick = useCallback((email: string) => {
         emailConfirmStore.setEmail(email)
         setUserEmail(email)
