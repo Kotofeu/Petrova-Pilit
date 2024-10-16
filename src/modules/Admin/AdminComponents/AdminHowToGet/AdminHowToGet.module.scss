@@ -39,11 +39,17 @@
         align-items: center;
     }
 
+    &__previewBox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
     &__previewImage {
         height: 100%;
-        width: 100%;
-        object-fit: contain;
-
+        object-fit: cover;
+        aspect-ratio: 3/4;
     }
 
     &__fileInput {
@@ -67,6 +73,8 @@
         justify-content: space-between;
         gap: 10px;
         z-index: 4;
+        background-color: rgba(#FFF, .5);
+        padding: 8px 10px;
     }
 
     &__button {
@@ -74,8 +82,6 @@
         height: 25px;
         pointer-events: all;
     }
-
-    &__previewImage {}
 }
 
 @media (min-width: 567.98px) {

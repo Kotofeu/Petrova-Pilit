@@ -10,9 +10,10 @@ export const HomeMainSlider = observer(() => {
         <Slider
             className={classes.homeMainSlider}
             items={applicationStore.homeSlider}
+            slideClassName={classes.homeMainSlider__slide}
             renderItem={
                 (item) =>
-                    <div className={classes.homeMainSlider__slide}>
+                    <div className={classes.homeMainSlider__imageBox}>
                         <img className={classes.homeMainSlider__image} src={item.imageSrc} alt={item.imageSrc}/>
                     </div>
             }

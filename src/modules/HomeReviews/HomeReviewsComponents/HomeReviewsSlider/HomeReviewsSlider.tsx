@@ -39,7 +39,19 @@ export const HomeReviewsSlider = observer(() => {
             addDots
             draggable
             looped
-            slidesToShow={3}
+            breakpoints={[
+                {
+                    width: 600,
+                    slideToShow: 2,
+                    slideToScroll: 1,
+                },
+                {
+                    width: 1000,
+                    slideToShow: 3,
+                    slideToScroll: 1,
+                },
+            ]}
+            slidesToShow={1}
             slidesToScroll={1}
 
         />

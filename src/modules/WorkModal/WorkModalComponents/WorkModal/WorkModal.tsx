@@ -26,8 +26,8 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
     const [title, setTitle] = useState<string>(work?.title || '')
     const [description, setDescription] = useState<string>(work?.description || '')
 
-    const [beforeImage, setBeforeImage] = useState<File>()
-    const [afterImage, setAfterImage] = useState<File>()
+    const [beforeImage, setBeforeImage] = useState<File | null>()
+    const [afterImage, setAfterImage] = useState<File | null>()
 
 
     const [otherImages, setOtherImages] = useState<FileList>()

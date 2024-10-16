@@ -1,7 +1,7 @@
 @import '../../../../styles/settings.scss';
 
 .homeMain {
-    padding-top: 130px;
+    padding-top: 120px;
     min-height: auto;
     position: relative;
     z-index: 1;
@@ -13,7 +13,7 @@
     }
 
     &__title {
-        font-size: 85px;
+        font-size: 70px;
         letter-spacing: 6px;
         font-weight: 600;
         text-align: center;
@@ -62,7 +62,7 @@
     &__content {
         display: flex;
         gap: 20px;
-        margin-top: 20px;
+        margin-top: 13px;
         justify-content: center;
     }
 

@@ -23,12 +23,24 @@ export const HomeWorksSlider = observer(() => {
                         work={work}
                     />
             }
+            breakpoints={[
+                {
+                    width: 550,
+                    slideToShow: 2,
+                    slideToScroll: 1,
+                },
+                {
+                    width: 1000,
+                    slideToShow: 3,
+                    slideToScroll: 1,
+                },
+            ]}
             addDots
             autoplay
             autoplayDelay={5000}
             draggable
             looped
-            slidesToShow={3}
+            slidesToShow={1}
             slidesToScroll={1}
 
         />)

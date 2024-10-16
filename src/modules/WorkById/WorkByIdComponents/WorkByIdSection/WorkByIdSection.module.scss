@@ -22,28 +22,22 @@
     &__inner {
         display: grid;
         grid-template-rows: auto;
-        grid-template-columns: 3fr 4fr;
+        grid-template-columns: 4fr 5fr;
         width: 100%;
         background-color: $secondary-color;
     }
 
     &__preview {
-        width: 100%;
         object-fit: contain;
         align-self: center;
-        max-height: 75vh;
-        max-height: 75dhv;
-        min-height: 600px;
-
+        object-fit: cover;
+        aspect-ratio: 4/3;
     }
 
     &__slider {
         align-self: center;
-        height: 100%;
-        width: 100%;
-        max-height: 85vh;
-        max-height: 85dvh;
-        min-height: 600px;
+        object-fit: cover;
+        aspect-ratio: 4/3;
     }
 
     &__text {
@@ -71,7 +65,7 @@
     }
 
     &__paragraph {
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 500;
         text-align: justify;
         white-space: pre-line;

@@ -21,26 +21,20 @@ export const AdminImages: FC<IAdminImages> = memo(({
     title,
     aspect,
 }) => {
-    const [loadedFile, setLoadedFile] = useState<File>()
     const { addMessage } = useMessage()
 
     const loadImage = useCallback((file: File | null) => {
-        setLoadedFile(file || undefined)
-    }, [setLoadedFile])
-
-    const onDeleteImage = useCallback((id: number) => {
-        deleteImage(id)
-        addMessage('Изображение удалено', 'complete')
-    }, [setLoadedFile])
-
-
-    const cropImage = useCallback((file: File | null) => {
         if (file) {
             addImage(file)
             addMessage('Изображение добавлено', 'complete')
         }
-        setLoadedFile(undefined)
-    }, [setLoadedFile, addImage])
+    }, [])
+
+    const onDeleteImage = useCallback((id: number) => {
+        deleteImage(id)
+        addMessage('Изображение удалено', 'complete')
+    }, [])
+
 
 
     return (
@@ -49,27 +43,13 @@ export const AdminImages: FC<IAdminImages> = memo(({
                 className={classes.adminImages__addImage}
                 style={{ aspectRatio: aspect || 1 }}
             >
-                {
-                    loadedFile
-                        ? <ImageCropper
-                            className={classes.adminImages__cropper}
-                            image={URL.createObjectURL(loadedFile)}
-                            onSave={cropImage}
-                            aspect={aspect || 1}
-                            onClose={() => setLoadedFile(undefined)}
-                        />
-                        : null
-                }
-                {
-                    !loadedFile
-                        ? <FileInput
-                            className={classes.adminImages__imageInput}
-                            handleFileChange={loadImage}
-                            name={title}
-                            title={title}
-                        />
-                        : null
-                }
+                <FileInput
+                    className={classes.adminImages__imageInput}
+                    handleFileChange={loadImage}
+                    name={title}
+                    title={title}
+                    maxFileSize={7340032}
+                />
             </div>
             {
                 images?.length
@@ -94,6 +74,7 @@ export const AdminImages: FC<IAdminImages> = memo(({
                                 onClick={() => onDeleteImage(image.id)}
                                 type='delete'
                             />
+                            <span>{index + 1}</span>
                         </div>
                     ))
                     : null

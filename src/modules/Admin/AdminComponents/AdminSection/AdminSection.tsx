@@ -42,7 +42,7 @@ export const AdminSection = observer(() => {
                 },
                 { title: 'Социальные сети/адрес', item: < AdminSocial /> },
                 { title: 'График работы', item: <AdminWorkDay /> },
-                { title: 'Твои преимущества', item: <AdminAdvantages /> },
+                { title: 'Твои преимущества (фото 4:3)', item: <AdminAdvantages /> },
                 {
                     title: 'Ссылка на карту', item: <AdminTextArea
                         initialValue={applicationStore.addressMap}
@@ -56,7 +56,7 @@ export const AdminSection = observer(() => {
             title: 'Главная страница',
             paragraphs: [
                 {
-                    title: 'Главный слайдер',
+                    title: 'Главный слайдер (фото 16:9)',
                     item: <AdminImages
                         images={applicationStore.homeSlider}
                         addImage={(image) => applicationStore.addMainSlider(image)}
@@ -83,7 +83,6 @@ export const AdminSection = observer(() => {
                         addImage={(image) => applicationStore.addOfficeImage(image)}
                         deleteImage={(id) => applicationStore.deleteOfficeImage(id)}
                         title='Добавить фото мастерской'
-                        aspect={3 / 4}
                     />
                 },
             ],

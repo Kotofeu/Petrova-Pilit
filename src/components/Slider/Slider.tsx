@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect, useMemo } from 'react';
+import { ReactNode, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { SwipeableHandlers, useSwipeable } from 'react-swipeable';
 import classes from './Slider.module.scss';
 import { SliderPagination } from './SliderPagination';
@@ -9,12 +9,19 @@ export interface IBaseSlide {
     id: string | number;
 }
 
+interface IBreakpoint {
+    width: number;
+    slideToShow: number;
+    slideToScroll: number;
+}
+
 export interface ISlider<T extends IBaseSlide> {
     name?: string;
     className?: string;
     slideClassName?: string;
     items: T[];
     renderItem: (item: T, index: number) => ReactNode;
+    getCurrentSlide?: (index: number) => void; 
     addArrows?: boolean;
     addDots?: boolean;
     autoplay?: boolean;
@@ -27,6 +34,7 @@ export interface ISlider<T extends IBaseSlide> {
     nextArrow?: ReactNode;
     customArrow?: ReactNode;
     initialSlide?: number;
+    breakpoints?: IBreakpoint[];
 }
 
 export const Slider = <T extends IBaseSlide>({
@@ -35,6 +43,7 @@ export const Slider = <T extends IBaseSlide>({
     slideClassName,
     items = [],
     renderItem,
+    getCurrentSlide,
     addArrows = false,
     addDots = false,
     draggable = false,
@@ -44,7 +53,8 @@ export const Slider = <T extends IBaseSlide>({
     slidesToScroll = 1,
     autoplayDelay = 2000,
     customArrow,
-    initialSlide = 0
+    initialSlide = 0,
+    breakpoints
 
 }: ISlider<T>) => {
     const [currentSlide, setCurrentSlide] = useState(initialSlide);
@@ -52,10 +62,12 @@ export const Slider = <T extends IBaseSlide>({
     const [isAnimating, setIsAnimating] = useState(true);
     const [isClickable, setIsClickable] = useState(true)
     const [swipeOffset, setSwipeOffset] = useState(0);
-
+    const sliderRef = useRef<HTMLDivElement | null>(null);
+    const [calcSlidesToShow, setCalcSlidesToShow] = useState<number>(slidesToShow)
+    const [calcSlidesToScroll, setCalcSlidesToScroll] = useState<number>(slidesToScroll)
     const totalScrolls = useMemo(() => {
-        return Math.ceil((items.length - slidesToShow) / slidesToScroll) + 1;
-    }, [items.length, slidesToShow, slidesToScroll]);
+        return Math.ceil((items.length - calcSlidesToShow) / calcSlidesToScroll) + 1;
+    }, [items.length, calcSlidesToShow, calcSlidesToScroll]);
 
     useEffect(() => {
         updateTranslateX();
@@ -63,13 +75,13 @@ export const Slider = <T extends IBaseSlide>({
     }, [currentSlide, swipeOffset, isClickable]);
 
     useEffect(() => {
-        if (autoplay) {
+        if (autoplay && totalScrolls > 1) {
             const intervalId = setInterval(nextSlide, autoplayDelay);
             return () => clearInterval(intervalId);
         }
-    }, [items.length, currentSlide, autoplayDelay, autoplay]);
+    }, [items.length, currentSlide, autoplayDelay, autoplay, totalScrolls]);
     const updateTranslateX = () => {
-        setTranslateX(-100 * (currentSlide * (slidesToScroll / slidesToShow)) + swipeOffset);
+        setTranslateX(-100 * (currentSlide * (calcSlidesToScroll / calcSlidesToShow)) + swipeOffset);
     };
 
     const changeSlide = (direction: number) => {
@@ -105,6 +117,50 @@ export const Slider = <T extends IBaseSlide>({
     };
     const isLastSlide = () => !looped && currentSlide >= totalScrolls - 1;
     const isFirstSlide = () => !looped && currentSlide <= 0;
+
+    
+    const updateSliderSettings = useCallback(() => {
+        if (sliderRef.current) {
+            const containerWidth = sliderRef.current.offsetWidth;
+            
+            if (breakpoints) {
+                const matchedBreakpoint = breakpoints
+                    .slice()
+                    .sort((a, b) => b.width - a.width)
+                    .find(b => containerWidth >= b.width);
+
+                if (matchedBreakpoint) {
+                    setCalcSlidesToShow(matchedBreakpoint.slideToShow);
+                    setCalcSlidesToScroll(matchedBreakpoint.slideToScroll);
+                } else {
+                    setCalcSlidesToShow(slidesToShow);
+                    setCalcSlidesToScroll(slidesToScroll);
+                }
+            } else {
+                setCalcSlidesToShow(slidesToShow);
+                setCalcSlidesToScroll(slidesToScroll);
+            }
+        }
+    }, [sliderRef.current, breakpoints]);
+    useEffect(() => {
+        if(currentSlide !== initialSlide){
+            changeSlide(1)
+        }
+    }, [calcSlidesToScroll, calcSlidesToShow])
+    useEffect(() => {
+        if (getCurrentSlide) {
+            getCurrentSlide(currentSlide)
+        }
+    }, [currentSlide, getCurrentSlide])
+    useEffect(() => {
+        updateSliderSettings();
+        window.addEventListener('resize', updateSliderSettings);
+
+        return () => {
+            window.removeEventListener('resize', updateSliderSettings);
+        };
+    }, [sliderRef.current, slidesToShow, slidesToScroll, breakpoints]);
+
     if (!draggable || totalScrolls <= 1) handlers = undefined;
     if (!items.length) return null;
 
@@ -112,6 +168,7 @@ export const Slider = <T extends IBaseSlide>({
     return (
         <div
             className={classConnection(classes.slider, className)}
+
             style={{
                 cursor: draggable && totalScrolls > 1 ? 'grab' : 'auto',
                 userSelect: draggable && totalScrolls > 1 ? 'none' : 'auto',
@@ -145,9 +202,10 @@ export const Slider = <T extends IBaseSlide>({
                     transition: isAnimating ? 'transform 0.3s ease' : 'none',
                     pointerEvents: isClickable ? 'auto' : 'none'
                 }}
+                ref={sliderRef}
             >
                 {items.map((item, index) => (
-                    <div className={classConnection(classes.slider__slide, slideClassName)} key={item.id} style={{ minWidth: `${100 / slidesToShow}%` }} aria-disabled>
+                    <div className={classConnection(classes.slider__slide, slideClassName)} key={item.id} style={{ minWidth: `${100 / calcSlidesToShow}%` }} aria-disabled>
                         {renderItem(item, index)}
                     </div>
                 ))}

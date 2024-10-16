@@ -11,6 +11,7 @@ import classes from './AdminAdvantages.module.scss'
 import { IconLoader } from '../IconLoader/IconLoader'
 import { applicationStore, IAdvantages, ICreateAdvantages } from '../../../../store'
 import TextArea from '../../../../UI/TextArea/TextArea'
+import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult'
 
 interface IAdvantageArray extends IAdvantages, ICreateAdvantages {
 
@@ -21,13 +22,15 @@ export const AdminAdvantages: FC = observer(() => {
         title: '',
         description: '',
         imageFile: undefined,
+        iconFile: undefined
     })
 
     const { addMessage } = useMessage();
     const validateAdvantages = (advantage: IAdvantageArray) => {
         if (advantage.title.length < 2) return 'Заголовок должен быть длиннее 2 символов';
         if (advantage.description.length < 2) return 'Описание отсутствует';
-        if (!advantage.imageFile && !advantage.imageSrc) return 'Отсутствует иконка';
+        if (!advantage.imageFile && !advantage.imageSrc) return 'Отсутствует картинка описания';
+        if (!advantage.iconFile && !advantage.iconSrs) return 'Отсутствует иконка';
         return null;
     };
 
@@ -38,9 +41,9 @@ export const AdminAdvantages: FC = observer(() => {
         ));
     }, []);
 
-    const handleImageChange = useCallback((file: File | null, id: number) => {
+    const handleImageChange = useCallback((file: File | null, id: number, type: 'imageFile' | 'iconFile') => {
         setAdvantages(prev => prev.map(advantage =>
-            advantage.id === id ? { ...advantage, imageFile: file || undefined } : advantage
+            advantage.id === id ? { ...advantage, [type]: file || undefined } : advantage
         ));
     }, []);
 
@@ -53,7 +56,7 @@ export const AdminAdvantages: FC = observer(() => {
         }
         applicationStore.addAdvantage(newAdvantage)
         addMessage(`Преимущество ${newAdvantage.title} добавлено`, 'complete')
-        setNewAdvantage({ title: '', description: '', imageFile: undefined })
+        setNewAdvantage({ title: '', description: '', imageFile: undefined, iconFile: undefined })
     }, [newAdvantage])
 
 
@@ -79,28 +82,37 @@ export const AdminAdvantages: FC = observer(() => {
             items={advantages}
             renderItem={(advantage) => (
                 <div className={classes.adminAdvantages__row} key={advantage.id}>
-                    <IconLoader
-                        className={classes.adminAdvantages__icon}
-                        type='light'
-                        setImage={(image) => handleImageChange(image, advantage.id)}
-                        image={advantage.imageFile ? URL.createObjectURL(advantage.imageFile) : advantage.imageSrc}
-                        title='Иконка'
-                    />
-                    <div className={classes.adminAdvantages__inputs}>
-                        <Input
-                            className={classes.adminAdvantages__input}
-                            value={advantage.title || ''}
-                            onChange={(event) => handleChange(event, advantage.id, 'title')}
-                            placeholder='Заголовок преимущества'
-                            title='Заголовок преимущества'
+                    <div className={classes.adminAdvantages__main}>
+                        <IconLoader
+                            className={classes.adminAdvantages__icon}
+                            type='light'
+                            setImage={(image) => handleImageChange(image, advantage.id, 'iconFile')}
+                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrs}
+                            title='Иконка'
                         />
-                        <TextArea
-                            className={classes.adminAdvantages__textArea}
-                            value={advantage.description || ''}
-                            onChange={(event) => handleChange(event, advantage.id, 'description')}
-                            placeholder='Описание преимущества'
-                            title='Описание преимущества' />
+                        <div className={classes.adminAdvantages__inputs}>
+                            <Input
+                                className={classes.adminAdvantages__input}
+                                value={advantage.title || ''}
+                                onChange={(event) => handleChange(event, advantage.id, 'title')}
+                                placeholder='Заголовок преимущества'
+                                title='Заголовок преимущества'
+                            />
+                            <TextArea
+                                className={classes.adminAdvantages__textArea}
+                                value={advantage.description || ''}
+                                onChange={(event) => handleChange(event, advantage.id, 'description')}
+                                placeholder='Описание преимущества'
+                                title='Описание преимущества' />
+                        </div>
                     </div>
+                    <ImageCropperWithResult
+                        className={classes.adminAdvantages__image}
+                        setImage={(image) => handleImageChange(image, advantage.id, 'imageFile')}
+                        initialImage={advantage.imageSrc}
+                        addCloseButton={false}
+                        aspect={4 / 3}
+                    />
                 </div>
             )}
             addItem={onAddAdvantage}
@@ -108,31 +120,38 @@ export const AdminAdvantages: FC = observer(() => {
             saveItem={(advantage) => onSaveClick(advantage)}
             renderItemToAdd={() => (
                 <div className={classes.adminAdvantages__row}>
-                    <IconLoader
-                        className={classes.adminAdvantages__icon}
-                        type='light'
-                        setImage={(image) => setNewAdvantage(prev => ({ ...prev, imageFile: image || undefined }))}
-                        image={newAdvantage.imageFile ? URL.createObjectURL(newAdvantage.imageFile) : undefined}
-                        title='Иконка'
-                    />
-                    <div className={classes.adminAdvantages__inputs}>
-                        <Input
-                            className={classes.adminAdvantages__input}
-                            value={newAdvantage?.title || ''}
-                            onChange={(event) => setNewAdvantage(prev => ({ ...prev, title: event.target.value }))}
-                            placeholder='Заголовок преимущества'
-                            title='Заголовок преимущества'
+                    <div className={classes.adminAdvantages__main}>
+                        <IconLoader
+                            className={classes.adminAdvantages__icon}
+                            type='light'
+                            setImage={(image) => setNewAdvantage(prev => ({ ...prev, iconFile: image || undefined }))}
+                            image={newAdvantage.iconFile ? URL.createObjectURL(newAdvantage.iconFile) : undefined}
+                            title='Иконка'
                         />
-                        <TextArea
-                            className={classes.adminAdvantages__textArea}
-                            value={newAdvantage?.description || ''}
-                            onChange={(event) => setNewAdvantage(prev => ({ ...prev, description: event.target.value }))}
-                            placeholder='Описание преимущества'
-                            title='Описание преимущества'
-                        />
+                        <div className={classes.adminAdvantages__inputs}>
+                            <Input
+                                className={classes.adminAdvantages__input}
+                                value={newAdvantage?.title || ''}
+                                onChange={(event) => setNewAdvantage(prev => ({ ...prev, title: event.target.value }))}
+                                placeholder='Заголовок преимущества'
+                                title='Заголовок преимущества'
+                            />
+                            <TextArea
+                                className={classes.adminAdvantages__textArea}
+                                value={newAdvantage?.description || ''}
+                                onChange={(event) => setNewAdvantage(prev => ({ ...prev, description: event.target.value }))}
+                                placeholder='Описание преимущества'
+                                title='Описание преимущества'
+                            />
 
+                        </div>
                     </div>
-
+                    <ImageCropperWithResult
+                        className={classes.adminAdvantages__image}
+                        setImage={(image) => setNewAdvantage(prev => ({ ...prev, imageFile: image || undefined }))}
+                        addCloseButton={false}
+                        aspect={4 / 3}
+                    />
                 </div>
             )}
             addIndex={false}

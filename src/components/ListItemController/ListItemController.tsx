@@ -51,24 +51,27 @@ const ListItemController = <T extends { id: number | string }>({
                                     && <span className={classes.listItemController__index}>{index + 1}.</span>
                                 }
                                 {renderItem(item, index)}
-                                {
-                                    saveItem
-                                        ? <ControllerButton
-                                            className={classes.listItemController__controller}
-                                            type='save'
-                                            onClick={() => saveItem(item)}
-                                        />
-                                        : null
-                                }
-                                {
-                                    deleteItem
-                                        ? <ControllerButton
-                                            className={classes.listItemController__controller}
-                                            type='delete'
-                                            onClick={() => deleteItem(item.id)}
-                                        />
-                                        : null
-                                }
+                                <div className={classes.listItemController__controllers}>
+                                    {
+                                        saveItem
+                                            ? <ControllerButton
+                                                className={classes.listItemController__controller}
+                                                type='save'
+                                                onClick={() => saveItem(item)}
+                                            />
+                                            : null
+                                    }
+                                    {
+                                        deleteItem
+                                            ? <ControllerButton
+                                                className={classes.listItemController__controller}
+                                                type='delete'
+                                                onClick={() => deleteItem(item.id)}
+                                            />
+                                            : null
+                                    }
+                                </div>
+
 
                             </div>
                         ))

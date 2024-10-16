@@ -38,6 +38,7 @@ export interface ICreateContactLink extends ILink {
 export interface IAdvantages {
     id: number;
     title: string;
+    iconSrs: string;
     imageSrc: string;
     description: string;
 }
@@ -45,6 +46,7 @@ export interface ICreateAdvantages {
     title: string;
     description: string;
     imageFile?: File;
+    iconFile?: File;
 }
 
 
@@ -151,27 +153,34 @@ export class ApplicationStore {
     private _advantages: IAdvantages[] = [
         {
             id: 1,
-            imageSrc: fast,
+            iconSrs: fast,
             title: 'Быстро',
-            description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!'
+            description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!',
+            imageSrc: sliderImage1,
         },
         {
             id: 2,
-            imageSrc: quality,
+            iconSrs: quality,
             title: 'Качественно',
-            description: 'Качество на первом месте — ваши ногти заслуживают лучшего!'
+            description: 'Качество на первом месте — ваши ногти заслуживают лучшего!',
+            imageSrc: sliderImage2,
+
         },
         {
             id: 3,
-            imageSrc: beautifully,
+            iconSrs: beautifully,
             title: 'Красиво',
-            description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!'
+            description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!',
+            imageSrc: sliderImage1,
+
         },
         {
             id: 4,
-            imageSrc: comfortable,
+            iconSrs: comfortable,
             title: 'Комфортно',
-            description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!'
+            description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!',
+            imageSrc: sliderImage3,
+
         }
     ]
     private _workSchedule: IWorkSchedule[] = [
@@ -306,22 +315,24 @@ export class ApplicationStore {
     }
 
     changeAdvantages(advantage: IAdvantages & ICreateAdvantages) {
-        const { id, title, description, imageFile, imageSrc } = advantage;
+        const { id, title, description, imageFile, imageSrc, iconSrs, iconFile } = advantage;
         const newAdvantage = {
             id,
             title,
             description,
             imageSrc: this.createImageSrc(imageFile, imageSrc),
+            iconSrs: this.createImageSrc(iconFile, iconSrs)
         };
         this._advantages = this.updateArray(this._advantages, newAdvantage, 'id');
     }
 
-    addAdvantage({ title, description, imageFile }: ICreateAdvantages): IAdvantages {
+    addAdvantage({ title, description, imageFile, iconFile }: ICreateAdvantages): IAdvantages {
         const newAdvantage: IAdvantages = {
             id: Date.now(),
             title,
             description,
             imageSrc: this.createImageSrc(imageFile),
+            iconSrs: this.createImageSrc(iconFile),
         };
         this._advantages.push(newAdvantage);
         return newAdvantage;

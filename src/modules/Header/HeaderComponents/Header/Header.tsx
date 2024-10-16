@@ -25,7 +25,7 @@ export const Header: FC = observer(() => {
   };
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const modalHandler = useCallback((isOpen: boolean) => {
-    if (userStore.user){
+    if (userStore.user) {
       if (isOpen) {
         setIsOpen(true)
         document.body.style.overflowY = 'hidden';
@@ -35,7 +35,7 @@ export const Header: FC = observer(() => {
         document.body.style.overflowY = 'auto';
       }
     }
-    else{
+    else {
       registrationStore.setIsOpen(true)
     }
 
@@ -46,23 +46,21 @@ export const Header: FC = observer(() => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
-
+  const isHiddenBanner: boolean = scrollingDown || !applicationStore.promoBanner //|| userStore.isAuth под вопросом
   return (
     <header className={classes.header}>
       <motion.div className={
         classConnection(
           classes.header__banner,
-          scrollingDown || !applicationStore.promoBanner ? classes.header__banner_hidden : ''
+          isHiddenBanner ? classes.header__banner_hidden : ''
         )}
-        initial={{ opacity: 1 }}
-        animate={{ opacity: scrollingDown ? 0 : 1 }}
       >
-        <h3 className={classes.header__bannerText}>{applicationStore.promoBanner}</h3>
+        <h3 className={classes.header__bannerText}>{ userStore.isAuth? 'Приходите, с удовольствием приму вас ещё' :applicationStore.promoBanner}</h3>
       </motion.div>
       <nav className={
         classConnection(
           classes.header__navigation,
-          scrollingDown || !applicationStore.promoBanner ? classes.header__navigation_upper : ''
+          isHiddenBanner ? classes.header__navigation_upper : ''
         )}
       >
         <div className={classes.header__navigationInner}>

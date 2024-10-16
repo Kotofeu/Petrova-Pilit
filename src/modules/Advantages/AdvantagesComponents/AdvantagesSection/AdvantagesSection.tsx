@@ -20,8 +20,7 @@ export const AdvantagesSection = observer(() => {
                     looped
                     autoplay
                     autoplayDelay={5000}
-                    slidesToShow={4}
-                    slidesToScroll={1}
+
                     slideClassName={classes.advantagesSection__slide}
                     renderItem={(advantage) =>
                         <AdvantagesCard
@@ -29,9 +28,28 @@ export const AdvantagesSection = observer(() => {
                             key={advantage.id}
                             title={advantage.title}
                             description={advantage.description}
-                            imageSrc={advantage.imageSrc}
+                            imageSrc={advantage.iconSrs}
                         />
                     }
+                    breakpoints={[
+                        {
+                            width: 600,
+                            slideToShow: 2,
+                            slideToScroll: 1,
+                        },
+                        {
+                            width: 900,
+                            slideToShow: 3,
+                            slideToScroll: 1,
+                        },
+                        {
+                            width: 1200,
+                            slideToShow: 4,
+                            slideToScroll: 1,
+                        },
+                    ]}
+                    slidesToShow={1}
+                    slidesToScroll={1}
                 />
             </div>
 

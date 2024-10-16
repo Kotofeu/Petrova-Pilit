@@ -6,6 +6,7 @@ import classes from './ImageCropper.module.scss'
 import { classConnection } from '../../utils/function';
 import { RotateControls } from './RotateControls';
 import { ZoomControls } from './ZoomControls';
+import { useMessage } from '../../modules/MessageContext';
 interface CropperProps {
     className?: string;
     image: string;
@@ -32,15 +33,21 @@ const ImageCropper: React.FC<CropperProps> = ({
     const [rotation, setRotation] = useState(0);
     const cropperRef = useRef<Cropper | null>(null)
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
-
+    const {addMessage} = useMessage()
     const handleCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
     const handleSave = async () => {
         if (croppedAreaPixels) {
-            const croppedImage = await getCroppedImg(image, croppedAreaPixels, rotation);
-            onSave(croppedImage);
+            try {
+                const croppedImage = await getCroppedImg(image, croppedAreaPixels, rotation);
+                onSave(croppedImage);
+            }
+            catch {
+                addMessage('Произошла непредвиденная ошибка', 'error')
+            }
+
         }
     };
 
@@ -63,7 +70,7 @@ const ImageCropper: React.FC<CropperProps> = ({
                 aspect={aspect}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
-                onRotationChange={(rotate) => setRotation(rotate <= 180 && rotate >= -180? rotate: rotation )}
+                onRotationChange={(rotate) => setRotation(rotate <= 180 && rotate >= -180 ? rotate : rotation)}
                 onCropComplete={handleCropComplete}
                 ref={cropperRef}
                 zoomWithScroll={true}

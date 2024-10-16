@@ -12,13 +12,18 @@
 
 
     &__row {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    &__main {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: column;
         gap: 8px;
-        font-size: 14px;
         width: 100%;
+
     }
 
     &__name {
@@ -69,20 +74,30 @@
 
     }
 
-
-    &__button {
-        width: 25px;
-        height: 25px;
-        flex-shrink: 0;
+    &__image{
+        max-width: 400px;
+        width: 100%;
+        aspect-ratio: 4/3;
+        margin-top: 10px;
     }
+
+
 }
 
 @media (min-width: 479.98px) {
     .adminAdvantages {
         &__row {
-            gap: 10px;
-            font-size: 16px;
 
+            font-size: 16px;
+        }
+        &__main{
+            gap: 10px;
+        }
+        &__image{
+            max-width: none;
+            width: 100%;
+            aspect-ratio: auto;
+            height: 300px;
         }
     }
 }
@@ -94,10 +109,11 @@
         }
 
         &__row {
-            flex-direction: row;
 
         }
-
+        &__main{
+            flex-direction: row;
+        }
         &__icons {}
 
         &__inputs {}
@@ -107,6 +123,7 @@
             font-size: 16px;
 
         }
+
 
     }
 }

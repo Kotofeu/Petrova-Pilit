@@ -37,7 +37,12 @@
         left: 0;
         font: inherit;
     }
+    &__controllers{
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 15px;
 
+    }
     &__controller {
         width: 25px;
         height: 25px;

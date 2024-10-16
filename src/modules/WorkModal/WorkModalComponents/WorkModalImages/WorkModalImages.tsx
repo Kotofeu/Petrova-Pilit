@@ -1,11 +1,11 @@
 import { FC, memo, useCallback, useEffect, useState } from 'react'
 import MultipleFileInput from '../../../../components/MultipleFileInput/MultipleFileInput';
-import { WorkImageCropper } from '../WorkImageCropper/WorkImageCropper';
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
 import { IImages } from '../../../../store';
 import { classConnection } from '../../../../utils/function';
 
 import classes from './WorkModalImages.module.scss';
+import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult';
 
 interface IWorkModalImages {
     className?: string;
@@ -13,8 +13,8 @@ interface IWorkModalImages {
     initialAfter?: string;
     initialBefore?: string;
     initialOtherImages?: IImages[];
-    setAfter: (file: File | undefined) => void;
-    setBefore: (file: File | undefined) => void;
+    setAfter: (file: File | null) => void;
+    setBefore: (file: File | null) => void;
     setOthers: (file: FileList | undefined) => void;
 }
 
@@ -37,7 +37,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                 const files = await Promise.all(initialOtherImages.map(async (image) => {
                     const response = await fetch(image.imageSrc);
                     const blob = await response.blob();
-                    return new File([blob],`image_${image.id}.png`, { type: blob.type });
+                    return new File([blob], `image_${image.id}.png`, { type: blob.type });
                 }));
 
                 const dataTransfer = new DataTransfer();
@@ -48,7 +48,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
 
         fetchFiles();
     }, [initialOtherImages, setOtherImages]);
-    
+
     useEffect(() => {
         setOthers(otherImages)
     }, [otherImages])
@@ -64,21 +64,21 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
     return (
         <div className={classConnection(classes.workModalImages, className)}>
             <div className={classes.workModalImages__previews}>
-                <WorkImageCropper
+                <ImageCropperWithResult
                     className={classes.workModalImages__previewBox}
                     title='Фото до'
                     name='beforeImage'
                     setImage={(file) => setBefore(file)}
                     initialImage={initialBefore || ''}
-
+                    aspect={4 / 3}
                 />
-                <WorkImageCropper
+                <ImageCropperWithResult
                     className={classes.workModalImages__previewBox}
                     title='Фото после'
                     name='afterImage'
                     setImage={(file) => setAfter(file)}
                     initialImage={initialAfter || ''}
-
+                    aspect={4 / 3}
                 />
             </div>
             <div className={classes.workModalImages__othersPhotos}>
