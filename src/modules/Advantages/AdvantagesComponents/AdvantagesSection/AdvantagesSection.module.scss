@@ -25,16 +25,11 @@
         z-index: 1;
     }
     &__title {
-        font-size: 65px;
-        font-weight: 600;
         color:  $neutral-color;
         text-align: center;
     }
-    &__slider, &__slide{
-
-    }
     &__slider {
-        margin-top: 50px;
+        margin-top: 35px;
     }
 
     &__slide {
@@ -43,5 +38,16 @@
     &__card{
         padding: 0 30px;
 
+    }
+}
+@media (min-width: 479.98px) {
+    .advantagesSection {
+        &__title {
+            padding: 0 30px;
+        }
+        &__slider {
+            margin-top: 40px;
+        }
+    
     }
 }

@@ -11,10 +11,12 @@ ul,
 ol {
   padding: 0;
 }
-main{
+
+main {
   min-height: 100vh;
   min-height: 100dvh;
 }
+
 body,
 h1,
 h2,
@@ -35,6 +37,7 @@ dd {
   padding: 0;
   font-size: inherit;
 }
+
 body {
   position: relative;
   width: 100%;
@@ -91,8 +94,9 @@ select {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-  background-color:  $text-color;
+  background-color: $text-color;
 }
+
 body {
   font-family: 'Montserrat';
   font-weight: 400;
@@ -116,23 +120,40 @@ h6 {
   font-weight: 600;
 
 }
-*, *:before, *:after {
+
+*,
+*:before,
+*:after {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   word-break: break-word;
 }
 
 
+h2 {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.1em;
+}
 
-@media (min-width: 575.98px) {
-  body{
-    
+@media (min-width: 479.98px) {
+  h2 {
+    font-size: 44px;
   }
+
+}
+
+@media (min-width: 767.98px) {
+  h2 {
+    font-size: 55px;
+  }
+
 }
 
 
-@media (min-width: 991.98px) {
-  body{
-
+@media (min-width: 1023.98px) {
+  h2 {
+    font-size: 65px;
   }
+
 }

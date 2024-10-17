@@ -11,12 +11,14 @@ export const AboutMainSection = observer(() => {
     <Section className={classes.aboutMain}>
       <h1 className={classes.aboutMain__title}>Обо мне</h1>
       <div className={classes.aboutMain__inner}>
-        <div className={classes.aboutMain__avatarBox}>
-          <Avatar className={classes.aboutMain__avatar} />
-          <span className={classConnection(classes.aboutMain__heart, classes.aboutMain__heart_left)} />
-          <ContactList
-            className={classes.aboutMain__links}
-          />
+        <div className={classes.aboutMain__content}>
+          <div className={classes.aboutMain__avatarBox}>
+            <Avatar className={classes.aboutMain__avatar} />
+            <span className={classConnection(classes.aboutMain__heart, classes.aboutMain__heart_left)} />
+            <ContactList
+              className={classes.aboutMain__links}
+            />
+          </div>
         </div>
         <p className={classes.aboutMain__text}>
           {applicationStore.aboutMe}

@@ -15,15 +15,13 @@ export const Footer = observer(() => {
     return (
         <footer className={classes.footer}>
             <div className={classes.footer__inner}>
-                <div className={classes.footer__column}>
-                    <Map
-                        className={classes.footer__map}
-                        name='Моя мастерская'
-                        src={applicationStore.addressMap || ''}
-                        height='300px'
-                        width='300px'
-                    />
-                </div>
+                <Map
+                    className={classes.footer__map}
+                    name='Моя мастерская'
+                    src={applicationStore.addressMap || ''}
+                    height='300px'
+                    width='300px'
+                />
                 <ContactLinks />
                 <PageLinks onLinkClick={onLinkClick} />
                 {

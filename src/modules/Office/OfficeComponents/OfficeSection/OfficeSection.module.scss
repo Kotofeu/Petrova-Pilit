@@ -1,18 +1,17 @@
 @import '../../../../styles/settings.scss';
 
 .officeSection {
-    padding: 80px 0;
+    padding: 45px 0 55px;
     min-height: auto;
     background-color: $neutral-color;
     position: relative;
 
     &__title {
         text-align: center;
-        font-size: 70px;
         font-weight: 500;
         color: $primary-color;
-        line-height: 1.2em;
-        margin-bottom: 35px;
+        margin-bottom: 20px;
+        padding: 0 10px;
 
         & span {
             color: $active-color;
@@ -20,4 +19,25 @@
     }
 
 
+}
+
+@media (min-width: 479.98px) {
+    .officeSection {
+        padding: 60px 0;
+
+        &__title {
+            margin-bottom: 25px;
+        }
+    }
+}
+
+@media (min-width: 767.98px) {
+
+    .officeSection {
+        padding: 80px 0;
+
+        &__title {
+            margin-bottom: 35px;
+        }
+    }
 }
