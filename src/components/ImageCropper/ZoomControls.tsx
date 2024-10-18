@@ -1,4 +1,4 @@
-import React, { memo, FC } from 'react';
+import React, { memo, FC, useCallback } from 'react';
 import classes from './ImageCropper.module.scss';
 import Button from '../../UI/Button/Button';
 
@@ -8,6 +8,10 @@ interface IZoomControls {
 }
 
 export const ZoomControls: FC<IZoomControls> = memo(({ zoom, setZoom }) => {
+    const zoomHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault()
+        setZoom(Number(event.target.value))
+    }, [setZoom])
     return (
         <div className={classes.zoom}>
             <Button
@@ -26,7 +30,7 @@ export const ZoomControls: FC<IZoomControls> = memo(({ zoom, setZoom }) => {
                 max={3}
                 step={0.1}
                 value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
+                onChange={zoomHandler}
             />
             <Button
                 className={classes.inputButton}

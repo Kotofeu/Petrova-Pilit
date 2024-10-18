@@ -10,7 +10,7 @@ import { IGetAllJSON, IImages } from '.';
 
 export interface IWorksType {
     id: number;
-    title: string;
+    title?: string;
 }
 export interface IWorks {
     id: number;
@@ -38,7 +38,6 @@ const mockWorks: IGetAllJSON<IWorks> = {
             title: 'Я выбираю пилить ноготочки, а не мозги😏',
             workType: {
                 id: 1,
-                title: 'Пиллинг'
             },
             time: 1724233268040,
             othersImage: [
@@ -80,7 +79,6 @@ const mockWorks: IGetAllJSON<IWorks> = {
             title: 'Восстановление архитектуры? WTF?🤔',
             workType: {
                 id: 2,
-                title: 'Фантазия пропала'
             },
             description: `Закрываем апрель🔥🔥
 Много случилось за тот месяц:
@@ -127,8 +125,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
             time: 1724233258040,
             title: 'Закрываем апрель🔥🔥',
             workType: {
-                id: 3,
-                title: 'Маник'
+                id: 3
             }
         },
         {
@@ -143,8 +140,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
             },
             title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ БЛА БЛА БЛА БЛА',
             workType: {
-                id: 1,
-                title: 'Пиллинг'
+                id: 1
             },
             time: 1724233268040,
 
@@ -167,19 +163,19 @@ export class WorksStore {
     private _workTypes: IWorksType[] = [
         {
             id: 0,
-            title: 'Пиллинг'
+            title: 'Нюдовое покрытие'
         },
         {
             id: 1,
-            title: 'Фантазия пропала'
+            title: 'Однотонное покрыти'
         },
         {
             id: 2,
-            title: 'Маник'
+            title: 'Простой дизайн'
         },
         {
             id: 3,
-            title: 'Падик'
+            title: 'Сложный дизайн'
         },
     ]
     private _works: IWorks[] = [];

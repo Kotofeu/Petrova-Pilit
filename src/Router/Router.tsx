@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import { Layout } from './Layout'
 import {
@@ -43,7 +43,7 @@ export const Router = () => {
             <Route path=':id' element={<User />} />
           </Route>
           <Route path={ADMIN_ROUTE} element ={<Admin />}/>
-
+          <Route path='*' element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -9,7 +9,7 @@
         position: relative;
         padding: 12px 25px;
         transition: color .2s ease-in-out;
-
+        white-space: nowrap;
         & span {
             position: absolute;
             display: flex;

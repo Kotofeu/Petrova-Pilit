@@ -37,15 +37,10 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
                 <div className={classes.reviewCard__userIcon}>
                     <img src={user?.imageSrc || defaultUSerIcon} alt={user?.name} />
                 </div>
-                <div className={classes.reviewCard__reviewInfo}>
-                    <div className={classes.reviewCard__reviewUser}>
-                        <h6 className={classes.reviewCard__userName} title={user?.name}>{user?.name}</h6>
-                        <p className={classes.reviewCard__level}>{`(${userLevel(user?.visitsNumber)})`}</p>
-                    </div>
-                    <div className={classes.reviewCard__reviewUser}>
-                        <DateTime className={classes.reviewCard__date} date={time} />
-                        <StarRating className={classes.reviewCard__rating} rating={rating} />
-                    </div>
+                <div className={classes.reviewCard__reviewUser}>
+                    <h6 className={classes.reviewCard__userName} title={user?.name}>{user?.name}</h6>
+                    <StarRating className={classes.reviewCard__rating} rating={rating} />
+
                 </div>
             </header>
             {
@@ -55,8 +50,11 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
                     </div>
                     : null
             }
-
             <footer className={classes.reviewCard__footer}>
+                <div className={classes.reviewCard__level}>
+                    <span>{`(${userLevel(user?.visitsNumber)})`}</span>
+                    <DateTime className={classes.reviewCard__date} date={time} />
+                </div>
                 {
                     memoizedChildren
                 }

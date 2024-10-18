@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import defaultUSerIcon from '../../assets/icons/User-icon.svg';
@@ -78,6 +78,9 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
             setVisits(user.visitsNumber || 0)
         }
     }, [user])
+    const onLinkClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.stopPropagation()
+    }, [])
     return (
         <>
             <article className={classConnection(
@@ -145,6 +148,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                                         title='Почта пользователя'
                                         aria-label='Почта пользователя'
                                         rel="noopener noreferrer"
+                                        onClick={(event) => onLinkClick(event)}
                                     >
                                         {user.email}
                                     </a>
@@ -164,6 +168,8 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                                         title='Телефон пользователя'
                                         aria-label='Телефон пользователя'
                                         rel="noopener noreferrer"
+                                        onClick={(event) => onLinkClick(event)}
+
                                     >
                                         {user.phone}
                                     </a>

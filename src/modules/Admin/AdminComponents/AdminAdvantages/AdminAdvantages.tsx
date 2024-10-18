@@ -11,7 +11,7 @@ import classes from './AdminAdvantages.module.scss'
 import { IconLoader } from '../IconLoader/IconLoader'
 import { applicationStore, IAdvantages, ICreateAdvantages } from '../../../../store'
 import TextArea from '../../../../UI/TextArea/TextArea'
-import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult'
+//import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult'
 
 interface IAdvantageArray extends IAdvantages, ICreateAdvantages {
 
@@ -106,13 +106,7 @@ export const AdminAdvantages: FC = observer(() => {
                                 title='Описание преимущества' />
                         </div>
                     </div>
-                    <ImageCropperWithResult
-                        className={classes.adminAdvantages__image}
-                        setImage={(image) => handleImageChange(image, advantage.id, 'imageFile')}
-                        initialImage={advantage.imageSrc}
-                        addCloseButton={false}
-                        aspect={4 / 3}
-                    />
+
                 </div>
             )}
             addItem={onAddAdvantage}
@@ -146,15 +140,28 @@ export const AdminAdvantages: FC = observer(() => {
 
                         </div>
                     </div>
-                    <ImageCropperWithResult
-                        className={classes.adminAdvantages__image}
-                        setImage={(image) => setNewAdvantage(prev => ({ ...prev, imageFile: image || undefined }))}
-                        addCloseButton={false}
-                        aspect={4 / 3}
-                    />
+
                 </div>
             )}
             addIndex={false}
         />
     );
 });
+
+/**
+ * 
+ *                     <ImageCropperWithResult
+                        className={classes.adminAdvantages__image}
+                        setImage={(image) => handleImageChange(image, advantage.id, 'imageFile')}
+                        initialImage={advantage.imageSrc}
+                        addCloseButton={false}
+                        aspect={4 / 3}
+                    />
+
+                                        <ImageCropperWithResult
+                        className={classes.adminAdvantages__image}
+                        setImage={(image) => setNewAdvantage(prev => ({ ...prev, imageFile: image || undefined }))}
+                        addCloseButton={false}
+                        aspect={4 / 3}
+                    />
+ */

@@ -6,7 +6,7 @@ import { classConnection } from '../../utils/function';
 
 interface ITabItem {
     id: number;
-    title: string;
+    title?: string;
 }
 
 interface ITabs {
@@ -42,21 +42,24 @@ const Tabs: FC<ITabs> = memo(({
                         className={tabClassName}
                         onClick={() => setActiveID(null)}
                         tabsName={name}
-                        title='Все'
+                        title='Все виды'
                     />
                 )
             }
             {
-                tabs.map(tab => (
-                    <TabButton
-                        key={tab.id}
-                        isActive={activeId === tab.id}
-                        className={tabClassName}
-                        onClick={() => setActiveID(tab.id)}
-                        tabsName={name}
-                        title={tab.title}
-                    />
-                ))
+                tabs.map(tab => {
+                    if (!tab.title) return
+                    return (
+                        <TabButton
+                            key={tab.id}
+                            isActive={activeId === tab.id}
+                            className={tabClassName}
+                            onClick={() => setActiveID(tab.id)}
+                            tabsName={name}
+                            title={tab.title}
+                        />
+                    )
+                })
             }
         </nav>
     );

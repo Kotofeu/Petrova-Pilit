@@ -13,7 +13,9 @@ interface IImageCropperWithResult {
   title?: string;
   name?: string;
   aspect?: number
-  addCloseButton?: boolean
+  addCloseButton?: boolean;
+  addScale?: boolean;
+  addRotate?: boolean;
 }
 
 const ImageCropperWithResult: FC<IImageCropperWithResult> = memo(({
@@ -23,7 +25,9 @@ const ImageCropperWithResult: FC<IImageCropperWithResult> = memo(({
   title,
   name,
   aspect = 1,
-  addCloseButton = true
+  addCloseButton = true,
+  addScale = true,
+  addRotate = true,
 }) => {
   const [loadedFile, setLoadedFile] = useState<File>()
   const [croppedFile, setCroppedFile] = useState<string>(initialImage || '')
@@ -70,6 +74,8 @@ const ImageCropperWithResult: FC<IImageCropperWithResult> = memo(({
                       onSave={cropImage}
                       aspect={aspect}
                       onClose={onCloseCrop}
+                      addRotate = {addRotate}
+                      addScale = {addScale}
                   />
                   : null
           }

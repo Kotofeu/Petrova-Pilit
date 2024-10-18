@@ -75,10 +75,10 @@
     }
 
     &__image{
-        max-width: 400px;
         width: 100%;
-        aspect-ratio: 4/3;
         margin-top: 10px;
+        height: 300px;
+
     }
 
 
@@ -96,8 +96,6 @@
         &__image{
             max-width: none;
             width: 100%;
-            aspect-ratio: auto;
-            height: 300px;
         }
     }
 }
@@ -108,15 +106,9 @@
             align-items: center !important;
         }
 
-        &__row {
-
-        }
         &__main{
             flex-direction: row;
         }
-        &__icons {}
-
-        &__inputs {}
 
         &__input,
         &__textArea {

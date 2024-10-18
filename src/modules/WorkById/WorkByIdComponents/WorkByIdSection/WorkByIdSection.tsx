@@ -7,6 +7,8 @@ import BeforeAfterSlider from '../../../../components/BeforeAfterSlider/BeforeAf
 import { WorkImagesGrid } from '../WorkImagesGrid/WorkImagesGrid'
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 import ModalOk from '../../../../components/Modal/ModalOk'
+import Error404 from '../../../../components/Error404/Error404'
+import { WORKS_ROUTE } from '../../../../utils/const/routes'
 
 interface IWorkByIdSection {
     work?: IWorks;
@@ -22,9 +24,15 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
     deleteWork
 }) => {
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    if (!work) return null
-    if (!work.afterImage?.imageSrc && !work.beforeImage?.imageSrc) return null
-    if (!work.title) return null
+    if (!work || (!work.afterImage?.imageSrc && !work.beforeImage?.imageSrc) || !work.title) {
+        return (
+            <Error404
+                page={WORKS_ROUTE}
+                text='Работа не найдена'
+                buttonText='Вернуться к работам'
+            />
+        )
+    }
     return (
         <>
             <Section className={classes.workById} isUnderline={!!work.othersImage?.length}>
@@ -94,7 +102,7 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                     : null
             }
             <ModalOk
-                isOpen = {isDelete}
+                isOpen={isDelete}
                 closeModal={() => setIsDelete(false)}
                 onOkClick={() => deleteWork(work.id)}
             />

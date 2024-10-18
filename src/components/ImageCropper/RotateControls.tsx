@@ -1,4 +1,4 @@
-import React, { memo, FC } from 'react';
+import React, { memo, FC, useCallback } from 'react';
 import classes from './ImageCropper.module.scss';
 import circleArrow from '../../assets/icons/circular_arrow_line.svg';
 import Button from '../../UI/Button/Button';
@@ -9,6 +9,9 @@ interface IRotateControls {
 }
 
 export const RotateControls: FC<IRotateControls> = memo(({ rotation, setRotation }) => {
+    const rotationHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setRotation(Number(event.target.value))
+    }, [setRotation])
     return (
         <div className={classes.rotation}>
             <Button
@@ -29,7 +32,7 @@ export const RotateControls: FC<IRotateControls> = memo(({ rotation, setRotation
                 max={180}
                 step={1}
                 value={rotation}
-                onChange={(e) => setRotation(Number(e.target.value))}
+                onChange={rotationHandler}
             />
             <Button
                 className={classes.inputButton}
