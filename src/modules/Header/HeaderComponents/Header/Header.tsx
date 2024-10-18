@@ -11,27 +11,34 @@ import classes from './Header.module.scss'
 import { HeaderUser } from '../HeaderUser/HeaderUser';
 import { classConnection } from '../../../../utils/function';
 import { HeaderUserModal } from '../HeaderUserModal/HeaderUserModal';
+import { HeaderAsideModal } from '../HeaderAsideModal/HeaderAsideModal';
 
+const bannerForAuth = 'Приходите, с удовольствием приму вас ещё'
 export const Header: FC = observer(() => {
   const [scrollingDown, setScrollingDown] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isNavOpen, setIsNavOpen] = useState<boolean>(false)
+  const [isUserOpen, setIsUserOpen] = useState<boolean>(false)
+
   const onLinkClick = useCallback(() => {
     window.scrollTo(0, 0);
+    setIsUserOpen(false)
+    setIsNavOpen(false)
+    document.body.style.overflowY = 'auto';
   }, [])
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
     setScrollingDown(currentScrollY > lastScrollY);
     setLastScrollY(currentScrollY);
   };
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const modalHandler = useCallback((isOpen: boolean) => {
+  const userModalHandler = useCallback((isOpen: boolean) => {
     if (userStore.user) {
       if (isOpen) {
-        setIsOpen(true)
+        setIsUserOpen(true)
         document.body.style.overflowY = 'hidden';
       }
       else {
-        setIsOpen(false)
+        setIsUserOpen(false)
         document.body.style.overflowY = 'auto';
       }
     }
@@ -40,13 +47,26 @@ export const Header: FC = observer(() => {
     }
 
   }, [userStore.user])
+
+  const burgerModalHandler = useCallback((isOpen: boolean) => {
+    if (isOpen) {
+      setIsNavOpen(true)
+      document.body.style.overflowY = 'hidden';
+    }
+    else {
+      setIsNavOpen(false)
+      document.body.style.overflowY = 'auto';
+    }
+
+  }, [userStore.user])
+
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
-  const isHiddenBanner: boolean = scrollingDown || !applicationStore.promoBanner //|| userStore.isAuth под вопросом
+  const isHiddenBanner: boolean = scrollingDown || !applicationStore.promoBanner
   return (
     <header className={classes.header}>
       <motion.div className={
@@ -55,7 +75,7 @@ export const Header: FC = observer(() => {
           isHiddenBanner ? classes.header__banner_hidden : ''
         )}
       >
-        <h3 className={classes.header__bannerText}>{ userStore.isAuth? 'Приходите, с удовольствием приму вас ещё' :applicationStore.promoBanner}</h3>
+        <h3 className={classes.header__bannerText}>{userStore.isAuth ? bannerForAuth : applicationStore.promoBanner}</h3>
       </motion.div>
       <nav className={
         classConnection(
@@ -65,7 +85,8 @@ export const Header: FC = observer(() => {
       >
         <div className={classes.header__navigationInner}>
           <HeaderLink link={HOME_ROUTE} title='Ppilit' className={classes.header__logo} />
-          <div className={classes.header__navigationLinks}>
+          <div className={classes.header__navigationLinks}
+          >
             {
               applicationStore.headerLinks.map(link =>
                 <HeaderLink {...link} className={classes.header__link} key={link.title} type={LinkType.underline} onClick={onLinkClick} />
@@ -73,22 +94,51 @@ export const Header: FC = observer(() => {
             }
           </div>
           <div className={classes.header__buttons}>
+            <Button
+              className={classes.header__burger}
+              title='Открыть навигацию'
+              onClick={() => burgerModalHandler(true)}
+            >
+              <span />
+              <span />
+              <span />
+            </Button>
             <HeaderUser
               className={classes.header__user}
               name={userStore.user?.name}
               imageSrc={userStore.user?.imageSrc}
               isAdmin={userStore.isAdmin}
               isAuth={userStore.isAuth}
-              openModal={modalHandler}
+              openModal={userModalHandler}
             />
             {
               userStore.isAuth
               && <HeaderUserModal
                 user={userStore.user}
-                isOpen={isOpen}
-                closeModal={modalHandler}
+                isOpen={isUserOpen}
+                closeModal={userModalHandler}
               />
             }
+            <HeaderAsideModal
+              isOpen={isNavOpen}
+              closeModal={burgerModalHandler}
+            >
+              <div className={classes.header__burgerLinks}>
+                {
+                  applicationStore.headerLinks.map(link =>
+                    <HeaderLink
+                      {...link}
+                      className={classes.header__burgerLink}
+                      key={link.title}
+                      onClick={onLinkClick}
+                    />
+                  )
+                }
+              </div>
+              <p className={classes.header__burgerBanner}>
+                {userStore.isAuth ? bannerForAuth : applicationStore.promoBanner}
+              </p>
+            </HeaderAsideModal>
           </div>
         </div>
       </nav>

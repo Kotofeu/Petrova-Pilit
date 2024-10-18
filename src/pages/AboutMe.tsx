@@ -9,7 +9,7 @@ const AboutMe = () => {
   return (
     <main>
       <AboutMainSection/>
-      <AboutAdvantages/>
+      <AdvantagesSection/>
       <HowToGetSection/>
       <OfficeSection/>
 

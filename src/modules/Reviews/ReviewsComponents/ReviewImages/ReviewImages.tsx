@@ -27,13 +27,9 @@ export const ReviewImages: FC<IReviewImages> = memo(({
         return Math.round(Array.from(images).reduce((acc, curr) => acc + curr.size, 0) / 1024 / 1024 * 100) / 100
     }, [images])
 
-    const items = Array.from(images || []);
-    const gridItems: (File | null)[] = [...items];
-
-    const emptyCellsCount = (3 - (gridItems.length % 3)) % 3;
-    for (let i = 0; i < emptyCellsCount; i++) {
-        gridItems.push(null);
-    }
+    const memoImages = useMemo(() => {
+        if (images?.length) return Array.from(images)
+    }, [images])
 
     return (
         <div className={classConnection(classes.reviewImages, className)}>
@@ -44,59 +40,48 @@ export const ReviewImages: FC<IReviewImages> = memo(({
                 maxTotalSize={MAX_IMAGES_WEIGHT}
             />
             {
-                (!!images?.length) &&
+                (!!memoImages?.length) &&
                 <>
                     <div className={classes.reviewImages__filesInfo}>
-                        <span>{`${images.length}/${MAX_IMAGE_COUNT}`}</span>
+                        <span>{`${memoImages.length}/${MAX_IMAGE_COUNT}`}</span>
                         <span>{`${generalWeight}Мб/${MAX_IMAGES_WEIGHT / 1024 / 1024}Мб`}</span>
                     </div>
                     <div className={classConnection(
                         classes.reviewImages__images,
-                        images.length > 3 ? classes.reviewImages__images_grid : ''
+                        memoImages.length > 3 ? classes.reviewImages__images_grid : ''
                     )}>
-                        <AnimatePresence mode={'popLayout'}>
-                            {Array.from(gridItems).map((image, index) => {
-                                if (image == null) return (
-                                    <div
-                                        key={index}
-                                        className={classConnection(
-                                            classes.reviewImages__image,
-                                            classes.reviewImages__image_empty
-                                        )}
-                                    >
-                                    </div>
-                                )
-                                const imageUrl = URL.createObjectURL(image)
-                                return (
-                                    <motion.div
-                                        className={classes.reviewImages__image}
-                                        key={image.name}
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        exit={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        layout
-                                    >
-                                        <span
-                                            className={classes.reviewImages__background}
-                                            style={{
-                                                backgroundImage: `url(${imageUrl})`
-                                            }}
-                                        />
-                                        <img
-                                            src={imageUrl}
-                                            alt={image.name}
-                                        />
-                                        <ControllerButton
-                                            className={classes.reviewImages__button}
-                                            type='delete'
-                                            onClick={() => handleImagesDelete(index)}
-                                            title='Удалить фото'
-                                        />
-                                    </motion.div>
+                        <AnimatePresence>
+                            {
+                                memoImages.map((image, index) => {
+                                    return (
+                                        <motion.div
+                                            className={classes.reviewImages__imageBox}
+                                            key={image.name}
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                        >
+                                            <img
+                                                className={classes.reviewImages__background}
+                                                src={URL.createObjectURL(image)}
+                                                alt={image.name}
+                                            />
+                                            <img
+                                                className={classes.reviewImages__image}
+                                                src={URL.createObjectURL(image)}
+                                                alt={image.name}
+                                            />
+                                            <ControllerButton
+                                                className={classes.reviewImages__button}
+                                                type='delete'
+                                                onClick={() => handleImagesDelete(index)}
+                                                title='Удалить фото'
+                                            />
+                                        </motion.div>
 
-                                )
+                                    )
+                                })
                             }
-                            )}
                         </AnimatePresence>
 
                     </div>

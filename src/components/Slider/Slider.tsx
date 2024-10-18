@@ -107,8 +107,9 @@ export const Slider = <T extends IBaseSlide>({
             setIsAnimating(false);
             setSwipeOffset((eventData.deltaX / window.innerWidth) * 100);
         },
-        preventScrollOnSwipe: true,
+        preventScrollOnSwipe: false,
         trackMouse: true,
+        delta: 20
     });
 
     const handleMouseLeave = () => {
@@ -176,6 +177,7 @@ export const Slider = <T extends IBaseSlide>({
             }}
             {...handlers}
             onMouseLeave={draggable && totalScrolls > 1 ? handleMouseLeave : undefined}
+            onTouchEnd={draggable && totalScrolls > 1 ? handleMouseLeave : undefined}
             aria-label={name}
         >
             {(addArrows && totalScrolls > 1) && (

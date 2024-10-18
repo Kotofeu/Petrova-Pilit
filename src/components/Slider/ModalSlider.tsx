@@ -1,4 +1,3 @@
-import React, { FC, memo } from 'react'
 import Modal from '../Modal/Modal'
 import classes from './Slider.module.scss'
 import { IBaseSlide, ISlider, Slider } from './Slider';

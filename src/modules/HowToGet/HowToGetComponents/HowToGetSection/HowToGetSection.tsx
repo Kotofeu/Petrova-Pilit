@@ -21,7 +21,6 @@ export const HowToGetSection = observer(() => {
           name='Моя мастерская'
           src={applicationStore.addressMap}
           height='100%'
-          width='200%'
         />
 
         {

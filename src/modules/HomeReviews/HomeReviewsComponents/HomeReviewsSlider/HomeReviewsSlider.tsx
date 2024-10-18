@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useCallback } from 'react'
+import { FC, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ID_PARAM, REVIEWS_ROUTE } from '../../../../utils/const/routes'
@@ -9,8 +9,10 @@ import { reviewsStore } from '../../../../store'
 import ReviewCard from '../../../../components/ReviewCard/ReviewCard'
 import classes from './HomeReviewsSlider.module.scss'
 
-
-export const HomeReviewsSlider = observer(() => {
+interface IHomeReviewsSlider {
+    className?: string;
+}
+export const HomeReviewsSlider: FC<IHomeReviewsSlider> = observer(({ className }) => {
     const router = useNavigate()
 
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>, id: number) => {
@@ -21,8 +23,8 @@ export const HomeReviewsSlider = observer(() => {
 
     return (
         <Slider
-            className={classes.homeReviewsSlider}
-            items={reviewsStore.reviews}
+            className={className}
+            items={reviewsStore.reviews.filter(review => !!review.comment)}
             renderItem={
                 (review) =>
                     <ReviewCard
@@ -41,12 +43,12 @@ export const HomeReviewsSlider = observer(() => {
             looped
             breakpoints={[
                 {
-                    width: 600,
+                    width: 700,
                     slideToShow: 2,
                     slideToScroll: 1,
                 },
                 {
-                    width: 1000,
+                    width: 1150,
                     slideToShow: 3,
                     slideToScroll: 1,
                 },

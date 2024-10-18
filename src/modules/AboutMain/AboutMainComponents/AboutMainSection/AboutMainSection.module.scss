@@ -3,7 +3,7 @@
 .aboutMain {
 
     position: relative;
-    padding-top: 115px;
+    padding-top: 80px;
 
     &__title {
         position: relative;
@@ -143,7 +143,7 @@
 
 @media (min-width: 767.98px) {
     .aboutMain {
-        padding-top: 120px;
+
 
         &__title {
             position: absolute;
@@ -209,6 +209,7 @@
 
 @media (min-width: 1023.98px) {
     .aboutMain {
+        padding-top: 115px;
         &__title {
             font-size: 100px;
         }
@@ -303,7 +304,6 @@
 
     }
 }
-
 
 @media (min-width: 1299.98px) {
     .aboutMain {

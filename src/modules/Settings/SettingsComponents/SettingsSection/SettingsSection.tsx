@@ -127,7 +127,6 @@ export const SettingsSection = observer(() => {
                         />
                         <div className={classes.settings__values}>
                             <SettingsRow
-                                className={classes.settings__inputRow}
                                 title='Ваше имя'
                                 subtitle={'* от 2 до 80 символов'}
                                 error={isNameError ? 'Ваше имя должно состоять от 2 до 80 символов' : ''}
@@ -145,7 +144,6 @@ export const SettingsSection = observer(() => {
                                 />
                             </SettingsRow>
                             <SettingsRow
-                                className={classes.settings__inputRow}
                                 title='Номер телефона'
                                 subtitle={'* Это необязательно, но так вас легче найти мастеру'}
                                 error={isPhoneError ? 'Номер телефона некорректный' : ''}
@@ -163,8 +161,8 @@ export const SettingsSection = observer(() => {
                                 />
                             </SettingsRow>
                             <SettingsEmailInput
-                                className={classes.settings__inputRow}
                                 inputClassName={classes.settings__input}
+                                emailFieldClassName={classes.settings__inputRow}
                                 email={userStore.user?.email || ''}
                                 setEmail={userEmailHandler}
                             />

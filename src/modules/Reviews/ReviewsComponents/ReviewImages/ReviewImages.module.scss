@@ -16,13 +16,13 @@
 
     &__images {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         margin-top: 10px;
 
     }
 
-    &__image {
+    &__imageBox {
         max-height: 150px;
         width: 100%;
         aspect-ratio: 1/1;
@@ -33,38 +33,56 @@
         background-color: $secondary-color;
         overflow: hidden;
         position: relative;
+        will-change: scale, opacity, width !important;
         &_empty {
             opacity: .5;
         }
 
-        & img {
-            position: relative;
-            z-index: 1;
-            object-fit: contain;
-            height: 100%;
-            width: 100%;
-        }
+
+    }
+
+    &__image {
+        position: relative;
+        z-index: 1;
+        object-fit: contain;
+        height: 100%;
+        width: 100%;
     }
 
     &__background {
         position: absolute;
-        top: -15px;
-        right: -15px;
-        bottom: -15px;
-        left: -15px;
+        top: -0;
+        right: -0;
+        bottom: -0;
+        left: -0;
+        height: 100%;
+        width: 100%;
+        scale: 1.1;
         display: block;
         opacity: .4;
-        background: no-repeat center;
-        background-size: cover;
+        object-fit: cover;
         filter: blur(13px);
 
     }
-    &__button{
+
+    &__button {
         position: absolute;
         z-index: 2;
         top: 10px;
         right: 10px;
         width: 20px;
         height: 20px;
+    }
+}
+
+@media (min-width: 479.98px) {
+    .reviewImages {
+        &__images {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+
+        }
+
     }
 }

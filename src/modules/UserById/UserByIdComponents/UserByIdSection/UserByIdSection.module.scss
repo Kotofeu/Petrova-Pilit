@@ -1,7 +1,7 @@
 @import '../../../../styles/settings.scss';
 
 .userById {
-    padding: 120px 0 30px;
+    padding: 85px 0 30px;
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
@@ -47,5 +47,12 @@
 
     .userById {
         max-width: 800px;
+    }
+}
+
+@media (min-width: 1023.98px) {
+    .userById{
+        padding: 120px 0 30px;
+
     }
 }

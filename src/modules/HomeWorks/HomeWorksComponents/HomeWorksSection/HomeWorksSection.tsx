@@ -18,7 +18,7 @@ export const HomeWorksSection = () => {
                     <span className={classes.homeWorks__buttonDecoration}>Смотреть больше работ</span>
                 </NavLink>
             </div>
-            <HomeWorksSlider />
+            <HomeWorksSlider className={classes.homeWorks__slider}/>
         </Section>
     )
 }

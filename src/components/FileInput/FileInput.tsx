@@ -52,7 +52,6 @@ const FileInput: React.FC<IFileInput> = memo(({
                 setIsError(false);
             }
         }
-        event.target.value = '';
     };
 
     const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -98,6 +97,7 @@ const FileInput: React.FC<IFileInput> = memo(({
                         type === 'icon' ? '.svg,.png,.ico' : '.mp4,.mov,.mp3,.wmv,.avi,.mpeg'
                     }
                     onChange={handleInputChange}
+                    onClick={(event) => event.currentTarget.value = ''}
                     style={{ display: 'none' }}
                 />
             </label>

@@ -10,8 +10,8 @@
     &__imageBox {
         clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
         background-color: $title-color;
-        height: 200px;
-        width: 200px;
+        height: 180px;
+        width: 180px;
     }
 
     &__image {
@@ -23,20 +23,56 @@
     }
 
     &__title {
-        font-size: 32px;
+        font-size: 26px;
         text-align: center;
         color: inherit;
         font-weight: 600;
-        padding-top: 15px;
+        padding-top: 10px;
 
     }
 
     &__description {
-        font-size: 18px;
+        font-size: 16px;
         text-align: center;
         color: inherit;
         font-weight: 500;
-        padding-top: 10px;
+        padding-top: 3px;
 
+    }
+}
+
+@media (min-width: 479.98px) {
+    .advantagesCard {
+        &__imageBox {
+            height: 190px;
+            width: 190px;
+        }
+        &__title {
+            font-size: 28px;
+            padding-top: 12px;
+        }
+        &__description {
+            font-size: 18px;
+            padding-top: 5px;
+    
+        }
+    }
+}
+
+@media (min-width: 767.98px) {
+    .advantagesCard {
+        &__imageBox {
+            height: 200px;
+            width: 200px;
+        }
+        &__title {
+            font-size: 32px;
+            padding-top: 15px;
+        }
+    
+        &__description {
+            padding-top: 10px;
+    
+        }
     }
 }

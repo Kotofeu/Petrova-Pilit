@@ -16,7 +16,7 @@ export const HomeReviewsSection = memo(() => {
                     <span className={classes.homeReviews__buttonDecoration}>Были у меня? Оставьте свой отзыв!</span>
                 </NavLink>
             </div>
-            <HomeReviewsSlider />
+            <HomeReviewsSlider className={classes.homeReviews__slider} />
         </Section>
     )
 })

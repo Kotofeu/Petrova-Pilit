@@ -153,6 +153,9 @@
     &__slider{
         height: 100%;
     }
+    &__slide{
+        display: none;
+    }
     &__arrow{
         border: none;
         width: 25px;

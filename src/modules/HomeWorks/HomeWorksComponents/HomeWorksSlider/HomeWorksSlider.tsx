@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { Slider } from '../../../../components/Slider'
 import { observer } from 'mobx-react-lite'
 
@@ -7,13 +7,17 @@ import classes from './HomeWorksSlider.module.scss'
 import { HomeWorkSlide } from '../HomeWorkSlide/HomeWorkSlide'
 import { worksStore } from '../../../../store'
 
-export const HomeWorksSlider = observer(() => {
+interface IHomeWorksSlider{
+    className?: string;
+}
+
+export const HomeWorksSlider: FC<IHomeWorksSlider> = observer(({className}) => {
     useEffect(() => {
         worksStore.loadWorks()
     }, [])
     return (
         <Slider
-            className={classes.homeWorksSlider}
+            className={className}
             items={worksStore.works}
             renderItem={
                 (work) =>

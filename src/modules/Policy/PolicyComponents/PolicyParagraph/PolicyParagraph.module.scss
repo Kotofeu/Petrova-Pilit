@@ -21,8 +21,9 @@
     &__rowName,
     &__rowValue{
         border: 1px solid $neutral-color;
-        font-size: 16px;
+        font-size: 14px;
         white-space: pre-line;
+        word-break: keep-all;
         padding: 10px;
         height: 100%;
         vertical-align: top;
@@ -33,8 +34,7 @@
     }
     &__rowValue{
         line-height: 1.4em;
-        text-align: justify;
         padding-right: 20px;
-
+        word-break: keep-all;
     }
 }

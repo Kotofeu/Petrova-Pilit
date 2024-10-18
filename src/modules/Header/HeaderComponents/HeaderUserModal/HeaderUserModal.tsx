@@ -11,6 +11,7 @@ import { ID_PARAM, IS_WRITING_PARAM, REVIEWS_ROUTE, SETTINGS_ROUTE, USER_ROUTE }
 import Button from '../../../../UI/Button/Button';
 import { WEBSITE_ADDRESS } from '../../../../utils/const/main';
 import { useMessage } from '../../../MessageContext';
+import { HeaderAsideModal } from '../HeaderAsideModal/HeaderAsideModal';
 
 interface IHeaderUser {
     user: IUser | null;
@@ -18,7 +19,7 @@ interface IHeaderUser {
     closeModal: (isOpen: boolean) => void;
 }
 
-export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal}) => {
+export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal }) => {
     const { addMessage } = useMessage();
     const onLinkClick = useCallback(() => {
         closeModal(false)
@@ -31,98 +32,78 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
         window.scrollTo(0, 0);
     }, [])
     return (
-        <AnimatePresence>
-            {
-                isOpen
-                && <motion.div
-                    className={classes.headerUserModal}
-                    animate={{ opacity: 1, x: 0 }}
-                    initial={{ opacity: 0, x: '100%' }}
-                    exit={{ opacity: 0, x: '100%' }}
-                    transition={{ power: 0.1 }}
+        <HeaderAsideModal isOpen={isOpen} closeModal={closeModal}>
+            <div className={classes.headerUserModal__imageBox}>
+                <img
+                    className={classes.headerUserModal__image}
+                    src={user?.imageSrc || defaultImage}
+                    alt={user?.name || 'Ваш аккаунт'}
+                />
+            </div>
+            <p className={classes.headerUserModal__level}>
+                {userLevel(user?.visitsNumber)}
+            </p>
+            <p className={classes.headerUserModal__name}>
+                {user?.name}
+            </p>
+            <nav className={classes.headerUserModal__content}>
+                <p
+                    className={classes.headerUserModal__navItem}
                 >
-                    <div className={classes.headerUserModal__inner}>
-                        <ControllerButton
-                            className={classes.headerUserModal__close}
-                            type='delete'
-                            title='Закрыть окно'
-                            onClick={() => closeModal(false)}
-                        />
-
-                        <div className={classes.headerUserModal__imageBox}>
-                            <img
-                                className={classes.headerUserModal__image}
-                                src={user?.imageSrc || defaultImage}
-                                alt={user?.name || 'Ваш аккаунт'}
-                            />
-                        </div>
-                        <p className={classes.headerUserModal__level}>
-                            {userLevel(user?.visitsNumber)}
-                        </p>
-                        <p className={classes.headerUserModal__name}>
-                            {user?.name}
-                        </p>
-                        <nav className={classes.headerUserModal__content}>
-                            <p
-                                className={classes.headerUserModal__navItem}
-                            >
-                                {`Количество посещений: ${user?.visitsNumber || 0}`}
-                            </p>
-                            <NavLink
-                                className={classes.headerUserModal__navLink}
-                                to={SETTINGS_ROUTE}
-                                onClick={onLinkClick}
-                            >
-                                Настройки
-                            </NavLink>
-                            {
-                                user?.review?.id
-                                    ? <NavLink
-                                        className={classes.headerUserModal__navLink}
-                                        to={`${REVIEWS_ROUTE}/?${ID_PARAM}=${user?.review?.id}`}
-                                        onClick={onLinkClick}
-                                    >
-                                        Ваш отзыв
-                                    </NavLink>
-                                    : <NavLink
-                                        className={classes.headerUserModal__navLink}
-                                        to={`${REVIEWS_ROUTE}/?${IS_WRITING_PARAM}=${true}`}
-                                        onClick={onLinkClick}
-                                    >
-                                        Написать отзыв
-                                    </NavLink>
-                            }
-
-                            <Button
-                                className={classes.headerUserModal__navButton}
-                                onClick={onExitClick}
-                            >
-                                Выйти
-                            </Button>
-
-                        </nav>
-                        <div
-                            className={classes.headerUserModal__qrBox}
+                    {`Количество посещений: ${user?.visitsNumber || 0}`}
+                </p>
+                <NavLink
+                    className={classes.headerUserModal__navLink}
+                    to={SETTINGS_ROUTE}
+                    onClick={onLinkClick}
+                >
+                    Настройки
+                </NavLink>
+                {
+                    user?.review?.id
+                        ? <NavLink
+                            className={classes.headerUserModal__navLink}
+                            to={`${REVIEWS_ROUTE}/?${ID_PARAM}=${user?.review?.id}`}
+                            onClick={onLinkClick}
                         >
-                            <p className={classes.headerUserModal__qrText}>
-                                Покажите QR-код мастеру
-                            </p>
-                            <QRCodeSVG
-                                value={`${WEBSITE_ADDRESS}${USER_ROUTE}/${user?.id}`}
-                                title={"Ваш QR Code"}
-                                size={260}
-                                fgColor={"#000000"}
-                                level={"L"}
-                                marginSize={0}
-                            />
-                            <p className={classes.headerUserModal__qrText}>
-                                или сделайте скриншот
-                            </p>
-                        </div>
+                            Ваш отзыв
+                        </NavLink>
+                        : <NavLink
+                            className={classes.headerUserModal__navLink}
+                            to={`${REVIEWS_ROUTE}/?${IS_WRITING_PARAM}=${true}`}
+                            onClick={onLinkClick}
+                        >
+                            Написать отзыв
+                        </NavLink>
+                }
 
-                    </div>
-                </motion.div>
-            }
+                <Button
+                    className={classes.headerUserModal__navButton}
+                    onClick={onExitClick}
+                >
+                    Выйти
+                </Button>
 
-        </AnimatePresence>)
+            </nav>
+            <div
+                className={classes.headerUserModal__qrBox}
+            >
+                <p className={classes.headerUserModal__qrText}>
+                    Покажите QR-код мастеру
+                </p>
+                <QRCodeSVG
+                    value={`${WEBSITE_ADDRESS}${USER_ROUTE}/${user?.id}`}
+                    title={"Ваш QR Code"}
+                    size={260}
+                    fgColor={"#000000"}
+                    level={"L"}
+                    marginSize={0}
+                />
+                <p className={classes.headerUserModal__qrText}>
+                    или сделайте скриншот
+                </p>
+            </div>
+
+        </HeaderAsideModal>
+    )
 })

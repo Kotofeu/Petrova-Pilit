@@ -1,15 +1,20 @@
 @import '../../../../styles/settings.scss';
-.reviewModal{
+
+.reviewModal {
+    width: 100%;
     padding: 10px;
+
 }
+
 .modalContent {
     height: 100%;
     max-width: 900px;
-    width: calc(100vw - 40px);
+    width: 100%;
     margin: 0 auto;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
     &__inner {
         overflow-y: auto;
         padding-left: 0px;
@@ -20,8 +25,8 @@
     }
 
     &__title {
-        
-        font-size: 42px;
+
+        font-size: 28px;
         background-color: $secondary-color;
         padding: 25px;
         padding-bottom: 15px;
@@ -31,16 +36,16 @@
         border-radius: 15px 15px 0 0;
 
         & span {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 400;
         }
     }
 
     &__inputRow {
-        padding: 13px 0px;
-        display: grid;
-        grid-template-columns: 160px 1fr;
-        gap: 20px;
+        padding: 6px 0px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
     &__label {
@@ -63,25 +68,31 @@
 
     }
 
-    &__nameInputContainer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        & span {
-            font-size: 18px;
-            padding: 0 20px;
-            white-space: nowrap;
-
-        }
+    &__registerButton {
+        padding: 0;
+        font-size: 18px;
     }
 
+    &__nameInputContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+
+        & span {
+            white-space: nowrap;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+    &__registerBox{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
     &__nameInput {
-        border: none;
-        background-color: transparent !important;
-        border-bottom: 3px solid $text-color;
         font-size: 20px;
-        max-width: 350px;
         width: 100%;
         font-weight: 500;
         padding: 5px;
@@ -120,7 +131,7 @@
     }
 
     &__imagesContainer {
-        padding: 10px 0;
+        padding: 0 0 6px;
     }
 
     &__send {
@@ -132,4 +143,72 @@
 
     }
 
+}
+
+@media (min-width: 479.98px) {
+    .reviewModal {
+        width: auto;
+
+    }
+
+    .modalContent {
+        width: calc(100vw - 40px);
+
+        &__title {
+            font-size: 34px;
+
+            & span {
+                font-size: 28px;
+            }
+        }
+
+        &__imagesContainer {
+            padding: 10px 0;
+        }
+
+    }
+}
+
+@media (min-width: 767.98px) {
+    .modalContent {
+
+        &__title {
+            font-size: 42px;
+
+            & span {
+                font-size: 32px;
+            }
+        }
+
+        &__registerButton {
+            padding: 5px 0;
+        }
+        &__nameInput {
+            border: none;
+            background-color: transparent !important;
+            border-bottom: 3px solid $text-color;
+        }
+        &__registerBox{
+            gap: 15px;
+        }
+        &__nameInputContainer {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            align-items: center;
+
+            & span {
+                font-size: 18px;
+                white-space: nowrap;
+
+            }
+        }
+
+        &__inputRow {
+            padding: 13px 0px;
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 20px;
+        }
+    }
 }

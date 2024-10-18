@@ -3,25 +3,42 @@
 
 .settingsFooter {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     width: 100%;
     align-items: center;
-    gap: 20px;
+    gap: 13px;
     padding: 20px 30px;
     background-color: $secondary-color;
-
     &__footerFlex {
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        gap: 40px;
+        gap: 13px;
     }
 
     &__footerBtn {
         padding: 0;
         background-color: transparent;
         border: none;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 500;
     }
 }
+
+@media (min-width: 479.98px) {
+    .settingsFooter {
+        flex-direction: row;
+        gap: 20px;
+        &__footerFlex {
+            flex-direction: row;
+            gap: 40px;
+        }
+    
+        &__footerBtn {
+            font-size: 16px;
+        }
+    }
+}
+

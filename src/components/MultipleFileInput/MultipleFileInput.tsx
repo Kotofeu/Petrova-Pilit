@@ -1,7 +1,6 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import classes from './MultipleFileInput.module.scss';
 import { classConnection } from '../../utils/function';
-import Message from '../../UI/Message/Message';
 import { useMessage } from '../../modules/MessageContext';
 
 interface IMultipleFileInput {
@@ -68,12 +67,11 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
-
         if (files && validateFiles(files)) {
             handleFilesChange(files);
             setIsError(false)
-
         }
+
     };
 
     const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -117,10 +115,11 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
                 <input
                     name={name}
                     type="file"
-                    multiple = {maxFilesCount > 1}
+                    multiple={maxFilesCount > 1}
                     accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff"
                     onChange={handleInputChange}
                     style={{ display: 'none' }}
+                    onClick={(event) => event.currentTarget.value = ''}
                 />
             </label>
         </>

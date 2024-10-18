@@ -40,18 +40,18 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
     }, []);
     const onContinueClick = useCallback(() => {
         if (!isUserAuth) {
-            if (formValues[NAME].length < 2){
+            if (formValues[NAME].length < 2) {
                 setNameError(true)
                 addMessage('Имя должно быть больше 2 символов', 'error')
                 return
             }
-            if (formValues[NAME].length > MAX_NAME_LENGTH){
+            if (formValues[NAME].length > MAX_NAME_LENGTH) {
                 setNameError(true)
                 addMessage(`Имя должно быть меньше ${MAX_NAME_LENGTH} символов`, 'error')
                 return
             }
         }
-        if(formValues[RATING] === 0){
+        if (formValues[RATING] === 0) {
             addMessage(`Укажите вашу оценку`, 'error')
             return
         }
@@ -84,13 +84,15 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
                                 value={formValues.name}
                                 onChange={handleInputChange}
                             />
-                            <span>или</span>
-                            <Button
-                                className={classes.modalContent__registerButton}
-                                onClick={startAuth}
-                            >
-                                Зарегистрируйтесь
-                            </Button>
+                            <div className={classes.modalContent__registerBox}>
+                                <span>или</span>
+                                <Button
+                                    className={classes.modalContent__registerButton}
+                                    onClick={startAuth}
+                                >
+                                    Зарегистрируйтесь
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 )}

@@ -4,10 +4,11 @@ import { ReviewCardImages } from '../ReviewCardImages/ReviewCardImages'
 import { reviewsStore } from '../../../../store'
 import { observer } from 'mobx-react-lite'
 import { useSearchParams } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { ID_PARAM } from '../../../../utils/const/routes'
 import { classConnection } from '../../../../utils/function'
-export const ReviewsSection = observer(() => {
+
+export const ReviewsSection: FC = observer(() => {
 
     const [searchParams] = useSearchParams();
     const id = searchParams.get(ID_PARAM);
@@ -27,7 +28,7 @@ export const ReviewsSection = observer(() => {
     }, [selectedReview, reviewsStore.reviews, selectedReview.current])
     return (
         <div className={classes.reviewsSection}>
-            <ReviewsNavbar />
+            <ReviewsNavbar className = {classes.reviewsSection__navbar}/>
             <div className={classes.reviewsSection__list}>
                 {
                     reviewsStore.reviews.map(review =>

@@ -1,11 +1,11 @@
 @import '../../../../styles/settings.scss';
 
 .admin {
-    padding: 120px 0 40px;
+    padding: 85px 0 40px;
 
     &__title {
         text-align: center;
-        font-size: 40px;
+        font-size: 32px;
         line-height: 1.2em;
     }
 
@@ -126,6 +126,17 @@
         &__content {
             padding: 25px 30px 10px;
         }
+        &__title {
+            font-size: 38px;
+        }
+    
     }
 
+}
+
+@media (min-width: 1023.98px) {
+    .admin{
+        padding: 120px 0 40px;
+
+    }
 }
