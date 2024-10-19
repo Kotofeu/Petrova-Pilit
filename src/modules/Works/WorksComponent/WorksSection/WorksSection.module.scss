@@ -2,62 +2,156 @@
 
 .works {
     min-height: 100vh;
-    min-height: 100dvh;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    margin: 0 auto;
+    max-width: $container-width;
+    position: relative;
+    z-index: 1;
 
-    &__inner {
+
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: $neutral-color;
+        height: 100%;
+        width: 100vw;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+    }
+
+    &__aside {
+        padding-top: 85px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         position: relative;
-        z-index: 1;
-        max-width: 1600px;
-        margin: 0 auto;
+        background-color: $neutral-color;
+        width: 100%;
     }
 
     &__title {
+        margin-top: auto;
         font-size: 40px;
-        white-space: nowrap;
+        color: #FFF;
         text-align: center;
+        padding: 0 10px;
+    }
+
+    &__tabs {
+        width: 100%;
+        padding: 18px 40px 20px;
+        margin-bottom: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-weight: 600;
+    }
+
+    &__tab {
+        width: 100%;
+        padding: 12px 8px;
+        font-size: 16px;
+        background-color: $title-color;
+
+        &_active {
+            color: inherit !important;
+
+            & span {
+                opacity: 1 !important;
+            }
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                color: $active-color;
+            }
+
+        }
+
+        @media (hover: none) {
+            &:active {
+                color: $active-color;
+            }
+        }
+    }
+
+
+    &__content {
+        padding-top: 20px;
+        padding-bottom: 30px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    &__empty {
+        margin: 0 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.2em;
+        position: relative;
+        margin-top: 20px;
+        padding: 0 25px;
+        border-left: 3px solid $text-color;
+        border-right: 3px solid $text-color;
+        animation: show .3s ease-in-out backwards;
+
+        &::after,
+        &::before {
+            content: '';
+            position: absolute;
+            top: calc(50% - 2px);
+            width: 30px;
+            height: 3px;
+            background-color: $text-color;
+        }
+
+        &::after {
+            right: 0;
+        }
+
+        &::before {
+            left: 0;
+        }
     }
 
     &__buttons {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 15px;
-        padding-bottom: 12px;
-        margin-top: 15px;
+        gap: 10px;
+        width: 100%;
+        padding: 0 10px;
+        padding-bottom: 15px;
     }
 
     &__button {
-        font-size: 15px;
+        font-size: 16px;
         padding: 0;
         border: none;
+        color: #FFF;
     }
 
-    &__tabs {
-        margin: 15px 0 20px;
-        justify-content: center;
+
+
+    &__list {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 3px;
-        font-size: 18px;
-        font-weight: 600;
-
-        & button {
-            padding: 8px 13px;
-            font-size: 16px;
-        }
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
     }
-
-    &__grid {}
 
     &__showMore {
         width: 100%;
-        margin-top: 15px;
+        margin-top: auto;
         background-color: transparent;
         border: none;
-        padding: 8px 0;
+        padding: 20px 0 0;
         font-size: 22px;
 
         & span {
@@ -136,13 +230,13 @@
 @keyframes show {
     0% {
         opacity: 0;
-        transform: translateY(20px) scale(.8);
+        scale: .8;
 
     }
 
     100% {
         opacity: 1;
-        transform: translateY(0px) scale(1);
+        scale: 1;
 
     }
 }
@@ -150,93 +244,153 @@
 @media (min-width: 479.98px) {
     .works {
         &__title {
-            font-size: 50px;
+            font-size: 60px;
         }
-
         &__tabs {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 7px;
-            row-gap: 3px;
-            font-size: 18px;
-            font-weight: 600;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px 10px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
-
         &__buttons {
-            justify-content: center;
-            gap: 25px;
-            padding-bottom: 15px;
-            margin-top: 20px;
+            max-width: 500px;
         }
-
-        &__button {
-            font-size: 16px;
-            padding: 0;
+        &__list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
+    
     }
 }
 
 @media (min-width: 767.98px) {
     .works {
+        display: flex;
+        align-items: flex-start;
         &__title {
-            font-size: 60px;
-            letter-spacing: 1px;
-            padding-bottom: .3em;
-            position: relative;
-
-            &::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                max-width: 200px;
-                width: 100%;
-                margin: 0 auto;
-                height: 6px;
-                border-radius: 6px;
-                background-color: $title-color;
-            }
+            font-size: 40px;
         }
-
+        &__empty {
+            margin: 0 40px;
+            font-size: 18px;
+            line-height: 1.3em;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+        }
+        &__aside {
+            position: sticky;
+            height: 100vh;
+            overflow-y: auto;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-width: 300px;
+        }
+        &__content {
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+    
         &__tabs {
-            margin-top: 20px;
+            max-width: none;
+            padding: 20px 40px 20px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 7px;
-            row-gap: 3px;
+            flex-direction: column;
+            gap: 10px;
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 20px;
+        }
+        &__buttons {
+            gap: 10px;
+            width: 100%;
+            padding: 20px 10px 20px;
+            max-width: none;
 
-            & button {
-                padding: 8px 13px;
-                font-size: 18px;
-            }
+        }
+        &__list {
+            display: flex;
+            flex-direction: column;
         }
     }
 }
 
 @media (min-width: 1023.98px) {
     .works {
-        padding-top: 120px;
+        &__aside {
+            padding-top: 103px;
+            min-width: 360px;
+            width: 360px;
 
-        &__tabs {
-            margin-top: 30px;
-            gap: 10px;
         }
+        &__buttons {
+            gap: 15px;
+            width: 100%;
+            padding: 20px 30px 20px;
+        }
+    
+        &__button {
+            font-size: 18px;
+            padding: 0;
+            border: none;
+            color: #FFF;
+        }
+    
+        &__content {
+            padding-top: 110px;
+            padding-right: 10px;
+            padding-left: 10px;
 
+        }
+        &__list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
         &__title {
-            font-size: 75px;
-            letter-spacing: 3px;
-            padding-bottom: .3em;
+            font-size: 50px;
         }
+
+
     }
 }
 
 @media (min-width: 1299.98px) {
-    .works {}
+    .works {
+
+        &__title {
+            font-size: 80px;
+        }
+
+        &__aside {
+            min-width: 550px;
+            width: 60%
+        }
+        &__tabs {
+            width: 100%;
+            padding: 30px 15px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    
+        &__tab {
+            width: 100%;
+            padding: 15px 10px;
+            font-size: 20px;
+            background-color: $title-color;
+
+            &_active {
+                color: inherit !important;
+
+                & span {
+                    opacity: 1 !important;
+                }
+            }
+        }
+    }
 }

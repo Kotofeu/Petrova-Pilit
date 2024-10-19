@@ -11,30 +11,37 @@ interface IWorksGrid {
 }
 
 export const WorksGrid: FC<IWorksGrid> = memo(({ className, works }) => {
+    if (!works.length) return null
     return (
         <motion.div
             className={classConnection(classes.grid, className)}
         >
-            {
-                works.length
-                    ? <AnimatePresence mode={'wait'}>
-                        {works.map(work => (
-                            <WorkCard
-                                className={classes.grid__card}
-                                key={work.id}
-                                id={work.id}
-                                image={work.beforeImage?.imageSrc || work.afterImage?.imageSrc}
-                                title={work.title}
-                                date={work.time}
+            <AnimatePresence mode={'sync'}>
+                {works.map((work, index) => {
+                    if (work.id === -1) {
+                        return (
+                            <motion.div
+                                layout
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className={classConnection(classes.grid__card, classes.grid__card_empty)}
+                                key={0 - (index + 1)} 
                             />
-                        ))}
-                    </AnimatePresence>
-                    : <div className={classes.grid__empty}>
-                        К сожалению, работы в эту категорию <br/>ещё не добавлены
-                    </div>
-            }
-
-
+                        )
+                    }
+                    return (
+                        <WorkCard
+                            className={classes.grid__card}
+                            key={work.id}
+                            id={work.id}
+                            image={work.beforeImage?.imageSrc || work.afterImage?.imageSrc}
+                            title={work.title}
+                            date={work.time}
+                        />
+                    )
+                })}
+            </AnimatePresence>
         </motion.div>
     );
 });

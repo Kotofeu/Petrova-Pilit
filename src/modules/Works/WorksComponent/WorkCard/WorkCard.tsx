@@ -36,7 +36,7 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => 
             <img className={classes.workCard__image} src={image} alt={title} />
             <h4 className={classes.workCard__title}>{title}</h4>
             <DateTime className={classes.workCard__date} date={date} addTime/>
-            <Button onClick={onCardClick} className={classes.workCard__button}>Посмотреть подробнее</Button>
+            <Button onClick={onCardClick} className={classes.workCard__button}>ПОДРОБНЕЕ</Button>
             <Button onClick={() => setIsShowMore(prev => !prev)} className={classes.workCard__show} />
         </motion.article>
     );
