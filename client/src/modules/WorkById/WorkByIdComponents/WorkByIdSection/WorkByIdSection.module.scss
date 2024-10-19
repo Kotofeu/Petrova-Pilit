@@ -260,12 +260,8 @@
             grid-template-columns: 4fr 5fr;
         }
 
-        &__preview {
-            width: auto;
-        }
 
         &__slider {
-            width: auto;
             & span {
                 font-size: 36px !important;
             }
