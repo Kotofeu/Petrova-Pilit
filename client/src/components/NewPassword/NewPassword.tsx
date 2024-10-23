@@ -5,7 +5,6 @@ import { classConnection } from '../../utils/function';
 
 import classes from './NewPassword.module.scss'
 import { AnimatePresence, motion } from 'framer-motion';
-import Button from '../../UI/Button/Button';
 import PasswordShowButton from './PasswordShowButton';
 interface INewPassword {
     className?: string;

@@ -30,9 +30,9 @@ export const WorkTypesModal: FC<IWorkTypesModal> = observer(({
         addMessage('Тип удалён', 'complete')
     }, [worksStore])
 
-    const addHandler = useCallback((title: string) => {
-        if (title.length > 2) {
-            worksStore.addType(title)
+    const addHandler = useCallback((name: string) => {
+        if (name.length > 2) {
+            worksStore.addType(name)
             setNewType('')
             addMessage('Тип добавлен', 'complete')
         }
@@ -52,7 +52,7 @@ export const WorkTypesModal: FC<IWorkTypesModal> = observer(({
                 renderItem={(tab, index) => (
                     <WorkEditType
                         className={classes.type}
-                        initialValue={tab.title}
+                        initialValue={tab.name}
                         id={tab.id}
                     />
                 )}

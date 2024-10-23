@@ -30,8 +30,7 @@ export interface IGetAllJSON<T> {
 export interface IImages {
     id: number;
     imageSrc: string;
-    title?: string;
-    description?: string;
+    name?: string;
 
 }
 

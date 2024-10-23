@@ -31,7 +31,7 @@ export const Footer = observer(() => {
                             <div className={classes.footer__linksList}>
                                 {
                                     applicationStore.workSchedule.map(workDay => (
-                                        <p className={classes.footer__workDay} key={workDay.id}><span>{workDay.title}</span><span>{workDay.value}</span></p>
+                                        <p className={classes.footer__workDay} key={workDay.id}><span>{workDay.name}</span><span>{workDay.value}</span></p>
                                     ))
                                 }
                             </div>

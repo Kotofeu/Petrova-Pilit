@@ -23,7 +23,7 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
     const [typeId, setTypeId] = useState<number | undefined>(work?.workType?.id);
     const [newType, setNewType] = useState<string>('')
 
-    const [title, setTitle] = useState<string>(work?.title || '')
+    const [name, setName] = useState<string>(work?.name || '')
     const [description, setDescription] = useState<string>(work?.description || '')
 
     const [beforeImage, setBeforeImage] = useState<File | null>()
@@ -50,7 +50,7 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
             }
         }
         if (action === 'text') {
-            if (title.length < 2) {
+            if (name.length < 2) {
                 addMessage('Введите название больше 2 символов', 'error')
             }
             else {
@@ -59,23 +59,23 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
 
         }
         else {
-            if (work?.afterImage?.imageSrc) {
+            if (work?.imageAfterSrc) {
 
             }
-            if (work?.beforeImage?.imageSrc) {
+            if (work?.imageBeforeSrc) {
 
             }
             if (otherImages?.length) {
 
             }
         }
-    }, [worksStore, newType, typeId, title, action])
+    }, [worksStore, newType, typeId, name, action])
 
     const closeModal = useCallback(() => {
         worksStore.setIsWorkCreating(false)
         setTypeId(undefined)
         setNewType('')
-        setTitle('')
+        setName('')
         setDescription('')
         setAction('type')
         setBeforeImage(undefined)
@@ -138,8 +138,8 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                             ? <div className={classes.workModal__text}>
                                 <Input
                                     className={classes.workModal__inputTitle}
-                                    value={title}
-                                    onChange={(event) => setTitle(event.target.value)}
+                                    value={name}
+                                    onChange={(event) => setName(event.target.value)}
                                     name='title'
                                     title='Заголовок публикации'
                                     placeholder='Заголовок публикации'
@@ -159,13 +159,13 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                     {
                         action === 'photo'
                             ? <WorkModalImages
-                                initialAfter={work?.afterImage?.imageSrc}
-                                initialBefore={work?.beforeImage?.imageSrc}
+                                initialAfter={work?.imageAfterSrc}
+                                initialBefore={work?.imageBeforeSrc}
                                 initialOtherImages={work?.othersImage}
                                 setAfter={setAfterImage}
                                 setBefore={setBeforeImage}
                                 setOthers={setOtherImages}
-                                title={title}
+                                title={name}
                                 className={classes.workModal__photos}
                             />
                             : null

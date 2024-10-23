@@ -18,7 +18,7 @@ interface IServices extends IService, IServiceCreate {
 export const AdminServices: FC = observer(() => {
     const [services, setServices] = useState<IServices[]>([]);
     const [newServices, setNewServices] = useState<IServiceCreate>({
-        title: '',
+        name: '',
         time: 0,
         description: '',
         price: 0,
@@ -26,13 +26,13 @@ export const AdminServices: FC = observer(() => {
 
     const { addMessage } = useMessage();
     const validateLink = (service: IServices) => {
-        if (service.title.length < 2) return 'Заголовок должен быть длиннее 2 символов';
+        if (service.name.length < 2) return 'Заголовок должен быть длиннее 2 символов';
         if (!service.description) return 'Описание отсутствует';
         if (!service.time) return 'Время работы';
         return null;
     };
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'title' | 'description') => {
+    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'name' | 'description') => {
         const { value } = event.target;
         setServices(prev => prev.map(service =>
             service.id === id ? { ...service, [type]: value } : service
@@ -52,8 +52,8 @@ export const AdminServices: FC = observer(() => {
             return;
         }
         servicesStore.addService(newServices)
-        addMessage(`Услуга ${newServices.title} добавлена`, 'complete')
-        setNewServices({ title: '', time: 0, description: '', price: 0 })
+        addMessage(`Услуга ${newServices.name} добавлена`, 'complete')
+        setNewServices({ name: '', time: 0, description: '', price: 0 })
     }, [newServices])
 
 
@@ -64,7 +64,7 @@ export const AdminServices: FC = observer(() => {
             return;
         }
         servicesStore.changeService(contactLink)
-        addMessage(`Услуга ${contactLink.title} обновлена`, 'complete')
+        addMessage(`Услуга ${contactLink.name} обновлена`, 'complete')
     }, [])
 
 
@@ -82,8 +82,8 @@ export const AdminServices: FC = observer(() => {
                     <div className={classes.adminServices__inputs}>
                         <Input
                             className={classes.adminServices__input}
-                            value={service.title}
-                            onChange={(event) => handleChange(event, service.id, 'title')}
+                            value={service.name}
+                            onChange={(event) => handleChange(event, service.id, 'name')}
                             placeholder='Заголовок услуги'
                             title='Заголовок услуги'
                         />
@@ -124,8 +124,8 @@ export const AdminServices: FC = observer(() => {
                     <div className={classes.adminServices__inputs}>
                         <Input
                             className={classes.adminServices__input}
-                            value={newServices.title || ''}
-                            onChange={(event) => setNewServices(prev => ({ ...prev, title: event.target.value }))}
+                            value={newServices.name || ''}
+                            onChange={(event) => setNewServices(prev => ({ ...prev, name: event.target.value }))}
                             placeholder='Заголовок услуги'
                             title='Заголовок услуги'
                         />

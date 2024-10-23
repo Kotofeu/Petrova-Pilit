@@ -19,7 +19,7 @@ interface IAdvantageArray extends IAdvantages, ICreateAdvantages {
 export const AdminAdvantages: FC = observer(() => {
     const [advantages, setAdvantages] = useState<IAdvantageArray[]>([]);
     const [newAdvantage, setNewAdvantage] = useState<ICreateAdvantages>({
-        title: '',
+        name: '',
         description: '',
         imageFile: undefined,
         iconFile: undefined
@@ -27,14 +27,14 @@ export const AdminAdvantages: FC = observer(() => {
 
     const { addMessage } = useMessage();
     const validateAdvantages = (advantage: IAdvantageArray) => {
-        if (advantage.title.length < 2) return 'Заголовок должен быть длиннее 2 символов';
+        if (advantage.name.length < 2) return 'Заголовок должен быть длиннее 2 символов';
         if (advantage.description.length < 2) return 'Описание отсутствует';
-        if (!advantage.imageFile && !advantage.imageSrc) return 'Отсутствует картинка описания';
-        if (!advantage.iconFile && !advantage.iconSrs) return 'Отсутствует иконка';
+        //if (!advantage.imageFile && !advantage.imageSrc) return 'Отсутствует картинка описания';
+        if (!advantage.iconFile && !advantage.iconSrс) return 'Отсутствует иконка';
         return null;
     };
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'title' | 'description') => {
+    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'name' | 'description') => {
         const { value } = event.target;
         setAdvantages(prev => prev.map(advantage =>
             advantage.id === id ? { ...advantage, [type]: value } : advantage
@@ -55,8 +55,8 @@ export const AdminAdvantages: FC = observer(() => {
             return;
         }
         applicationStore.addAdvantage(newAdvantage)
-        addMessage(`Преимущество ${newAdvantage.title} добавлено`, 'complete')
-        setNewAdvantage({ title: '', description: '', imageFile: undefined, iconFile: undefined })
+        addMessage(`Преимущество ${newAdvantage.name} добавлено`, 'complete')
+        setNewAdvantage({ name: '', description: '', imageFile: undefined, iconFile: undefined })
     }, [newAdvantage])
 
 
@@ -67,7 +67,7 @@ export const AdminAdvantages: FC = observer(() => {
             return;
         }
         applicationStore.changeAdvantages(advantage)
-        addMessage(`Преимущество ${advantage.title} обновлено`, 'complete')
+        addMessage(`Преимущество ${advantage.name} обновлено`, 'complete')
     }, [])
 
 
@@ -87,14 +87,14 @@ export const AdminAdvantages: FC = observer(() => {
                             className={classes.adminAdvantages__icon}
                             type='light'
                             setImage={(image) => handleImageChange(image, advantage.id, 'iconFile')}
-                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrs}
+                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrс}
                             title='Иконка'
                         />
                         <div className={classes.adminAdvantages__inputs}>
                             <Input
                                 className={classes.adminAdvantages__input}
-                                value={advantage.title || ''}
-                                onChange={(event) => handleChange(event, advantage.id, 'title')}
+                                value={advantage.name || ''}
+                                onChange={(event) => handleChange(event, advantage.id, 'name')}
                                 placeholder='Заголовок преимущества'
                                 title='Заголовок преимущества'
                             />
@@ -125,8 +125,8 @@ export const AdminAdvantages: FC = observer(() => {
                         <div className={classes.adminAdvantages__inputs}>
                             <Input
                                 className={classes.adminAdvantages__input}
-                                value={newAdvantage?.title || ''}
-                                onChange={(event) => setNewAdvantage(prev => ({ ...prev, title: event.target.value }))}
+                                value={newAdvantage?.name || ''}
+                                onChange={(event) => setNewAdvantage(prev => ({ ...prev, name: event.target.value }))}
                                 placeholder='Заголовок преимущества'
                                 title='Заголовок преимущества'
                             />

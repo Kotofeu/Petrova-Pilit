@@ -15,10 +15,10 @@ export const PageLinks: FC<IPageLinks> = observer(({onLinkClick}) => (
                 <NavLink
                     className={classes.footer__link}
                     to={link.link}
-                    key={link.title}
+                    key={link.name}
                     onClick={onLinkClick}
                 >
-                    {link.title}
+                    {link.name}
                 </NavLink>
             ))}
             <Link

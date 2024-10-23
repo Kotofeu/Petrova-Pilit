@@ -12,11 +12,11 @@ export const ContactLinks = observer(() => (
                     className={classes.footer__link}
                     key={link.id}
                     href={link.link}
-                    title={link.title}
+                    title={link.name}
                     linkType="socialLink"
                     imageSrc={link.imageSrc}
                 >
-                    {link.title}
+                    {link.name}
                 </ContactLink>
             ))}
         </div>

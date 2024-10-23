@@ -19,7 +19,7 @@ interface IHeaderLink extends ILink {
 }
 
 export const HeaderLink: FC<IHeaderLink> = memo((props) => {
-    const { className, children, onClick, type = LinkType.none, title, link } = props
+    const { className, children, onClick, type = LinkType.none, name, link } = props
     return (
         <NavLink
             className={
@@ -31,7 +31,7 @@ export const HeaderLink: FC<IHeaderLink> = memo((props) => {
         >
             {({ isActive }) =>
                 <>
-                    {title}
+                    {name}
                     {children}
                     <ActiveLine
                         className={classes.headerLink__activeLine}

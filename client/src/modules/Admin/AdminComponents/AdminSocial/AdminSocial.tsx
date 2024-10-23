@@ -18,19 +18,19 @@ interface IChooseContactLink extends IContactLink, ICreateContactLink {
 export const AdminSocial: FC = observer(() => {
     const [socialLinks, setSocialLinks] = useState<IChooseContactLink[]>([]);
     const [newSocialLinks, setNewSocialLinks] = useState<ICreateContactLink>({
-        title: '',
+        name: '',
         link: '',
     })
 
     const { addMessage } = useMessage();
     const validateLink = (link: IChooseContactLink) => {
-        if (link.title.length < 2) return 'Заголовок должен быть длиннее 2 символов';
+        if (link.name.length < 2) return 'Заголовок должен быть длиннее 2 символов';
         if (link.link.length < 2) return 'Ссылка отсутствует';
         if (!link.imageFile && !link.imageSrc) return 'Отсутствует тёмная иконка';
         return null;
     };
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'title' | 'link') => {
+    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: number, type: 'name' | 'link') => {
         const { value } = event.target;
         setSocialLinks(prev => prev.map(contactLink =>
             contactLink.id === id ? { ...contactLink, [type]: value } : contactLink
@@ -51,8 +51,8 @@ export const AdminSocial: FC = observer(() => {
             return;
         }
         applicationStore.addContactLink(newSocialLinks)
-        addMessage(`Ссылка на ${newSocialLinks.title} добавлена`, 'complete')
-        setNewSocialLinks({ title: '', link: '', imageFile: undefined})
+        addMessage(`Ссылка на ${newSocialLinks.name} добавлена`, 'complete')
+        setNewSocialLinks({ name: '', link: '', imageFile: undefined})
     }, [newSocialLinks])
 
 
@@ -63,7 +63,7 @@ export const AdminSocial: FC = observer(() => {
             return;
         }
         applicationStore.changeContactLink(contactLink)
-        addMessage(`Ссылка на ${contactLink.title} обновлена`, 'complete')
+        addMessage(`Ссылка на ${contactLink.name} обновлена`, 'complete')
     }, [])
 
 
@@ -90,8 +90,8 @@ export const AdminSocial: FC = observer(() => {
                     <div className={classes.adminSocial__inputs}>
                         <Input
                             className={classes.adminSocial__input}
-                            value={socialLink.title || ''}
-                            onChange={(event) => handleChange(event, socialLink.id, 'title')}
+                            value={socialLink.name || ''}
+                            onChange={(event) => handleChange(event, socialLink.id, 'name')}
                             placeholder='Заголовок ссылки'
                             title='Заголовок ссылки'
                         />
@@ -124,8 +124,8 @@ export const AdminSocial: FC = observer(() => {
                     <div className={classes.adminSocial__inputs}>
                         <Input
                             className={classes.adminSocial__input}
-                            value={newSocialLinks?.title || ''}
-                            onChange={(event) => setNewSocialLinks(prev => ({ ...prev, title: event.target.value }))}
+                            value={newSocialLinks?.name || ''}
+                            onChange={(event) => setNewSocialLinks(prev => ({ ...prev, name: event.target.value }))}
                             placeholder='Заголовок ссылки'
                             title='Заголовок ссылки'
                         />

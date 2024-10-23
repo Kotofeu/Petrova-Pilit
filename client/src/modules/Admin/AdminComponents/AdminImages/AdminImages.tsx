@@ -67,7 +67,7 @@ export const AdminImages: FC<IAdminImages> = memo(({
                             <img
                                 className={classes.adminImages__image}
                                 src={image.imageSrc}
-                                alt={image.title || image.description || `Изображение №${index}`}
+                                alt={image.name || `Изображение №${index}`}
                             />
                             <ControllerButton
                                 className={classes.adminImages__deleteImage}

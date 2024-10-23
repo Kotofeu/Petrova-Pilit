@@ -35,8 +35,8 @@ export const WorksGrid: FC<IWorksGrid> = memo(({ className, works }) => {
                             className={classes.grid__card}
                             key={work.id}
                             id={work.id}
-                            image={work.beforeImage?.imageSrc || work.afterImage?.imageSrc}
-                            title={work.title}
+                            image={work.imageBeforeSrc || work.imageAfterSrc}
+                            title={work.name}
                             date={work.time}
                         />
                     )

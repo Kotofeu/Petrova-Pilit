@@ -34,7 +34,7 @@ export const WorksSection: FC = observer(() => {
     }, [items.length]);
     if (items.length > 0) {
         for (let i = 0; i < emptyCellsCount; i++) {
-            gridItems.push({ id: -1, title: '', time: 0 });
+            gridItems.push({ id: -1, name: '', time: 0 });
         }
     }
 
@@ -57,7 +57,7 @@ export const WorksSection: FC = observer(() => {
                     />
                     {
                         worksStore.workTypes.map(tab => {
-                            if (!tab.title) return
+                            if (!tab.name) return
                             return (
                                 <WorkTab
                                     className={classConnection(
@@ -66,7 +66,7 @@ export const WorksSection: FC = observer(() => {
                                     )}
                                     key={tab.id}
                                     onClick={() => setActiveType(tab.id)}
-                                    title={tab.title}
+                                    title={tab.name}
                                     isActive={workTypes === tab.id}
                                 />
 

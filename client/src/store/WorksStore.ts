@@ -10,13 +10,13 @@ import { IGetAllJSON, IImages } from '.';
 
 export interface IWorksType {
     id: number;
-    title?: string;
+    name?: string;
 }
 export interface IWorks {
     id: number;
-    afterImage?: IImages;
-    beforeImage?: IImages;
-    title: string;
+    imageAfterSrc?: string;
+    imageBeforeSrc?: string;
+    name: string;
     description?: string;
     workType?: IWorksType;
     othersImage?: IImages[];
@@ -27,15 +27,9 @@ const mockWorks: IGetAllJSON<IWorks> = {
     rows: [
         {
             id: 1,
-            afterImage: {
-                id: 10,
-                imageSrc: sliderImage2
-            },
-            beforeImage: {
-                id: 11,
-                imageSrc: sliderImage1
-            },
-            title: 'Я выбираю пилить ноготочки, а не мозги😏',
+            imageAfterSrc: sliderImage2,
+            imageBeforeSrc: sliderImage1,
+            name: 'Я выбираю пилить ноготочки, а не мозги😏',
             workType: {
                 id: 1,
             },
@@ -68,15 +62,9 @@ const mockWorks: IGetAllJSON<IWorks> = {
         },
         {
             id: 2,
-            afterImage: {
-                id: 12,
-                imageSrc: sliderImage4
-            },
-            beforeImage: {
-                id: 13,
-                imageSrc: sliderImage3
-            },
-            title: 'Восстановление архитектуры? WTF?🤔',
+            imageAfterSrc: sliderImage4,
+            imageBeforeSrc: sliderImage3,
+            name: 'Восстановление архитектуры? WTF?🤔',
             workType: {
                 id: 2,
             },
@@ -118,27 +106,18 @@ const mockWorks: IGetAllJSON<IWorks> = {
         },
         {
             id: 3,
-            beforeImage: {
-                id: 14,
-                imageSrc: sliderImage4
-            },
+            imageBeforeSrc: sliderImage4,
             time: 1724233258040,
-            title: 'Закрываем апрель🔥🔥',
+            name: 'Закрываем апрель🔥🔥',
             workType: {
                 id: 3
             }
         },
         {
             id: 4,
-            afterImage: {
-                id: 15,
-                imageSrc: sliderImage3
-            },
-            beforeImage: {
-                id: 16,
-                imageSrc: sliderImage1
-            },
-            title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ БЛА БЛА БЛА БЛА',
+            imageAfterSrc: sliderImage3,
+            imageBeforeSrc: sliderImage1,
+            name: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ БЛА БЛА БЛА БЛА',
             workType: {
                 id: 1
             },
@@ -146,12 +125,9 @@ const mockWorks: IGetAllJSON<IWorks> = {
 
         },
         {
-            beforeImage: {
-                id: 17,
-                imageSrc: sliderImage4
-            },
+            imageBeforeSrc: sliderImage4,
             id: 5,
-            title: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА',
+            name: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА',
             time: 1724233168040,
         },
     ]
@@ -163,19 +139,19 @@ export class WorksStore {
     private _workTypes: IWorksType[] = [
         {
             id: 0,
-            title: 'Нюдовое покрытие'
+            name: 'Нюдовое покрытие'
         },
         {
             id: 1,
-            title: 'Однотонное покрыти'
+            name: 'Однотонное покрыти'
         },
         {
             id: 2,
-            title: 'Простой дизайн'
+            name: 'Простой дизайн'
         },
         {
             id: 3,
-            title: 'Сложный дизайн'
+            name: 'Сложный дизайн'
         },
     ]
     private _works: IWorks[] = [];
@@ -267,14 +243,14 @@ export class WorksStore {
 
     editType(type: IWorksType) {
         this._workTypes = this._workTypes.map(tag => (
-            tag.id === type.id? {id: type.id, title: type.title}: tag
+            tag.id === type.id? {id: type.id, name: type.name}: tag
         ))
     }
-    addType(title: string) {
+    addType(name: string) {
         const id = Date.now()
         this._workTypes.push({
             id: id,
-            title: title
+            name: name
         })
         return id
     }

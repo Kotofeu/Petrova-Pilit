@@ -7,12 +7,16 @@ import userImage from '../assets/images/main.png'
 import { IReviews } from './ReviewsStore';
 import { IGetAllJSON } from '.';
 
+interface IRoles {
+    id: number;
+    name?: 'USER' | 'ADMIN' | 'ANON';
+}
 
 export interface IUser {
     id: number;
     name?: string;
     imageSrc?: string;
-    role?: 'USER' | 'ADMIN';
+    role?: IRoles;
     visitsNumber?: number;
     review?: IReviews;
     email?: string;
@@ -22,7 +26,7 @@ const mockUser: IUser = {
     id: 1,
     name: 'Анастасия Петрова',
     imageSrc: userImage,
-    role: 'ADMIN',
+    role: { id: 1, name: 'ADMIN' },
     visitsNumber: 1,
     email: 'cras.petrov@yandex.ru',
     phone: '+79114968216',
@@ -35,7 +39,7 @@ const mockAdmin: IUser = {
     name: 'Бурятский Бублик',
     email: 'buryat@gmail.ru',
     imageSrc: adminImage,
-    role: 'ADMIN',
+    role: { id: 1, name: 'USER' },
     visitsNumber: 0
 }
 const allUsers: IGetAllJSON<IUser> = {
@@ -99,7 +103,7 @@ export class UserStore {
         return this._user !== null
     }
     get isAdmin() {
-        return this._user?.role === "ADMIN" ? true : false
+        return this._user?.role?.name === "ADMIN" ? true : false
     }
     get user() {
         return this._user

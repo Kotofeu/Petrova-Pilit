@@ -84,12 +84,12 @@ export const Header: FC = observer(() => {
         )}
       >
         <div className={classes.header__navigationInner}>
-          <HeaderLink link={HOME_ROUTE} title='Ppilit' className={classes.header__logo} />
+          <HeaderLink link={HOME_ROUTE} name='Ppilit' className={classes.header__logo} />
           <div className={classes.header__navigationLinks}
           >
             {
               applicationStore.headerLinks.map(link =>
-                <HeaderLink {...link} className={classes.header__link} key={link.title} type={LinkType.underline} onClick={onLinkClick} />
+                <HeaderLink {...link} className={classes.header__link} key={link.name} type={LinkType.underline} onClick={onLinkClick} />
               )
             }
           </div>
@@ -129,7 +129,7 @@ export const Header: FC = observer(() => {
                     <HeaderLink
                       {...link}
                       className={classes.header__burgerLink}
-                      key={link.title}
+                      key={link.name}
                       onClick={onLinkClick}
                     />
                   )

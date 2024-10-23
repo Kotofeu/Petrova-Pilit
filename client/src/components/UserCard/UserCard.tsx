@@ -205,7 +205,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                                     <Button
                                         className={
                                             classConnection(
-                                                user?.role === 'ADMIN' ? classes.userCard__button_active : '',
+                                                user?.role?.name === 'ADMIN' ? classes.userCard__button_active : '',
                                                 classes.userCard__button)
                                         }
                                         onClick={() => setAction('admin')}

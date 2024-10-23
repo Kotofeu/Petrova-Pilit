@@ -26,9 +26,9 @@ export const AdvantagesSection = observer(() => {
                         <AdvantagesCard
                             className={classes.advantagesSection__card}
                             key={advantage.id}
-                            title={advantage.title}
+                            title={advantage.name}
                             description={advantage.description}
-                            imageSrc={advantage.iconSrs}
+                            imageSrc={advantage.iconSrс}
                         />
                     }
                     breakpoints={[

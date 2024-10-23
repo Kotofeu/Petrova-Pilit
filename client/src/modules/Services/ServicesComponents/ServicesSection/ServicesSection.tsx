@@ -24,7 +24,7 @@ export const ServicesSection = observer(() => {
                     renderTitle={(service, index) =>
                         <ServicesTitle
                             className={classes.services__servicesTitle}
-                            title = {service.title}
+                            title = {service.name}
                             time={service.time}
                             price={service.price}
 

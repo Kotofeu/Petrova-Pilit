@@ -16,7 +16,7 @@ interface IHomeWorkSlide {
 }
 export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
     const { className, work } = props
-    const {id, afterImage, beforeImage, title} = work
+    const {id, imageAfterSrc, imageBeforeSrc, name} = work
     const router = useNavigate()
 
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
@@ -24,8 +24,8 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
         window.scrollTo(0, 0)
         router(`${WORKS_ROUTE}/${id}`)
     }, [id])
-    if (!afterImage && !beforeImage) return null
-    const isSlice: boolean = !!afterImage && !!beforeImage
+    if (!imageAfterSrc && !imageBeforeSrc) return null
+    const isSlice: boolean = !!imageAfterSrc && !!imageBeforeSrc
     return (
         <article className={classConnection(classes.homeWorkSlide, className)}>
             <div className={classes.homeWorkSlide__preview}>
@@ -36,21 +36,21 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                             <HomeWorkSlideImage
                                 className={classes.homeWorkSlide__image}
                                 type='before'
-                                imageSrc={beforeImage?.imageSrc}
-                                alt={`${title} до работы`}
+                                imageSrc={imageBeforeSrc}
+                                alt={`${name} до работы`}
                             />
                             <HomeWorkSlideImage
                                 className={classes.homeWorkSlide__image}
                                 type='after'
-                                imageSrc={afterImage?.imageSrc}
-                                alt={`${title} после работы`}
+                                imageSrc={imageAfterSrc}
+                                alt={`${name} после работы`}
                             />
                         </>
                         :
                         <HomeWorkSlideImage
                             className={classes.homeWorkSlide__image}
-                            imageSrc={afterImage?.imageSrc || beforeImage?.imageSrc}
-                            alt={title}
+                            imageSrc={imageAfterSrc || imageBeforeSrc}
+                            alt={name}
                         />
                 }
             </div >
@@ -59,7 +59,7 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                 onClick={onSlideClick}
             >
                 <h6 className={classes.homeWorkSlide__title}>
-                    {title}
+                    {name}
                 </h6>
             </div>
         </article >

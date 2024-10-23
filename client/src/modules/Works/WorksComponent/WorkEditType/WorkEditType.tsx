@@ -17,8 +17,8 @@ interface IWorkEditType {
 }
 
 export const WorkEditType: FC<IWorkEditType> = observer(({ className, initialValue, id }) => {
-    const [title, setTitle] = useState<string>(initialValue || '')
-    const debouncedName = useDebounce(title, 1000)
+    const [name, setName] = useState<string>(initialValue || '')
+    const debouncedName = useDebounce(name, 1000)
     const { addMessage } = useMessage()
     
     useEffect(() => {
@@ -26,7 +26,7 @@ export const WorkEditType: FC<IWorkEditType> = observer(({ className, initialVal
         if (debouncedName && debouncedName !== initialValue && id !== undefined) {
             worksStore.editType({
                 id: id,
-                title: debouncedName
+                name: debouncedName
             })
             addMessage('Тип изменён', 'complete')
         }
@@ -34,8 +34,8 @@ export const WorkEditType: FC<IWorkEditType> = observer(({ className, initialVal
     return (
         <Input
             className={className}
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
             placeholder='Введите название'
             title='Название тега'
         />

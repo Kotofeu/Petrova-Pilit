@@ -22,7 +22,7 @@ import { IImages } from '.';
 
 
 export interface ILink {
-    title: string;
+    name: string;
     link: string;
 }
 
@@ -37,13 +37,13 @@ export interface ICreateContactLink extends ILink {
 
 export interface IAdvantages {
     id: number;
-    title: string;
-    iconSrs: string;
+    name: string;
+    iconSrс: string;
     imageSrc: string;
     description: string;
 }
 export interface ICreateAdvantages {
-    title: string;
+    name: string;
     description: string;
     imageFile?: File;
     iconFile?: File;
@@ -52,8 +52,8 @@ export interface ICreateAdvantages {
 
 export interface IWorkSchedule {
     id: number;
-    title: string;
-    shortTitle: string;
+    name: string;
+    shortName: string;
     value: string;
 }
 interface IGeneralData {
@@ -68,12 +68,12 @@ export class ApplicationStore {
         makeAutoObservable(this, {}, { deep: true })
     }
     private _headerLinks: ILink[] = [
-        { title: "Главная", link: HOME_ROUTE },
-        { title: "Обо мне", link: ABOUT_ROUTE },
-        { title: "Мои работы", link: WORKS_ROUTE },
-        { title: "Отзывы", link: REVIEWS_ROUTE },
-        { title: "Клиенты", link: USER_ROUTE },
-        { title: "Админка", link: ADMIN_ROUTE }
+        { name: "Главная", link: HOME_ROUTE },
+        { name: "Обо мне", link: ABOUT_ROUTE },
+        { name: "Мои работы", link: WORKS_ROUTE },
+        { name: "Отзывы", link: REVIEWS_ROUTE },
+        { name: "Клиенты", link: USER_ROUTE },
+        { name: "Админка", link: ADMIN_ROUTE }
     ];
     private _generalData: IGeneralData = {
         promoBanner: 'Скидка 50% на первый маникюр!',
@@ -92,19 +92,19 @@ export class ApplicationStore {
     private _contactLinks: IContactLink[] = [
         {
             id: 1,
-            title: 'WhatsApp',
+            name: 'WhatsApp',
             link: 'https://wa.me/+79814621828',
             imageSrc: Whatsapp,
         },
         {
             id: 2,
-            title: 'Instagram',
+            name: 'Instagram',
             link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
             imageSrc: Instagram,
         },
         {
             id: 3,
-            title: 'Калининград, Боткина 2А',
+            name: 'Калининград, Боткина 2А',
             link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
             imageSrc: Map,
         }
@@ -153,31 +153,31 @@ export class ApplicationStore {
     private _advantages: IAdvantages[] = [
         {
             id: 1,
-            iconSrs: fast,
-            title: 'Быстро',
+            iconSrс: fast,
+            name: 'Быстро',
             description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!',
             imageSrc: sliderImage1,
         },
         {
             id: 2,
-            iconSrs: quality,
-            title: 'Качественно',
+            iconSrс: quality,
+            name: 'Качественно',
             description: 'Качество на первом месте — ваши ногти заслуживают лучшего!',
             imageSrc: sliderImage2,
 
         },
         {
             id: 3,
-            iconSrs: beautifully,
-            title: 'Красиво',
+            iconSrс: beautifully,
+            name: 'Красиво',
             description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!',
             imageSrc: sliderImage1,
 
         },
         {
             id: 4,
-            iconSrs: comfortable,
-            title: 'Комфортно',
+            iconSrс: comfortable,
+            name: 'Комфортно',
             description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!',
             imageSrc: sliderImage3,
 
@@ -186,44 +186,44 @@ export class ApplicationStore {
     private _workSchedule: IWorkSchedule[] = [
         {
             id: 1,
-            title: 'Понеденьник',
-            shortTitle: 'Пн',
+            name: 'Понеденьник',
+            shortName: 'Пн',
             value: '08:00 - 20:00',
         },
         {
             id: 2,
-            title: 'Вторник',
-            shortTitle: 'Вт',
+            name: 'Вторник',
+            shortName: 'Вт',
             value: '08:00 - 20:00',
         },
         {
             id: 3,
-            title: 'Среда',
-            shortTitle: 'Ср',
+            name: 'Среда',
+            shortName: 'Ср',
             value: '08:00 - 20:00',
         },
         {
             id: 4,
-            title: 'Четверг',
-            shortTitle: 'Чт',
+            name: 'Четверг',
+            shortName: 'Чт',
             value: '08:00 - 20:00',
         },
         {
             id: 5,
-            title: 'Пятница',
-            shortTitle: 'Пт',
+            name: 'Пятница',
+            shortName: 'Пт',
             value: '08:00 - 20:00',
         },
         {
             id: 6,
-            title: 'Суббота',
-            shortTitle: 'Сб',
+            name: 'Суббота',
+            shortName: 'Сб',
             value: '08:00 - 20:00',
         },
         {
             id: 7,
-            title: 'Воскресенье',
-            shortTitle: 'Вс',
+            name: 'Воскресенье',
+            shortName: 'Вс',
             value: 'Выходной',
         },
 
@@ -289,20 +289,20 @@ export class ApplicationStore {
         this._workSchedule = this.updateArray(this._workSchedule, workDay, 'id');
     }
     changeContactLink(contactLink: IContactLink & ICreateContactLink) {
-        const { id, title, link, imageFile, imageSrc } = contactLink;
+        const { id, name, link, imageFile, imageSrc } = contactLink;
         const newContactLink = {
             id,
-            title,
+            name,
             link,
             imageSrc: this.createImageSrc(imageFile, imageSrc),
         };
         this._contactLinks = this.updateArray(this._contactLinks, newContactLink, 'id');
     }
 
-    addContactLink({ title, link, imageFile }: ICreateContactLink): IContactLink {
+    addContactLink({ name, link, imageFile }: ICreateContactLink): IContactLink {
         const newContactLink: IContactLink = {
             id: Date.now(),
-            title,
+            name,
             link,
             imageSrc: this.createImageSrc(imageFile),
         };
@@ -315,24 +315,24 @@ export class ApplicationStore {
     }
 
     changeAdvantages(advantage: IAdvantages & ICreateAdvantages) {
-        const { id, title, description, imageFile, imageSrc, iconSrs, iconFile } = advantage;
+        const { id, name, description, imageFile, imageSrc, iconSrс, iconFile } = advantage;
         const newAdvantage = {
             id,
-            title,
+            name,
             description,
             imageSrc: this.createImageSrc(imageFile, imageSrc),
-            iconSrs: this.createImageSrc(iconFile, iconSrs)
+            iconSrс: this.createImageSrc(iconFile, iconSrс)
         };
         this._advantages = this.updateArray(this._advantages, newAdvantage, 'id');
     }
 
-    addAdvantage({ title, description, imageFile, iconFile }: ICreateAdvantages): IAdvantages {
+    addAdvantage({ name, description, imageFile, iconFile }: ICreateAdvantages): IAdvantages {
         const newAdvantage: IAdvantages = {
             id: Date.now(),
-            title,
+            name,
             description,
             imageSrc: this.createImageSrc(imageFile),
-            iconSrs: this.createImageSrc(iconFile),
+            iconSrс: this.createImageSrc(iconFile),
         };
         this._advantages.push(newAdvantage);
         return newAdvantage;

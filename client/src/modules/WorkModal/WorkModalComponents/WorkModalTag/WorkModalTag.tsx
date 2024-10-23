@@ -41,7 +41,7 @@ export const WorkModalTag: FC<IWorkModalTag> = memo(({ types, typeId, setTypeId 
                                 key={type.id}
                                 value={type.id}
                             >
-                                {type.title}
+                                {type.name}
                             </option>
                         )}
 

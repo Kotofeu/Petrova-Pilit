@@ -1,5 +1,3 @@
-
-import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 export const REGISTRATION = 'registration';

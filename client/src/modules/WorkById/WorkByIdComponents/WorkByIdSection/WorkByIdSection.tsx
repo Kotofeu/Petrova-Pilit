@@ -24,7 +24,7 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
     deleteWork
 }) => {
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    if (!work || (!work.afterImage?.imageSrc && !work.beforeImage?.imageSrc) || !work.title) {
+    if (!work || (!work.imageAfterSrc && !work.imageBeforeSrc) || !work.name) {
         return (
             <Error404
                 page={WORKS_ROUTE}
@@ -57,21 +57,21 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
 
                 <div className={classes.workById__inner}>
                     {
-                        (work.afterImage?.imageSrc && work.beforeImage?.imageSrc)
+                        (work.imageAfterSrc && work.imageBeforeSrc)
                             ? <BeforeAfterSlider
                                 className={classes.workById__slider}
-                                before={work.beforeImage?.imageSrc || ''}
-                                after={work.afterImage?.imageSrc || ''}
+                                before={work.imageBeforeSrc || ''}
+                                after={work.imageAfterSrc || ''}
 
                             />
                             : <img
                                 className={classes.workById__preview}
-                                src={work.afterImage?.imageSrc || work.beforeImage?.imageSrc}
-                                alt={work.title}
+                                src={work.imageAfterSrc || work.imageBeforeSrc}
+                                alt={work.name}
                             />
                     }
                     <div className={classes.workById__text}>
-                        <h1 className={classes.workById__title}>{work.title}</h1>
+                        <h1 className={classes.workById__title}>{work.name}</h1>
                         <DateTime
                             className={classes.workById__date}
                             date={work.time}

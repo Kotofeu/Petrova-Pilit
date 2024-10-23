@@ -18,13 +18,13 @@ export const AdminWorkDay: FC = observer(() => {
         const { name, value } = event.target;
         setWorkSchedule(prev =>
             prev.map(workDay =>
-                workDay.title === name ? { ...workDay, value } : workDay
+                workDay.name === name ? { ...workDay, value } : workDay
             )
         );
     }, []);
     const onSaveClick = useCallback((workDay: IWorkSchedule) => {
         applicationStore.changeWorkSchedule(workDay)
-        addMessage(`Расписание на ${workDay.title} изменено`, 'complete')
+        addMessage(`Расписание на ${workDay.name} изменено`, 'complete')
     }, [])
     return (
         <ListItemController
@@ -36,20 +36,20 @@ export const AdminWorkDay: FC = observer(() => {
                     <p
                         className={classes.adminWorkDay__name}
                     >
-                        {workDay.title}:
+                        {workDay.name}:
                     </p>
                     <p
                         className={classes.adminWorkDay__shortName}
                     >
-                        {workDay.shortTitle}:
+                        {workDay.shortName}:
                     </p>
                     <Input
                         className={classes.adminWorkDay__input}
                         value={workDay.value || ''}
                         onChange={workScheduleHandler}
-                        name={workDay.title}
+                        name={workDay.name}
                         placeholder='00:00 - 00:00'
-                        title={`Расписание на ${workDay.title}`}
+                        title={`Расписание на ${workDay.name}`}
                     />
 
                 </div>
