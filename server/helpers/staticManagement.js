@@ -1,7 +1,6 @@
-const fs = require('fs').promises; 
+const fs = require('fs').promises;
 const path = require('path');
 const sharp = require('sharp');
-const ffmpeg = require('fluent-ffmpeg'); 
 const { v4: uuidv4 } = require('uuid');
 const ApiError = require('../error/ApiError');
 
@@ -14,6 +13,7 @@ class StaticManagement {
                 try {
                     await fs.unlink(filePath);
                 } catch (error) {
+                    console.error(`Ошибка при удалении файла ${filePath}:`, error);
                 }
             }));
         }
@@ -27,8 +27,9 @@ class StaticManagement {
                 if (image.name) {
                     const fileName = `${uuidv4()}.${image.name.split('.').pop()}`;
                     imagesNames.push(fileName);
+                    const filePath = path.resolve(__dirname, '..', 'static', fileName)
                     try {
-                        await image.mv(path.resolve(__dirname, '..', 'static', fileName));
+                        await this.compressFile(image, filePath, image.name);
                     } catch (error) {
                         throw ApiError.Internal('Ошибка сохранения изображения');
                     }
@@ -44,88 +45,53 @@ class StaticManagement {
             try {
                 await fs.unlink(filePath);
             } catch (error) {
+                console.error(`Ошибка при удалении файла ${filePath}:`, error);
             }
         }
     }
 
     async staticCreate(image) {
-        if (image.constructor === Array) {
-            throw new Error('Вы передали больше 1 изображения');
+        if (Array.isArray(image)) {
+            throw ApiError.BadRequest('Вы передали больше 1 изображения');
         }
-        
+
         let imageName;
         if (image && image.name) {
             imageName = `${uuidv4()}.${image.name.split('.').pop()}`;
             const filePath = path.resolve(__dirname, '..', 'static', imageName);
-            
-            try {
-                await image.mv(filePath);
-                await this.compressFile(filePath, image.name);
-            } catch (error) {
-                throw new Error('Ошибка сохранения изображения');
-            }
+            await this.compressFile(image, filePath, image.name);
+
         }
         return imageName;
     }
-    
 
-    async compressFile(filePath, fileName) {
+    async compressFile(image, filePath, fileName) {
         const ext = path.extname(fileName).toLowerCase();
-    
-        switch (ext) {
-            case '.jpg':
-            case '.jpeg':
-                await sharp(filePath)
-                    .jpeg({ quality: 80 })
-                    .toFile(filePath);
-                break;
-            case '.png':
-                await sharp(filePath)
-                    .png({ quality: 80 })
-                    .toFile(filePath);
-                break;
-            case '.gif':
-                await sharp(filePath)
-                    .gif({ quality: 80 })
-                    .toFile(filePath);
-                break;
-            case '.bmp':
-                break;
-            case '.tiff':
-                await sharp(filePath)
-                    .tiff({ quality: 80 })
-                    .toFile(filePath);
-                break;
-            case '.svg':
-                break;
-            case '.mp4':
-            case '.mov':
-            case '.wmv':
-            case '.avi':
-            case '.mpeg':
-                await compressVideo(filePath);
-                break;
-            default:
-                break;
+        if (
+            !['.mp4', '.mov', '.wmv', '.avi', '.mpeg', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.svg'].includes(ext)
+        ) {
+            throw ApiError.BadRequest(`Тип файла ${ext} не поддерживается`);
         }
-    }
-    
-    compressVideo(filePath) {
-        return new Promise((resolve, reject) => {
-            const outputFilePath = filePath.replace(/.(mp4|mov|wmv|avi|mpeg)$/, '-compressed$&');
-    
-            ffmpeg(filePath)
-                .outputOptions('-crf', '23')
-                .on('end', () => {
-                    fs.unlinkSync(filePath);
-                    fs.renameSync(outputFilePath, filePath);
-                    resolve();
-                })
-                .on('error', (error) => {
-                    reject(error);
-                })
-                .save(outputFilePath); 
-        });
+        try {
+            switch (ext) {
+                case '.jpg':
+                case '.jpeg':
+                    await sharp(image.data).jpeg({ quality: 80 }).toFile(filePath);
+                    break;
+                case '.png':
+                    await sharp(image.data).png({ quality: 80 }).toFile(filePath);
+                    break;
+                case '.tiff':
+                    await sharp(image.data).tiff({ quality: 80 }).toFile(filePath);
+                    break;
+                default:
+                    await image.mv(filePath);
+                    return;
+            }
+        } catch (error) {
+            console.error(`Ошибка при сжатии файла ${filePath}:`, error);
+            throw ApiError.Internal('Ошибка сжатия изображения');
+        }
     }
 }
 

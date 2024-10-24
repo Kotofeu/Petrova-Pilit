@@ -88,7 +88,7 @@ const OfficeImages = sequelize.define('office_images', {
 })
 
 
-const homeSlider = sequelize.define('home_slider', {
+const HomeSlider = sequelize.define('home_slider', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     imageSrc: { type: DataTypes.STRING, allowNull: false },
 }, {
@@ -212,7 +212,7 @@ module.exports = {
     Works,
     SharedImages,
     OfficeImages,
-    homeSlider,
+    HomeSlider,
     Reviews,
     Users,
     AuthValues,

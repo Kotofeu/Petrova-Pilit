@@ -26,7 +26,7 @@ const FileInput: React.FC<IFileInput> = memo(({
         ? /.(jpg|jpeg|png|gif|bmp|tiff)$/i 
         : type === 'icon' 
             ? /.(svg|png)$/i 
-            : /.(mp4|mov|mp3|wmv|avi|mpeg)$/i;
+            : /.(mp4|mov|wmv|avi|mpeg)$/i;
     const { addMessage } = useMessage();
     const validateFile = (file: File) => {
         if (file.size > maxFileSize) {
@@ -94,7 +94,7 @@ const FileInput: React.FC<IFileInput> = memo(({
                     type="file"
                     accept={
                         type === 'photo' ? '.jpg,.jpeg,.png,.gif,.bmp,.tiff' :
-                        type === 'icon' ? '.svg,.png' : '.mp4,.mov,.mp3,.wmv,.avi,.mpeg'
+                        type === 'icon' ? '.svg,.png' : '.mp4,.mov,.wmv,.avi,.mpeg'
                     }
                     onChange={handleInputChange}
                     onClick={(event) => event.currentTarget.value = ''}
