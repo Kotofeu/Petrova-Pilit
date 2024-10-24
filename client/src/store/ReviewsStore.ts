@@ -17,7 +17,7 @@ export interface IReviews {
     comment?: string;
     time?: number;
     rating?: number;
-    images?: IImages[];
+    shared_images?: IImages[];
 }
 export class ReviewsStore {
     constructor() {
@@ -31,7 +31,7 @@ export class ReviewsStore {
                 comment: 'Отличный мастер, всем советую',
                 time: 1724233268040,
                 rating: 5,
-                images: [
+                shared_images: [
                     {
                         id: 1,
                         imageSrc: combinedManicure,
@@ -116,7 +116,7 @@ export class ReviewsStore {
                 comment: 'Замечательная, добрая и отзывчивая девушка. Маникюр делает аккуратно, соблюдает все нормы и правила гигиены.',
                 time: 1724232268040,
                 rating: 4,
-                images: [
+                shared_images: [
                     {
                         id: 1,
                         imageSrc: combinedManicure,

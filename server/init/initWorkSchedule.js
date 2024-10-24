@@ -1,14 +1,7 @@
 require('dotenv').config();
-const sequelize = require('../db');
-const modules = require('../models/models');
-
+const { WorkSchedule } = require('../models/models');
 const initWorkSchedule = async () => {
     try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-
-        await modules.WorkSchedule.sync({ force: true });
-
         const daysOfWeek = [
             { name: 'Понедельник', shortName: 'Пн.' },
             { name: 'Вторник', shortName: 'Вт.' },
@@ -18,13 +11,21 @@ const initWorkSchedule = async () => {
             { name: 'Суббота', shortName: 'Сб.' },
             { name: 'Воскресенье', shortName: 'Вс.' },
         ];
+        const count = await WorkSchedule.count()
+        if (count !== daysOfWeek.length) {
+            await WorkSchedule.destroy({
+                where: {},
+                truncate: true,
+            });
 
-        await modules.WorkSchedule.bulkCreate(daysOfWeek);
-        console.log('Table created and populated with initial data.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    } finally {
-        await sequelize.close();
+            const result = await WorkSchedule.bulkCreate(daysOfWeek);
+            console.log('Таблица графика работы заполнена!');
+        }
+
+    }
+    catch {
+        console.error(`Невозможно создать график работы`);
+
     }
 };
 

@@ -24,10 +24,10 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
     }
     const images = useMemo(() => {
         const maxLength = 6
-        if (!review.images?.length) return null
-        return review.images.length > maxLength
-            ? review.images.slice(0, maxLength)
-            : review.images;
+        if (!review.shared_images?.length) return null
+        return review.shared_images.length > maxLength
+            ? review.shared_images.slice(0, maxLength)
+            : review.shared_images;
     }, [review])
     return (
         <ReviewCard

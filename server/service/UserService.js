@@ -1,16 +1,17 @@
-const { Users, AuthValues } = require('../models/models');
+const { Users, AuthValues, Reviews, SharedImages } = require('../models/models');
 const UserDto = require('../dtos/UserDto');
 const bcrypt = require('bcrypt');
 const mailService = require('./MailService');
 const tokenService = require('./TokenService');
 const ApiError = require('../error/ApiError');
-
+const staticManagement = require('../helpers/staticManagement')
 class UserService {
 
-    async createUserWithToken(email, password) {
+    async createUserWithToken(confirmToken, password) {
         this.validatePassword(password);
+        const { id, email } = tokenService.validateConfirmToken(confirmToken);
         const user = await this.findUserByEmail(email);
-        const candidateAuthValues = await AuthValues.findOne({ where: {userId: user ? user.id : null} });
+        const candidateAuthValues = await AuthValues.findOne({ where: { userId: user ? user.id : null } });
         if (candidateAuthValues) {
             throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
         }
@@ -26,8 +27,9 @@ class UserService {
         return { ...tokens, user: userDto };
     }
 
-    async resetPassword(email, newPassword) {
+    async recoverUser(confirmToken, newPassword) {
         this.validatePassword(newPassword);
+        const { id, email } = tokenService.validateConfirmToken(confirmToken);
         const user = await this.findUserByEmail(email);
         const hashPassword = await this.hashPassword(newPassword);
         const userDto = new UserDto(user);
@@ -40,26 +42,31 @@ class UserService {
         return { ...tokens, user: userDto };
     }
 
-    async changeEmail(email, newEmail) {
+    async changeEmail(confirmToken, newEmail) {
+        const { id, email } = tokenService.validateConfirmToken(confirmToken);
         const candidate = await this.validateEmail(newEmail);
+
         if (candidate) {
             throw ApiError.BadRequest(`Пользователь с почтовым адресом ${newEmail} уже существует`);
         }
-        const user = await Users.findOne({ where: { email } });
-        if (!user) {
-            throw ApiError.NotFound(`Пользователь с почтовым адресом ${email} не существует`);
-        }
+        const user = await this.findUserByEmail(email);
 
+
+        const candidateAuth = await AuthValues.findOne({ where: { userId: user.id } });
+        if (!candidateAuth) {
+            throw ApiError.NotFound(`Пользователь с почтовым адресом ${email} не зарегистрирован`);
+        }
         user.email = newEmail;
         await user.save();
         const userDto = new UserDto(user);
+        await tokenService.removeAllTokens(userDto.id);
         const tokens = this.generateAndStoreTokens(userDto);
         return { ...tokens, user: userDto };
 
     }
     // Готово
     async recoverUserSendCode(email) {
-        this.validateEmail(email);
+        await this.validateEmail(email);
         const user = await this.findUserByEmail(email);
         const codeConfirm = this.generateActivationCode();
         user.activateCode = codeConfirm;
@@ -71,7 +78,7 @@ class UserService {
     }
 
     async changeEmailSendCode(userEmail, email) {
-        const candidate = this.validateEmail(email);
+        const candidate = await this.validateEmail(email);
         if (candidate) {
             throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
         }
@@ -82,9 +89,10 @@ class UserService {
         const codeConfirm = this.generateActivationCode();
 
         user.activateCode = codeConfirm;
+
         await Promise.all([
             user.save(),
-            mailService.sendCodeMail(newEmail, codeConfirm)
+            mailService.sendCodeMail(email, codeConfirm)
         ]);
         return new UserDto(user)
 
@@ -92,7 +100,7 @@ class UserService {
     // 50/50
     async newUserSendCode(email) {
         const candidate = await this.validateEmail(email);
-        const candidateAuthValues = await AuthValues.findOne({ where: {userId: candidate ? candidate.id : null} });
+        const candidateAuthValues = await AuthValues.findOne({ where: { userId: candidate ? candidate.id : null } });
         if (candidateAuthValues) {
             throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
         }
@@ -127,7 +135,7 @@ class UserService {
 
     async login(email, password) {
         const user = await this.findUserByEmail(email);
-        const authValues = await AuthValues.findOne({ userId: user.id });
+        const authValues = await AuthValues.findOne({ where: { userId: user.id } });
         if (!authValues) {
             throw ApiError.BadRequest(`Пользователь не создавался (вместо входа завершите регистрацию)`);
         }
@@ -137,6 +145,7 @@ class UserService {
         }
         const tokens = this.generateAndStoreTokens(user);
         const userDto = new UserDto(user);
+
 
         return { ...tokens, user: userDto };
     }
@@ -151,20 +160,132 @@ class UserService {
         if (!refreshToken) {
             throw ApiError.UnauthorizedError();
         }
-        const { id, email } = tokenService.validateRefreshToken(refreshToken);
+        const { id, role } = tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (!id || !email || !tokenFromDb) {
+        if (!id || !tokenFromDb) {
             throw ApiError.UnauthorizedError();
         }
-        const user = await this.findUserByEmail(email);
+        const user = await this.findUserById(id);
+
         const userDto = new UserDto(user);
-        const tokens = this.generateAndStoreTokens(userDto);
+        const tokens = this.generateAndStoreTokens(userDto, tokenFromDb.id);
 
         return { ...tokens, user: userDto };
     }
 
+    async getUser(id, refreshToken) {
+        if (!refreshToken || !id) {
+            throw ApiError.UnauthorizedError();
+        }
+        const tokenFromDb = await tokenService.findToken(refreshToken);
+        if (!tokenFromDb) {
+            throw ApiError.UnauthorizedError();
+        }
+        const user = await this.findUserById(id);
+        const userDto = new UserDto(user);
+        const tokens = this.generateAndStoreTokens(userDto, tokenFromDb.id);
+        return { ...tokens, user: userDto };
+    }
 
 
+    async giveRole(id, role) {
+        if (!role || !id) {
+            throw ApiError.BadRequest('Не указаны id и/или новая роль пользователя');
+        }
+        const user = await this.findUserById(id);
+
+        user.role = role
+        await user.save()
+        return new UserDto(user)
+    }
+
+    async changeById(id, userDto, image) {
+        const userValues = new UserDto(userDto);
+        if (!id) {
+            throw ApiError.BadRequest('Не указан id пользователя');
+        }
+        const user = await this.findUserById(id);
+
+        Object.keys(userValues).forEach(key => {
+            if (userValues[key]) {
+                user[key] = userValues[key];
+            }
+        });
+
+        if (image) {
+            const fileName = await staticManagement.staticCreate(image);
+            await staticManagement.staticDelete(user.imageSrc);
+            user.imageSrc = fileName;
+        }
+        await user.save()
+        return new UserDto(user)
+    }
+
+    async changeImage(id, image) {
+        if (!id) {
+            throw ApiError.BadRequest('Не указан id пользователя');
+        }
+        const user = await this.findUserById(id);
+
+        await staticManagement.staticDelete(user.imageSrc);
+        if (image) {
+            const fileName = await staticManagement.staticCreate(image);
+            user.imageSrc = fileName;
+        }
+        else {
+            user.imageSrc = null
+        }
+        await user.save()
+        return new UserDto(user)
+    }
+
+    async changeName(id, name) {
+        if (!id) {
+            throw ApiError.BadRequest('Не указан id пользователя');
+        }
+        const user = await this.findUserById(id);
+
+        user.name = name || null
+        await user.save()
+        return new UserDto(user)
+    }
+    async changePhone(id, phone) {
+        if (!id) {
+            throw ApiError.BadRequest('Не указан id пользователя');
+        }
+        const user = await this.findUserById(id);
+
+        user.phone = phone || null
+        await user.save()
+        return new UserDto(user)
+    }
+
+    async getAllUsers() {
+        const users = await Users.findAndCountAll();
+        return users;
+    }
+    async getUserById(id) {
+        if (!id) {
+            throw ApiError.BadRequest('Не указан id пользователя');
+        }
+        const user = await this.findUserById(id);
+
+        return new UserDto(user)
+    }
+
+    async deleteUser(id) {
+        if (!id) {
+            return next(ApiError.UnauthorizedError())
+        }
+        const candidate = await Users.findOne({ where: { id } });
+        if (!candidate) {
+            return null
+        }
+        await staticManagement.staticDelete(candidate.imageSrc);
+        const user = await Users.destroy({ where: { id } });
+        tokenService.removeAllTokens(id)
+        return user
+    }
 
     validateToken(confirmToken) {
         const { id, email } = tokenService.validateConfirmToken(confirmToken);
@@ -173,9 +294,47 @@ class UserService {
         }
         return { id, email };
     }
+    async findUserById(id) {
+
+        const user = await Users.findOne({
+            where: { id },
+            include: [{
+                model: Reviews,
+                attributes: ['id', 'comment', 'rating'],
+                include: [{
+                    model: SharedImages,
+                    through: {
+                        attributes: []
+                    },
+                    attributes: ['id', 'name', 'imageSrc']
+                }],
+            }],
+            attributes: ['id', 'name', 'imageSrc', 'visitsNumber', 'email', 'phone', 'role']
+        });
+
+        if (!user) {
+            throw ApiError.NotFound(`Пользователь с id ${id} не существует`);
+        }
+        return user;
+    }
 
     async findUserByEmail(email) {
-        const user = await Users.findOne({ where: { email } });
+
+        const user = await Users.findOne({
+            where: { email },
+            include: [{
+                model: Reviews,
+                attributes: ['id', 'comment', 'rating'],
+                include: [{
+                    model: SharedImages,
+                    through: {
+                        attributes: []
+                    },
+                    attributes: ['id', 'name', 'imageSrc']
+                }],
+            }],
+            attributes: ['id', 'name', 'imageSrc', 'visitsNumber', 'email', 'phone', 'role']
+        });
 
         if (!user) {
             throw ApiError.NotFound(`Пользователь с почтовым адресом ${email} не существует`);
@@ -218,9 +377,14 @@ class UserService {
         return String(Math.floor(Math.random() * Math.pow(10, 6))).padStart(6, '0');
     }
 
-    generateAndStoreTokens(userDto) {
+    generateAndStoreTokens(userDto, tokenId) {
         const tokens = tokenService.generateTokens(userDto.id, userDto.role, userDto.email);
-        tokenService.createToken(userDto.id, tokens.refreshToken);
+        if (!tokenId) {
+            tokenService.createToken(userDto.id, tokens.refreshToken);
+        }
+        else {
+            tokenService.saveToken(tokenId, tokens.refreshToken);
+        }
         return tokens;
     }
 

@@ -24,7 +24,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
 }) => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isHovering, setIsHovering] = useState<boolean>(false);
-    const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/i;
+    const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|tiff)$/i;
     const { addMessage } = useMessage();
 
     const validateFiles = (files: FileList) => {
@@ -116,7 +116,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
                     name={name}
                     type="file"
                     multiple={maxFilesCount > 1}
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff"
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
                     onChange={handleInputChange}
                     style={{ display: 'none' }}
                     onClick={(event) => event.currentTarget.value = ''}

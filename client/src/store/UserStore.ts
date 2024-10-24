@@ -7,16 +7,12 @@ import userImage from '../assets/images/main.png'
 import { IReviews } from './ReviewsStore';
 import { IGetAllJSON } from '.';
 
-interface IRoles {
-    id: number;
-    name?: 'USER' | 'ADMIN' | 'ANON';
-}
 
 export interface IUser {
     id: number;
     name?: string;
     imageSrc?: string;
-    role?: IRoles;
+    role?: 'USER' | 'ADMIN' | 'ANON';
     visitsNumber?: number;
     review?: IReviews;
     email?: string;
@@ -26,7 +22,7 @@ const mockUser: IUser = {
     id: 1,
     name: 'Анастасия Петрова',
     imageSrc: userImage,
-    role: { id: 1, name: 'ADMIN' },
+    role: 'ADMIN',
     visitsNumber: 1,
     email: 'cras.petrov@yandex.ru',
     phone: '+79114968216',
@@ -39,7 +35,7 @@ const mockAdmin: IUser = {
     name: 'Бурятский Бублик',
     email: 'buryat@gmail.ru',
     imageSrc: adminImage,
-    role: { id: 1, name: 'USER' },
+    role: 'USER',
     visitsNumber: 0
 }
 const allUsers: IGetAllJSON<IUser> = {
@@ -56,54 +52,66 @@ export class UserStore {
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
-
+//
     setUser(user: IUser | null) {
         this._user = user
     }
+
+    //
+    getAllUsers() {
+        return allUsers
+    }
+    //
+    getUserById(id: number) {
+        return allUsers.rows.find(user => user.id === id)
+    }
+    //
+    changeUserById(user: IUser) {
+
+    }
+    //
+    deleteUserById(id: number) {
+
+    }
+    //
+    giveRoleForUser(id: number, role: "ADMIN" | "USER") {
+
+    }
+    //
     setUserImage(image: File | null) {
         if (this._user) {
             this._user.imageSrc = image ? URL.createObjectURL(image) : undefined
         }
     }
+    //
     setUserName(userName: string) {
         if (this._user) {
             this._user.name = userName
         }
     }
+    //
     setUserPhone(phone: string) {
         if (this._user) {
             this._user.phone = phone
         }
     }
+    //
     setUserEmail(email: string) {
         if (this._user) {
 
             this._user.email = email
         }
     }
-    getAllUsers() {
-        return allUsers
-    }
 
-    getUserById(id: number) {
-        return allUsers.rows.find(user => user.id === id)
-    }
 
-    deleteUserById(id: number) {
 
-    }
-    giveRoleForUser(id: number, role: "ADMIN" | "USER") {
 
-    }
-    changeUserById(user: IUser) {
-
-    }
 
     get isAuth(): boolean {
         return this._user !== null
     }
     get isAdmin() {
-        return this._user?.role?.name === "ADMIN" ? true : false
+        return this._user?.role === "ADMIN" ? true : false
     }
     get user() {
         return this._user
