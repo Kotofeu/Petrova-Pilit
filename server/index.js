@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser')
 const PORT = process.env.PORT || 5000;
 const initWorkSchedule = require('./init/initWorkSchedule') 
 const initAdmin= require('./init/initAdmin') 
+const initSettings= require('./init/initSettings') 
 
 
 const app = express();

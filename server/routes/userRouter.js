@@ -9,8 +9,8 @@ const checkRole = require('../middleware/CheckRoleMiddleware')
 
 
 
-router.post('/registration', body('password').isLength({ min: 8, max: 32 }), userController.createUserWithToken)
-router.post('/recover', body('password').isLength({ min: 8, max: 32 }), userController.recoverUser)
+router.post('/registration', userController.createUserWithToken)
+router.post('/recover', userController.recoverUser)
 router.post('/change-email', body('newEmail').isEmail(), authMiddleware, userController.changeEmail)
 
 router.post('/recover-send-code', body('email').isEmail(), userController.recoverUserSendCode)

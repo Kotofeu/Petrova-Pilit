@@ -13,7 +13,6 @@ class StaticManagement {
                 try {
                     await fs.unlink(filePath);
                 } catch (error) {
-                    console.error(`Ошибка при удалении файла ${filePath}:`, error);
                 }
             }));
         }
@@ -45,7 +44,6 @@ class StaticManagement {
             try {
                 await fs.unlink(filePath);
             } catch (error) {
-                console.error(`Ошибка при удалении файла ${filePath}:`, error);
             }
         }
     }

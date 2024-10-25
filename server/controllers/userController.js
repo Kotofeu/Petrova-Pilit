@@ -10,14 +10,11 @@ class UserController {
             if (!req.cookies || !req.cookies.confirmToken) {
                 return next(ApiError.Forbidden('Вы не подтвердили адрес электронной почты'))
             }
-            const { confirmToken } = req.cookies;
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return next(ApiError.BadRequest('Ошибка при валидации пароля'))
-            }
+            const { confirmToken, anonUserId } = req.cookies;
             const { password } = req.body;
-            const userData = await userService.createUserWithToken(confirmToken, password);
+            const userData = await userService.createUserWithToken(confirmToken, password, anonUserId);
             res.clearCookie('confirmToken');
+            res.clearCookie('anonUserId');
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
         } catch (e) {
@@ -30,10 +27,6 @@ class UserController {
                 return next(ApiError.Forbidden('Вы не подтвердили адрес электронной почты'))
             }
             const { confirmToken } = req.cookies;
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return next(ApiError.BadRequest('Ошибка при валидации пароля'))
-            }
             const { password } = req.body;
             const userData = await userService.recoverUser(confirmToken, password);
             res.clearCookie('confirmToken');

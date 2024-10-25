@@ -7,7 +7,7 @@ const ApiError = require('../error/ApiError');
 const staticManagement = require('../helpers/staticManagement')
 class UserService {
 
-    async createUserWithToken(confirmToken, password) {
+    async createUserWithToken(confirmToken, password, anonUserId) {
         this.validatePassword(password);
         const { id, email } = tokenService.validateConfirmToken(confirmToken);
         const user = await this.findUserByEmail(email);
@@ -18,12 +18,25 @@ class UserService {
         user.role = 'USER';
         await user.save();
 
+
         const hashPassword = await this.hashPassword(password);
+        await AuthValues.create({ userId: user.id, password: hashPassword });
+
+        if (anonUserId) {
+            const anonUser = await Users.findOne({ where: { id: anonUserId } });
+            if (anonUser) {
+                user.name = anonUser.name;
+                await user.save();
+                const review = await Reviews.findOne({ where: { userId: anonUser.id } });
+                if (review) {
+                    review.userId = user.id;
+                    await review.save();
+                }
+                await anonUser.destroy();
+            }
+        }
         const userDto = new UserDto(user);
-
-        await AuthValues.create({ userId: userDto.id, password: hashPassword });
         const tokens = this.generateAndStoreTokens(userDto);
-
         return { ...tokens, user: userDto };
     }
 
@@ -140,8 +153,9 @@ class UserService {
             throw ApiError.BadRequest(`Пользователь не создавался (вместо входа завершите регистрацию)`);
         }
         const isPassEquals = await bcrypt.compare(password, authValues.password);
+        
         if (!isPassEquals) {
-            throw new Error('Неверный пароль');
+            throw ApiError.BadRequest('Неверный пароль');
         }
         const tokens = this.generateAndStoreTokens(user);
         const userDto = new UserDto(user);
@@ -261,7 +275,7 @@ class UserService {
     }
 
     async getAllUsers() {
-        const users = await Users.findAndCountAll();
+        const users = await Users.findAndCountAll({ order: [['id', 'ASC']] });
         return users;
     }
     async getUserById(id) {
@@ -306,6 +320,7 @@ class UserService {
                     through: {
                         attributes: []
                     },
+                    order: [['id', 'ASC']],
                     attributes: ['id', 'name', 'imageSrc']
                 }],
             }],
@@ -368,7 +383,7 @@ class UserService {
     }
 
     validatePassword(password) {
-        if (password.length < 8 || /[^a-zA-Z0-9!@#$%^&*()_+=[]{};':"\/|<>?]/.test(password) || /s/.test(password)) {
+        if (password.length < 8 || /[^a-zA-Z0-9!@#$%^&*()_+=[\]{};':"\\/|<>?]/.test(password) || /\s/.test(password) || password.length > 32) {
             throw ApiError.BadRequest(`Пароль невалидный(менее 8 символов и имеет запрещённые символы)`);
         }
     }

@@ -8,7 +8,7 @@ const Contacts = sequelize.define('contacts', {
     imageSrc: { type: DataTypes.STRING, allowNull: false },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 const Advantages = sequelize.define('advantages', {
@@ -16,10 +16,10 @@ const Advantages = sequelize.define('advantages', {
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
     description: { type: DataTypes.STRING, allowNull: false, unique: true },
     iconSrс: { type: DataTypes.STRING, allowNull: false },
-    imageSrc: { type: DataTypes.STRING, allowNull: false },
+    imageSrc: { type: DataTypes.STRING, allowNull: true },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 const WorkSchedule = sequelize.define('work_schedule', {
@@ -29,7 +29,7 @@ const WorkSchedule = sequelize.define('work_schedule', {
     value: { type: DataTypes.STRING, allowNull: true },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 const MainSettings = sequelize.define('main_settings', {
@@ -44,12 +44,22 @@ const MainSettings = sequelize.define('main_settings', {
 const Services = sequelize.define('services', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
-    time: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: true },
-    price: { type: DataTypes.FLOAT, defaultValue: 0, allowNull: true },
+    time: {
+        type: DataTypes.INTEGER, defaultValue: 0, allowNull: true, validate: {
+            isInt: true,
+            min: 0,
+        }
+    },
+    price: {
+        type: DataTypes.FLOAT, defaultValue: 0, allowNull: true, validate: {
+            isInt: true,
+            min: 0,
+        }
+    },
     description: { type: DataTypes.TEXT, allowNull: false },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 const WorkTypes = sequelize.define('work_types', {
@@ -57,7 +67,7 @@ const WorkTypes = sequelize.define('work_types', {
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 const Works = sequelize.define('works', {
@@ -84,7 +94,7 @@ const OfficeImages = sequelize.define('office_images', {
     imageSrc: { type: DataTypes.STRING, allowNull: false },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 
@@ -93,7 +103,7 @@ const HomeSlider = sequelize.define('home_slider', {
     imageSrc: { type: DataTypes.STRING, allowNull: false },
 }, {
     freezeTableName: true,
-    timestamps: false 
+    timestamps: false
 })
 
 const Reviews = sequelize.define('reviews', {
@@ -161,7 +171,7 @@ WorkTypes.hasMany(Works, {
 });
 Works.belongsTo(WorkTypes, {
     foreignKey: {
-        name: 'typeId', 
+        name: 'typeId',
         allowNull: true
     }
 });
