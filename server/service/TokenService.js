@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
 const ApiError = require('../error/ApiError');
 const { RefreshTokens } = require('../models/models');
-
+const UserDto = require('../dtos/UserDto');
 class TokenService {
-    generateTokens(id, role, email) {
-        const accessToken = jwt.sign({id, role, email}, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' })
+    generateTokens(userDto) {
+        const {id, role, email, phone, name, imageSrc, visitsNumber} = new UserDto(userDto)
+        const accessToken = jwt.sign({id, role, email, phone, name, imageSrc, visitsNumber}, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' })
         const refreshToken = jwt.sign({id, role}, process.env.JWT_REFRESH_SECRET, { expiresIn: '60d' })
         return {
             accessToken,

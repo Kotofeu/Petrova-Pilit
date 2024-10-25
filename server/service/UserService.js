@@ -153,7 +153,7 @@ class UserService {
             throw ApiError.BadRequest(`Пользователь не создавался (вместо входа завершите регистрацию)`);
         }
         const isPassEquals = await bcrypt.compare(password, authValues.password);
-        
+
         if (!isPassEquals) {
             throw ApiError.BadRequest('Неверный пароль');
         }
@@ -289,16 +289,46 @@ class UserService {
 
     async deleteUser(id) {
         if (!id) {
-            return next(ApiError.UnauthorizedError())
+            throw ApiError.UnauthorizedError();
         }
-        const candidate = await Users.findOne({ where: { id } });
-        if (!candidate) {
-            return null
+        const user = await Users.findOne({
+            where: { id },
+            include: [{
+                model: Reviews,
+                attributes: ['id', 'comment', 'rating'],
+                include: [{
+                    model: SharedImages,
+                    through: {
+                        attributes: []
+                    },
+                    order: [['id', 'ASC']],
+                    attributes: ['id', 'name', 'imageSrc']
+                }],
+            }],
+            attributes: ['id', 'name', 'imageSrc', 'visitsNumber', 'email', 'phone', 'role']
+        });
+
+        if (!user) {
+            return null;
         }
-        await staticManagement.staticDelete(candidate.imageSrc);
-        const user = await Users.destroy({ where: { id } });
-        tokenService.removeAllTokens(id)
-        return user
+
+        if (user.review) {
+            if (user.review.shared_images) {
+                await staticManagement.manyStaticDelete(user.review.shared_images);
+                await Promise.all(user.review.shared_images.map(image =>
+                    SharedImages.destroy({ where: { id: image.id } })
+                ));
+            }
+            await Reviews.destroy({ where: { id: user.review.id } })
+        }
+
+        if (user.imageSrc) {
+            await staticManagement.staticDelete(user.imageSrc);
+        }
+        await staticManagement.staticDelete(user.imageSrc);
+        const deletedUser = await Users.destroy({ where: { id } });
+        tokenService.removeAllTokens(id);
+        return deletedUser
     }
 
     validateToken(confirmToken) {
@@ -393,7 +423,7 @@ class UserService {
     }
 
     generateAndStoreTokens(userDto, tokenId) {
-        const tokens = tokenService.generateTokens(userDto.id, userDto.role, userDto.email);
+        const tokens = tokenService.generateTokens(userDto);
         if (!tokenId) {
             tokenService.createToken(userDto.id, tokens.refreshToken);
         }

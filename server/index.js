@@ -1,18 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
 const sequelize = require('./db');
-const modules = require('./models/models');
 const router = require('./routes/index');
 const errorHandler = require('./middleware/ErrorMiddleware');
-const path = require('path')
-const cookieParser = require('cookie-parser')
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const cron = require('node-cron');
+const deleteOldRefreshTokens = require('./helpers/deleteOldRefreshTokens'); 
 const PORT = process.env.PORT || 5000;
-const initWorkSchedule = require('./init/initWorkSchedule') 
-const initAdmin= require('./init/initAdmin') 
-const initSettings= require('./init/initSettings') 
-
 
 const app = express();
 app.use(cors({
@@ -20,21 +17,25 @@ app.use(cors({
     origin: process.env.CLIENT_URL
 }));
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, 'static')))
+app.use(express.static(path.resolve(__dirname, 'static')));
 app.use(cookieParser());
-app.use(fileUpload({}))
+app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorHandler);
+
+cron.schedule('0 0 * * *', () => {
+    console.log('Запуск проверки и удаления просроченных токенов...');
+    deleteOldRefreshTokens();
+});
 
 const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
         app.listen(PORT, () => console.log('Server started'));
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
     }
-}
+};
 
 start();
