@@ -72,11 +72,12 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
     }, [worksStore, newType, typeId, name, action])
 
     const closeModal = useCallback(() => {
+       
         worksStore.setIsWorkCreating(false)
-        setTypeId(undefined)
+        setTypeId(work?.workType?.id)
         setNewType('')
-        setName('')
-        setDescription('')
+        setName(work?.name || '')
+        setDescription(work?.description || '')
         setAction('type')
         setBeforeImage(undefined)
         setAfterImage(undefined)

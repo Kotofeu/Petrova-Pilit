@@ -94,15 +94,14 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                         ? <div className={classes.workModalImages__photosList}>
                             {
                                 Array.from(otherImages).map((image, index) => {
-                                    const imageUrl = URL.createObjectURL(image)
                                     return (
                                         <div
                                             className={classes.workModalImages__photosItem}
-                                            key={index}
+                                            key={image.name}
                                         >
                                             <img
 
-                                                src={imageUrl}
+                                                src={URL.createObjectURL(image)}
                                                 alt={`Изображение №${index + 1} к посту ${title}`}
                                             />
                                             <ControllerButton

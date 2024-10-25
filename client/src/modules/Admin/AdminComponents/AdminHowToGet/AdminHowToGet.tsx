@@ -71,7 +71,7 @@ export const AdminHowToGet: FC = observer(() => {
                         title='Загрузить видео'
                         name='Upload video'
                         type='video'
-                        maxFileSize={20971520}
+                        maxFileSize={2097152000}
                     />
                 </div>
                 <div className={classes.adminHowToGet__preview}>

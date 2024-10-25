@@ -57,7 +57,12 @@
         transition: color .2s ease-in-out;
 
     }
-
+    &__loader{
+        display: block;
+        height: 30px;
+        font-size: 30px;
+        margin-bottom: 7px;
+    }
     &__cam {
         display: block;
         width: 40px;

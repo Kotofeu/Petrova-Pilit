@@ -2,6 +2,8 @@ import React, { memo, useState } from 'react';
 import classes from './MultipleFileInput.module.scss';
 import { classConnection } from '../../utils/function';
 import { useMessage } from '../../modules/MessageContext';
+import heic2any from 'heic2any';
+import Loader from '../../UI/Loader/Loader';
 
 interface IMultipleFileInput {
     className?: string;
@@ -24,7 +26,9 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
 }) => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isHovering, setIsHovering] = useState<boolean>(false);
-    const allowedExtensions = /\.(jpg|jpeg|png|gif|bmp|tiff)$/i;
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const allowedExtensions = /\.(jpg|jpeg|png|gif|webp|bmp|heic|heif)$/i;
     const { addMessage } = useMessage();
 
     const validateFiles = (files: FileList) => {
@@ -64,27 +68,60 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
 
         return true;
     };
+    const convertHeicToJpg = (fileList: FileList): Promise<FileList> => {
+        return new Promise((resolve, reject) => {
+            let isConvert = true
+            const promises = Array.from(fileList).map(file => {
+                if (/.(heic|heif)$/i.exec(file.name)) {
+                    if (isConvert) {
+                        addMessage(`Конвертация фотографии типа heic`, 'message')
+                        isConvert = false
+                    }
+                    return heic2any({ blob: file, toType: 'image/jpeg' })
+                        .then((blobs) => {
+                            const blob = Array.isArray(blobs) ? blobs[0] : blobs;
+                            return new File([blob], file.name.replace(/.heic$|.heif$/i, '.jpg'), { type: 'image/jpeg' });
+                        });
+                } else {
+                    return Promise.resolve(file);
+                }
+            });
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (files && validateFiles(files)) {
-            handleFilesChange(files);
-            setIsError(false)
-        }
-
+            Promise.all(promises)
+                .then((convertedFiles) => {
+                    const newFileList = new DataTransfer();
+                    convertedFiles.forEach(file => newFileList.items.add(file));
+                    resolve(newFileList.files);
+                })
+                .catch(reject);
+        });
+    };
+    const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        fileLoad(event.target.files)
     };
 
-    const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    const handleDrop = async (event: React.DragEvent<HTMLLabelElement>) => {
         event.preventDefault();
         setIsHovering(false);
-        const files = event.dataTransfer.files;
-
-        if (files && validateFiles(files)) {
-            handleFilesChange(files);
-            setIsError(false)
-
-        }
+        fileLoad(event.dataTransfer.files)
     };
+
+    const fileLoad = async (files: FileList | null) => {
+        setIsLoading(true)
+        setIsError(false);
+        if (files && validateFiles(files)) {
+            try {
+                const jpgFileList = await convertHeicToJpg(files);
+                handleFilesChange(jpgFileList);
+                setIsError(false)
+            } catch (error) {
+                setIsError(true)
+                addMessage(`Ошибка конвертации heic файла: ${error}`, 'error')
+            }
+        }
+        setIsLoading(false)
+
+    }
 
     const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
         event.preventDefault();
@@ -108,7 +145,17 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
             >
-                <span className={classes.multipleFileInput__cam} />
+                {
+                    !isLoading
+                        ? <span className={classes.multipleFileInput__cam} />
+                        : null
+                }
+                {
+                    isLoading && !isError
+                        ? <Loader className={classes.multipleFileInput__loader} isLoading />
+                        : null
+                }
+
                 <span className={classes.multipleFileInput__text}>
                     {title}
                 </span>
@@ -116,7 +163,7 @@ const MultipleFileInput: React.FC<IMultipleFileInput> = memo(({
                     name={name}
                     type="file"
                     multiple={maxFilesCount > 1}
-                    accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
+                    accept=".jpg,.jpeg,.png,.gif,.bmp,.heic,.webp,.heif"
                     onChange={handleInputChange}
                     style={{ display: 'none' }}
                     onClick={(event) => event.currentTarget.value = ''}

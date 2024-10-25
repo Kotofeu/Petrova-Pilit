@@ -57,7 +57,7 @@ const ImageCropperWithResult: FC<IImageCropperWithResult> = memo(({
                   : null
           }
           {
-              croppedFile && addCloseButton
+              croppedFile && addCloseButton && croppedFile !== initialImage
                   ? <ControllerButton
                       className={classes.imageCropperWithResult__delete}
                       type='delete'

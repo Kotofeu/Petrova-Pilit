@@ -54,42 +54,55 @@ class StaticManagement {
         if (Array.isArray(image)) {
             throw ApiError.BadRequest('Вы передали больше 1 изображения');
         }
-
+    
         let imageName;
         if (image && image.name) {
             imageName = `${uuidv4()}.${image.name.split('.').pop()}`;
             const filePath = path.resolve(__dirname, '..', 'static', imageName);
             await this.compressFile(image, filePath, image.name);
-
         }
         return imageName;
     }
-
+    
     async compressFile(image, filePath, fileName) {
         const ext = path.extname(fileName).toLowerCase();
-        if (
-            !['.mp4', '.mov', '.wmv', '.avi', '.mpeg', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.svg'].includes(ext)
-        ) {
+        const supportedFormats = [
+            '.mp4',
+            '.mov',
+            '.jpg',
+            '.webp',
+            '.jpeg',
+            '.png',
+            '.gif',
+            '.bmp',
+            '.svg',
+        ];
+    
+        if (!supportedFormats.includes(ext)) {
             throw ApiError.BadRequest(`Тип файла ${ext} не поддерживается`);
         }
+
         try {
+            let outputFormat;
+
             switch (ext) {
                 case '.jpg':
                 case '.jpeg':
-                    await sharp(image.data).jpeg({ quality: 80 }).toFile(filePath);
+                    outputFormat = sharp(image.data).jpeg({ quality: 80 });
                     break;
                 case '.png':
-                    await sharp(image.data).png({ quality: 80 }).toFile(filePath);
+                    outputFormat = sharp(image.data).png({ quality: 80 });
                     break;
-                case '.tiff':
-                    await sharp(image.data).tiff({ quality: 80 }).toFile(filePath);
+                case '.webp':
+                    outputFormat = sharp(image.data).webp({ quality: 80 });
                     break;
                 default:
                     await image.mv(filePath);
                     return;
             }
+    
+            await outputFormat.toFile(filePath);
         } catch (error) {
-            console.error(`Ошибка при сжатии файла ${filePath}:`, error);
             throw ApiError.Internal('Ошибка сжатия изображения');
         }
     }
