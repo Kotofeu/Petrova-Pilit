@@ -7,18 +7,21 @@ export const ContactLinks = observer(() => (
     <div className={classes.footer__column}>
         <h6 className={classes.footer__columnTitle}>Контакты</h6>
         <div className={classes.footer__linksList}>
-            {applicationStore.contactLinks.map(link => (
-                <ContactLink
-                    className={classes.footer__link}
-                    key={link.id}
-                    href={link.link}
-                    title={link.name}
-                    linkType="socialLink"
-                    imageSrc={link.imageSrc}
-                >
-                    {link.name}
-                </ContactLink>
-            ))}
+            {applicationStore.contactLinks.map(link => {
+                if (!link.link || !link.name || !link.imageSrc) return null
+                return (
+                    <ContactLink
+                        className={classes.footer__link}
+                        key={link.id}
+                        href={link.link}
+                        title={link.name}
+                        linkType="socialLink"
+                        imageSrc={link.imageSrc}
+                    >
+                        {link.name}
+                    </ContactLink>
+                )
+            })}
         </div>
     </div>
 ));

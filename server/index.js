@@ -8,14 +8,28 @@ const errorHandler = require('./middleware/ErrorMiddleware');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const cron = require('node-cron');
-const deleteOldRefreshTokens = require('./helpers/deleteOldRefreshTokens'); 
+const deleteOldRefreshTokens = require('./helpers/deleteOldRefreshTokens');
 const PORT = process.env.PORT || 5000;
+const initWorkSchedule = require('./init/initWorkSchedule');
+const initAdmin = require('./init/initAdmin');
+const initSettings = require('./init/initSettings');
 
 const app = express();
+
+const allowedOrigins = [process.env.CLIENT_URL];
+
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
 }));
+
+
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, 'static')));
 app.use(cookieParser());

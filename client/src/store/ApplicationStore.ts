@@ -18,12 +18,13 @@ import quality from '../assets/icons/quality.svg'
 import comfortable from '../assets/icons/comfortable.svg'
 import beautifully from '../assets/icons/beautifully.svg'
 import { IImages } from '.';
+import { IAdvantageValue } from '../http/advantageApi';
 
 
 
 export interface ILink {
-    name: string;
-    link: string;
+    name?: string;
+    link?: string;
 }
 
 export interface IContactLink extends ILink {
@@ -34,31 +35,25 @@ export interface ICreateContactLink extends ILink {
     imageFile?: File;
 }
 
-
-export interface IAdvantages {
+export interface IAdvantages extends IAdvantageValue {
     id: number;
-    name: string;
-    iconSrс: string;
-    imageSrc: string;
-    description: string;
 }
-export interface ICreateAdvantages {
-    name: string;
-    description: string;
-    imageFile?: File;
+
+export interface ICreateAdvantages extends IAdvantageValue{
     iconFile?: File;
+    imageFile?: File;
 }
 
 
 export interface IWorkSchedule {
     id: number;
-    name: string;
-    shortName: string;
-    value: string;
+    name?: string;
+    shortName?: string;
+    value?: string;
 }
 interface IGeneralData {
-    promoBanner: string;
-    aboutMe: string;
+    promoBanner?: string;
+    aboutMe?: string;
     addressMap?: string;
     howToGetVideo?: string;
     howToGetPreview?: string;
@@ -71,10 +66,12 @@ export class ApplicationStore {
         { name: "Главная", link: HOME_ROUTE },
         { name: "Обо мне", link: ABOUT_ROUTE },
         { name: "Мои работы", link: WORKS_ROUTE },
-        { name: "Отзывы", link: REVIEWS_ROUTE },
+        { name: "Отзывы", link: REVIEWS_ROUTE }
+    ];
+    private _headerAdminLinks: ILink[] = [
         { name: "Клиенты", link: USER_ROUTE },
         { name: "Админка", link: ADMIN_ROUTE }
-    ];
+    ]
     private _generalData: IGeneralData = {
         promoBanner: 'Скидка 50% на первый маникюр!',
         addressMap: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2304.608889733823!2d20.522914741385073!3d54.71650388760703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e3160bea68a3bf%3A0x47e628c68d0b71c0!2z0YPQuy4g0JHQvtGC0LrQuNC90LAsIDLQkCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtNGB0LrQsNGPINC-0LHQuy4sIDIzNjAxNg!5e0!3m2!1sru!2sru!4v1724979269501!5m2!1sru!2sru',
@@ -153,14 +150,14 @@ export class ApplicationStore {
     private _advantages: IAdvantages[] = [
         {
             id: 1,
-            iconSrс: fast,
+            iconSrc: fast,
             name: 'Быстро',
             description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!',
             imageSrc: sliderImage1,
         },
         {
             id: 2,
-            iconSrс: quality,
+            iconSrc: quality,
             name: 'Качественно',
             description: 'Качество на первом месте — ваши ногти заслуживают лучшего!',
             imageSrc: sliderImage2,
@@ -168,7 +165,7 @@ export class ApplicationStore {
         },
         {
             id: 3,
-            iconSrс: beautifully,
+            iconSrc: beautifully,
             name: 'Красиво',
             description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!',
             imageSrc: sliderImage1,
@@ -176,7 +173,7 @@ export class ApplicationStore {
         },
         {
             id: 4,
-            iconSrс: comfortable,
+            iconSrc: comfortable,
             name: 'Комфортно',
             description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!',
             imageSrc: sliderImage3,
@@ -238,6 +235,9 @@ export class ApplicationStore {
     }
     get headerLinks() {
         return this._headerLinks
+    }
+    get headerAdminLinks() {
+        return this._headerAdminLinks
     }
     get contactLinks() {
         return this._contactLinks
@@ -315,13 +315,13 @@ export class ApplicationStore {
     }
 
     changeAdvantages(advantage: IAdvantages & ICreateAdvantages) {
-        const { id, name, description, imageFile, imageSrc, iconSrс, iconFile } = advantage;
+        const { id, name, description, imageFile, imageSrc, iconSrc, iconFile } = advantage;
         const newAdvantage = {
             id,
             name,
             description,
             imageSrc: this.createImageSrc(imageFile, imageSrc),
-            iconSrс: this.createImageSrc(iconFile, iconSrс)
+            iconSrc: this.createImageSrc(iconFile, iconSrc)
         };
         this._advantages = this.updateArray(this._advantages, newAdvantage, 'id');
     }
@@ -332,7 +332,7 @@ export class ApplicationStore {
             name,
             description,
             imageSrc: this.createImageSrc(imageFile),
-            iconSrс: this.createImageSrc(iconFile),
+            iconSrc: this.createImageSrc(iconFile),
         };
         this._advantages.push(newAdvantage);
         return newAdvantage;

@@ -24,8 +24,9 @@ export const AdminSocial: FC = observer(() => {
 
     const { addMessage } = useMessage();
     const validateLink = (link: IChooseContactLink) => {
-        if (link.name.length < 2) return 'Заголовок должен быть длиннее 2 символов';
-        if (link.link.length < 2) return 'Ссылка отсутствует';
+
+        if (link.name && (link.name.length < 2)) return 'Заголовок должен быть длиннее 2 символов';
+        if (link.link && (link.link.length < 2)) return 'Ссылка отсутствует';
         if (!link.imageFile && !link.imageSrc) return 'Отсутствует тёмная иконка';
         return null;
     };
@@ -52,7 +53,7 @@ export const AdminSocial: FC = observer(() => {
         }
         applicationStore.addContactLink(newSocialLinks)
         addMessage(`Ссылка на ${newSocialLinks.name} добавлена`, 'complete')
-        setNewSocialLinks({ name: '', link: '', imageFile: undefined})
+        setNewSocialLinks({ name: '', link: '', imageFile: undefined })
     }, [newSocialLinks])
 
 

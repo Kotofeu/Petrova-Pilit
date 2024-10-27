@@ -16,11 +16,11 @@ export interface IWorks {
     id: number;
     imageAfterSrc?: string;
     imageBeforeSrc?: string;
-    name: string;
+    name?: string;
     description?: string;
     workType?: IWorksType;
     images?: IImages[];
-    time: number;
+    time?: number;
 }
 const mockWorks: IGetAllJSON<IWorks> = {
     count: 7,

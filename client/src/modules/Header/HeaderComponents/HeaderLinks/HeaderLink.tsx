@@ -20,6 +20,7 @@ interface IHeaderLink extends ILink {
 
 export const HeaderLink: FC<IHeaderLink> = memo((props) => {
     const { className, children, onClick, type = LinkType.none, name, link } = props
+    if (!link || !name) return null
     return (
         <NavLink
             className={

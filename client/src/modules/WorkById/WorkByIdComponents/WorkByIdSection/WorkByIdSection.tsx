@@ -72,11 +72,16 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                     }
                     <div className={classes.workById__text}>
                         <h1 className={classes.workById__title}>{work.name}</h1>
-                        <DateTime
-                            className={classes.workById__date}
-                            date={work.time}
-                            addTime
-                        />
+                        {
+                            work.time
+                                ? <DateTime
+                                    className={classes.workById__date}
+                                    date={work.time}
+                                    addTime
+                                />
+                                : null
+                        }
+
                         <div
                             className={classes.workById__desc}
                         >

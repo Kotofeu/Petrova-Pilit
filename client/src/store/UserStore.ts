@@ -4,23 +4,16 @@ import { makeAutoObservable } from 'mobx'
 
 import adminImage from '../assets/images/12_11zon.jpg'
 import userImage from '../assets/images/main.png'
-import { IReviews } from './ReviewsStore';
 import { IGetAllJSON } from '.';
+import { IUserValues } from '../http/userApi';
 
 
-export interface IUser {
+
+export interface IUser extends IUserValues {
     id: number;
-    name?: string;
-    imageSrc?: string;
-    role?: 'USER' | 'ADMIN' | 'ANON';
-    visitsNumber?: number;
-    review?: IReviews;
-    email?: string;
-    phone?: string;
 }
 const mockUser: IUser = {
     id: 1,
-    name: 'Анастасия Петрова',
     imageSrc: userImage,
     role: 'ADMIN',
     visitsNumber: 1,
@@ -52,7 +45,7 @@ export class UserStore {
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
-//
+    //
     setUser(user: IUser | null) {
         this._user = user
     }

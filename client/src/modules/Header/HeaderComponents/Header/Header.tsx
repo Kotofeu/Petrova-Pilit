@@ -92,6 +92,11 @@ export const Header: FC = observer(() => {
                 <HeaderLink {...link} className={classes.header__link} key={link.name} type={LinkType.underline} onClick={onLinkClick} />
               )
             }
+            {
+              userStore.isAdmin && applicationStore.headerAdminLinks.map(link =>
+                <HeaderLink {...link} className={classes.header__link} key={link.name} type={LinkType.underline} onClick={onLinkClick} />
+              )
+            }
           </div>
           <div className={classes.header__buttons}>
             <Button

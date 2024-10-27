@@ -15,6 +15,7 @@ const ContactList: FC<IContactList> = observer((props) => {
         <nav className={classConnection(classes.contactList, props.className)}>
             {
                 applicationStore.contactLinks.map(link => {
+                    if (!link.link || !link.name || !link.imageSrc) return null
                     return (
                         <ContactLink
                             className={classes.contactList__link}

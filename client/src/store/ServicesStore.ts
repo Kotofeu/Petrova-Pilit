@@ -2,20 +2,11 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import { IGetAllJSON } from '.';
+import { IServiceValue } from '../http/service';
 
 
-export interface IService {
+export interface IService extends IServiceValue {
     id: number;
-    name: string;
-    time: number;
-    price: number;
-    description?: string;
-}
-export interface IServiceCreate {
-    name: string;
-    time: number;
-    price: number;
-    description?: string;
 }
 
 
@@ -105,13 +96,13 @@ export class ServicesStore {
     }
 
 
-    changeService(service: IService & IServiceCreate) {
+    changeService(service: IService & IServiceValue) {
         this._services.rows = this._services.rows.map(SR =>
             SR.id === service.id ? service : SR
         );
     }
 
-    addService(service: IServiceCreate) {
+    addService(service: IServiceValue) {
         this._services.count = this._services.count + 1
         this._services.rows.push({
             id: Date.now(),

@@ -198,7 +198,7 @@ class UserController {
                 return next(ApiError.UnauthorizedError())
             }
             const { refreshToken } = req.cookies;
-            const { id, role, email } = req.user
+            const { id } = req.user
             const userData = await userService.getUser(id, refreshToken);
             if (userData.user.review) {
                 res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
@@ -304,7 +304,7 @@ class UserController {
             if (!req.user) {
                 return next(ApiError.UnauthorizedError())
             }
-            const { id, role, email } = req.user
+            const { id } = req.user
             const userData = await userService.deleteUser(id);
             res.clearCookie('refreshToken');
             res.clearCookie('confirmToken');

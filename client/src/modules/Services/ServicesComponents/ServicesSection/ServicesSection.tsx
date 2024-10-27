@@ -21,14 +21,18 @@ export const ServicesSection = observer(() => {
                     items={servicesStore.services}
                     selectedItem={isServiceOpen}
                     setSelectedItem={setIsServiceOpen}
-                    renderTitle={(service, index) =>
-                        <ServicesTitle
-                            className={classes.services__servicesTitle}
-                            title = {service.name}
-                            time={service.time}
-                            price={service.price}
+                    renderTitle={(service, index) => {
+                        if (!service.name || !service.time || !service.price) return null
+                        return (
+                            <ServicesTitle
+                                className={classes.services__servicesTitle}
+                                title={service.name}
+                                time={service.time}
+                                price={service.price}
 
-                        />
+                            />
+                        )
+                    }
                     }
                     renderDescription={(service, index) => {
                         if (!service.description) return null

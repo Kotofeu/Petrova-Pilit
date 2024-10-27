@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { useMessage } from '../../../MessageContext'
-import { servicesStore, IService, IServiceCreate } from '../../../../store'
+import { servicesStore, IService } from '../../../../store'
 
 import ListItemController from '../../../../components/ListItemController/ListItemController'
 import Input from '../../../../UI/Input/Input'
@@ -10,14 +10,15 @@ import Input from '../../../../UI/Input/Input'
 import TextArea from '../../../../UI/TextArea/TextArea'
 
 import classes from './AdminServices.module.scss'
+import { IServiceValue } from '../../../../http/service'
 
-interface IServices extends IService, IServiceCreate {
-
+interface IServices extends IService, IServiceValue {
+    id: number
 }
 
 export const AdminServices: FC = observer(() => {
     const [services, setServices] = useState<IServices[]>([]);
-    const [newServices, setNewServices] = useState<IServiceCreate>({
+    const [newServices, setNewServices] = useState<IServiceValue>({
         name: '',
         time: 0,
         description: '',
@@ -26,7 +27,7 @@ export const AdminServices: FC = observer(() => {
 
     const { addMessage } = useMessage();
     const validateLink = (service: IServices) => {
-        if (service.name.length < 2) return 'Заголовок должен быть длиннее 2 символов';
+        if (service.name && (service.name.length < 2)) return 'Заголовок должен быть длиннее 2 символов';
         if (!service.description) return 'Описание отсутствует';
         if (!service.time) return 'Время работы';
         return null;
@@ -82,7 +83,7 @@ export const AdminServices: FC = observer(() => {
                     <div className={classes.adminServices__inputs}>
                         <Input
                             className={classes.adminServices__input}
-                            value={service.name}
+                            value={service.name ? service.name : ''}
                             onChange={(event) => handleChange(event, service.id, 'name')}
                             placeholder='Заголовок услуги'
                             title='Заголовок услуги'

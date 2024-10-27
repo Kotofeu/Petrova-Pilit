@@ -66,14 +66,14 @@ export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {
                                     <img
                                         className={classes.userReview__image}
                                         src={image.imageSrc}
-                                        alt={`Фотография к отзыву пользователя ${user?.name} №${index + 1}`}
-                                        aria-label={`Фотография к отзыву пользователя ${user?.name} №${index + 1}`}
+                                        alt={`Фотография к отзыву пользователя ${user?.name || user?.email} №${index + 1}`}
+                                        aria-label={`Фотография к отзыву пользователя ${user?.name || user?.email} №${index + 1}`}
                                     />
 
                                     <img
                                         className={classes.userReview__background}
                                         src={image.imageSrc}
-                                        alt={`Фотография к отзыву пользователя ${user?.name} №${index + 1}`}
+                                        alt={`Фотография к отзыву пользователя ${user?.name || user?.email} №${index + 1}`}
                                         aria-hidden
                                     />
                                 </div>

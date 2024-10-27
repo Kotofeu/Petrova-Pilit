@@ -1,51 +1,28 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from './Layout';
+import ScrollToTop from '../components/ScrollToTop';
+import { userStore } from '../store';
+import { adminRoutes, authRoutes, publicRoutes } from './userRoutes';
+import { observer } from 'mobx-react-lite';
 
-import { Layout } from './Layout'
-import {
-  ABOUT_ROUTE,
-  ADMIN_ROUTE,
-  HOME_ROUTE,
-  POLICY_ROUTE,
-  REVIEWS_ROUTE,
-  SETTINGS_ROUTE,
-  USER_ROUTE,
-  WORKS_ROUTE
-} from '../utils/const/routes'
-import Home from '../pages/Home'
-import ScrollToTop from '../components/ScrollToTop'
-import AboutMe from '../pages/AboutMe'
-import Works from '../pages/Works'
-import Work from '../pages/Work'
-import Reviews from '../pages/Reviews'
-import Policy from '../pages/Policy'
-import Settings from '../pages/Settings'
-import User from '../pages/User'
-import Users from '../pages/Users'
-import Admin from '../pages/Admin'
-
-export const Router = () => {
+export const Router = observer(() => {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path={HOME_ROUTE} element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path={ABOUT_ROUTE} element={<AboutMe />} />
-          <Route path={WORKS_ROUTE}>
-            <Route index element={<Works />} />
-            <Route path=':id' element={<Work />} />
-          </Route>
-          <Route path={REVIEWS_ROUTE} element ={<Reviews />}/>
-          <Route path={POLICY_ROUTE} element={<Policy />} />
-          <Route path={SETTINGS_ROUTE} element={<Settings />} />
-          <Route path={USER_ROUTE}>
-            <Route index element={<Users />} />
-            <Route path=':id' element={<User />} />
-          </Route>
-          <Route path={ADMIN_ROUTE} element ={<Admin />}/>
+        <Route path='/' element={<Layout />}>
+          {userStore.isAuth && authRoutes.map(({ path, Component }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+          {publicRoutes.map(({ path, Component }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+          {userStore.isAdmin && adminRoutes.map(({ path, Component }) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
           <Route path='*' element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+});

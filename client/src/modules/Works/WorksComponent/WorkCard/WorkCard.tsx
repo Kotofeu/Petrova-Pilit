@@ -12,7 +12,7 @@ interface IWorkCard {
     className?: string;
     image?: string;
     title?: string;
-    date: number;
+    date?: number;
 }
 
 const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => {
@@ -35,7 +35,11 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => 
         >
             <img className={classes.workCard__image} src={image} alt={title} />
             <h4 className={classes.workCard__title}>{title}</h4>
-            <DateTime className={classes.workCard__date} date={date} addTime/>
+            {
+                date
+                    ? <DateTime className={classes.workCard__date} date={date} addTime />
+                    : null
+            }
             <Button onClick={onCardClick} className={classes.workCard__button}>ПОДРОБНЕЕ</Button>
             <Button onClick={() => setIsShowMore(prev => !prev)} className={classes.workCard__show} />
         </motion.article>

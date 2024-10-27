@@ -20,8 +20,10 @@
             background-color: $primary-color ;
         }
     }
-    &:disabled{
-        opacity: .8;
+
+    &:disabled {
+        opacity: .8 !important;
+        border: 2px solid rgba($text-color, .7);
     }
 }
 

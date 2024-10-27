@@ -28,7 +28,7 @@ export const AdvantagesSection = observer(() => {
                             key={advantage.id}
                             title={advantage.name}
                             description={advantage.description}
-                            imageSrc={advantage.iconSrс}
+                            imageSrc={advantage.iconSrc}
                         />
                     }
                     breakpoints={[

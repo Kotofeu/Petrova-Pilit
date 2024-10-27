@@ -74,7 +74,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
 
     useEffect(() => {
         if (user) {
-            setNewUserName(user.name || user.email || '')
+            setNewUserName(user.name || '')
             setVisits(user.visitsNumber || 0)
         }
     }, [user])
@@ -112,29 +112,35 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                 </div>
                 <div className={classes.userCard__content}>
                     <div className={classes.userCard__fields}>
-                        <div className={classes.userCard__field}>
-                            <p className={classes.userCard__fieldName}>
-                                Имя:
-                            </p>
-                            {
-                                !isShortCard
-                                    ? <div className={classes.userCard__fieldFlex}>
-                                        <Input
-                                            className={classes.userCard__fieldValue}
-                                            value={newUserName}
-                                            onChange={(event) => setNewUserName(event.target.value)}
-                                            disabled={!isNewName}
-                                        />
-                                        <ControllerButton
-                                            className={classes.userCard__nameBtn}
-                                            type={isNewName ? 'save' : 'edit'}
-                                            title='Задать новое имя пользователю'
-                                            onClick={newNameHandler}
-                                        />
-                                    </div>
-                                    : <p className={classes.userCard__fieldValue}>{user?.name}</p>
-                            }
-                        </div>
+
+                        {
+                            !!user?.name || !isShortCard
+                                ? <div className={classes.userCard__field}>
+                                    <p className={classes.userCard__fieldName}>
+                                        Имя:
+                                    </p>
+                                    {
+                                        !isShortCard
+                                            ? <div className={classes.userCard__fieldFlex}>
+                                                <Input
+                                                    className={classes.userCard__fieldValue}
+                                                    value={newUserName}
+                                                    onChange={(event) => setNewUserName(event.target.value)}
+                                                    disabled={!isNewName}
+                                                />
+                                                <ControllerButton
+                                                    className={classes.userCard__nameBtn}
+                                                    type={isNewName ? 'save' : 'edit'}
+                                                    title='Задать новое имя пользователю'
+                                                    onClick={newNameHandler}
+                                                />
+                                            </div>
+                                            : <p className={classes.userCard__fieldValue}>{user?.name}</p>
+                                    }
+                                </div>
+                                : null
+                        }
+
                         {
                             user?.email
                                 ? <div className={classes.userCard__field}>

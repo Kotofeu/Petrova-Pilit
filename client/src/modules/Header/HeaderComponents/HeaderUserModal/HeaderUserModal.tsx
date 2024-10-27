@@ -37,14 +37,14 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
                 <img
                     className={classes.headerUserModal__image}
                     src={user?.imageSrc || defaultImage}
-                    alt={user?.name || 'Ваш аккаунт'}
+                    alt={user?.name || user?.email || 'Ваш аккаунт'}
                 />
             </div>
             <p className={classes.headerUserModal__level}>
                 {userLevel(user?.visitsNumber || null)}
             </p>
             <p className={classes.headerUserModal__name}>
-                {user?.name}
+                {user?.name || user?.email}
             </p>
             <nav className={classes.headerUserModal__content}>
                 <p

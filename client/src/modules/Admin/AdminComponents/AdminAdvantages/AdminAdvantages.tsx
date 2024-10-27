@@ -14,7 +14,7 @@ import TextArea from '../../../../UI/TextArea/TextArea'
 //import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult'
 
 interface IAdvantageArray extends IAdvantages, ICreateAdvantages {
-
+    id: number
 }
 export const AdminAdvantages: FC = observer(() => {
     const [advantages, setAdvantages] = useState<IAdvantageArray[]>([]);
@@ -27,10 +27,10 @@ export const AdminAdvantages: FC = observer(() => {
 
     const { addMessage } = useMessage();
     const validateAdvantages = (advantage: IAdvantageArray) => {
-        if (advantage.name.length < 2) return 'Заголовок должен быть длиннее 2 символов';
-        if (advantage.description.length < 2) return 'Описание отсутствует';
+        if (advantage.name && (advantage.name.length < 2)) return 'Заголовок должен быть длиннее 2 символов';
+        if (advantage.description && (advantage.description.length < 2)) return 'Описание отсутствует';
         //if (!advantage.imageFile && !advantage.imageSrc) return 'Отсутствует картинка описания';
-        if (!advantage.iconFile && !advantage.iconSrс) return 'Отсутствует иконка';
+        if (!advantage.iconFile && !advantage.iconSrc) return 'Отсутствует иконка';
         return null;
     };
 
@@ -87,7 +87,7 @@ export const AdminAdvantages: FC = observer(() => {
                             className={classes.adminAdvantages__icon}
                             type='light'
                             setImage={(image) => handleImageChange(image, advantage.id, 'iconFile')}
-                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrс}
+                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrc}
                             title='Иконка'
                         />
                         <div className={classes.adminAdvantages__inputs}>

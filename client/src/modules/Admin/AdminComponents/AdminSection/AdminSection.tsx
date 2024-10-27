@@ -15,6 +15,7 @@ import { AdminHowToGet } from '../AdminHowToGet/AdminHowToGet';
 import classes from './AdminSection.module.scss'
 
 
+
 interface IParagraph {
     title: string;
     item: React.ReactNode;

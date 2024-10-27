@@ -4,9 +4,9 @@ import classes from './AdvantagesCard.module.scss'
 import { classConnection } from '../../../../utils/function';
 interface IAdvantagesCard {
     className?: string;
-    title: string;
-    description: string;
-    imageSrc: string;
+    title?: string;
+    description?: string;
+    imageSrc?: string;
 }
 export const AdvantagesCard: FC<IAdvantagesCard> = memo(({
     className,
@@ -14,6 +14,7 @@ export const AdvantagesCard: FC<IAdvantagesCard> = memo(({
     description,
     imageSrc
 }) => {
+    if (!title || !description || !imageSrc) return null
     return (
         <div className={classConnection(classes.advantagesCard, className)} >
             <div className={classes.advantagesCard__imageBox}>
