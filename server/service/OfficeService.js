@@ -7,15 +7,21 @@ class OfficeService {
         const images = await OfficeImages.findAndCountAll();
         return images;
     }
-    async addImage(image) {
-        if (image) {
-            const fileName = await staticManagement.staticCreate(image);
-            const images = await OfficeImages.create({ imageSrc: fileName });
-            return images
+    async addImages(images) {
+        let imagesPaths = [];
+        if (images) {
+            imagesPaths = await staticManagement.manyStaticCreate(images);
         }
         else {
-            throw ApiError.BadRequest('Изображение не передано');
+            throw ApiError.BadRequest('Изображения не переданы');
         }
+        await Promise.all(imagesPaths.map(async image => {
+            await OfficeImages.create({
+                name: image,
+                imageSrc: image,
+            });
+        }));
+        return imagesPaths.length
     }
     async deleteById(id) {
         const image = await OfficeImages.findOne({ where: { id } });

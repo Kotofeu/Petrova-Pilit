@@ -4,7 +4,7 @@ const router = new Router()
 const checkRole = require('../middleware/CheckRoleMiddleware')
 
 router.get('/', homeSliderController.getImages)
-router.post('/', checkRole('ADMIN'), homeSliderController.addImage)
+router.post('/', checkRole('ADMIN'), homeSliderController.addImages)
 router.delete('/:id', checkRole('ADMIN'), homeSliderController.deleteById)
 
 

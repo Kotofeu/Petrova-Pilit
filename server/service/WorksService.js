@@ -202,16 +202,13 @@ class WorksService {
         let otherImagesPaths = [];
         if (otherImages) {
             otherImagesPaths = await staticManagement.manyStaticCreate(otherImages);
-            if (work.works_images) {
-                await Promise.all(otherImagesPaths.map(async (image, index) => {
-                    await WorksImages.create({
-                        name: `${workValues.name}: ${index + 1}`,
-                        imageSrc: image,
-                        workId: work.id,
-                    });
-                }));
-
-            }
+            await Promise.all(otherImagesPaths.map(async (image, index) => {
+                await WorksImages.create({
+                    name: `${workValues.name}: ${index + 1}`,
+                    imageSrc: image,
+                    workId: work.id,
+                });
+            }));
         }
 
 

@@ -72,9 +72,13 @@ class ReviewController {
     async changeById(req, res, next) {
         try {
             const { reviewId } = req.cookies;
-            // Удалять reviewId если отзыва не существует
-            const review = await reviewsService.changeById(reviewId, name, rating, comment, refreshToken, images)
+            let images;
+            if (req.files && req.files.images) {
+                images = req.files.images
+            }
+            const { rating, comment, deletedIds} = req.body;
 
+            const review = await reviewsService.changeById(reviewId, rating, comment, images, deletedIds, res)
             return res.json(review);
         } catch (e) {
             next(e);

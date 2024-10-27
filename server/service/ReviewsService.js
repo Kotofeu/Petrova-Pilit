@@ -239,117 +239,96 @@ class ReviewsService {
         return new ReviewDto(newReview);
     }
 
-    async changeById(id, workDto, typeId, imageAfter, imageBefore, otherImages, deletedIds) {
-        const workValues = new WorkDto(workDto);
+    async changeById(reviewId, rating, comment, images, deletedIds, res) {
+        let validRating = null;
 
-        if (!id) {
-            throw ApiError.BadRequest('Не указан id работы');
+        if (!reviewId) {
+            throw ApiError.BadRequest('Не указан id отзыва');
         }
         if (deletedIds && !Array.isArray(deletedIds)) {
             throw ApiError.BadRequest('Удаляемые изображения должны быть массивом');
         }
-        if (otherImages && (otherImages.length > 12)) {
-            throw ApiError.BadRequest("Вы превысили доспуск в 12 изображений");
+        if (images && (images.length > 6)) {
+            throw ApiError.BadRequest("Вы превысили доспуск в 6 изображений");
         }
-        if (imageAfter && (imageAfter.length > 1)) {
-            throw ApiError.BadRequest("Вы передали больше 1 изображения в раздел после");
-        }
-        if (imageBefore && (imageBefore.length > 1)) {
-            throw ApiError.BadRequest("Вы передали больше 1 изображения в раздел до");
-        }
-        const work = await Works.findOne({
-            where: { id },
+        const review = await Reviews.findOne({
+            where: { id: reviewId },
             include: [
                 {
-                    model: WorksImages,
+                    model: ReviewsImages,
                     attributes: ['id', 'name', 'imageSrc']
                 },
-            ],
+                {
+                    model: Users,
+                    attributes: ['id', 'name', 'email', 'imageSrc', 'visitsNumber']
+                }
+            ]
         });
-        if (!work) {
-            throw ApiError.NotFound(`Работа с id ${id} не существует`);
+        if (!review) {
+            res.clearCookie('reviewId');
+            throw ApiError.NotFound(`Отзыв с id ${id} не существует`);
+        }
+        if (rating !== undefined && !isNaN(Number(rating))) {
+            validRating = Math.max(1, Math.min(5, Number(rating)));
         }
         let deletedImages = []
         if (deletedIds) {
-            deletedImages = await WorksImages.findAll({
+            deletedImages = await ReviewsImages.findAll({
                 where: {
                     [Op.and]: [
                         { id: deletedIds },
-                        { workId: work.id }
+                        { reviewId: reviewId }
                     ]
                 }
             })
         }
         const isValid =
-            Array.isArray(otherImages)
-                ? otherImages.length + work.works_images.length - deletedImages.length > 12
-                : otherImages ? 1 + work.works_images.length - deletedImages.length > 12 : false
+            Array.isArray(images)
+                ? images.length + review.reviews_images.length - deletedImages.length > 6
+                : images ? 1 + review.reviews_images.length - deletedImages.length > 6 : false
 
         if (isValid) {
-            throw ApiError.BadRequest("Вы превысили доспуск в 12 изображений");
+            throw ApiError.BadRequest("Вы превысили доспуск в 6 изображений");
+        }
+        if (validRating){
+            review.rating = validRating
+        }
+        if (comment) {
+            review.comment = comment
         }
         if (deletedImages) {
             await staticManagement.manyStaticDelete(deletedImages);
             await Promise.all(deletedImages.map(async image =>
-                await WorksImages.destroy({ where: { id: image.id } })
+                await ReviewsImages.destroy({ where: { id: image.id } })
             ));
         }
-        if (typeId) {
-            const type = await WorkTypes.findOne({ where: { id: typeId } });
-            if (!type) {
-                throw ApiError.NotFound("Указанный тип работы не найден");
-            }
-            work.typeId = typeId
+        let imagesPaths = [];
+        if (images) {
+            imagesPaths = await staticManagement.manyStaticCreate(images);
+            await Promise.all(imagesPaths.map(async (image, index) => {
+                await ReviewsImages.create({
+                    name: image,
+                    imageSrc: image,
+                    reviewId: review.id,
+                });
+            }));
         }
+        await review.save();
 
-        Object.keys(workValues).forEach(key => {
-            if (workValues[key]) {
-                work[key] = workValues[key];
-            }
-        });
-        if (imageAfter) {
-            const imageAfterPath = await staticManagement.staticCreate(imageAfter);
-            await staticManagement.staticDelete(work.imageAfterSrc);
-            work.imageAfterSrc = imageAfterPath;
-        }
-
-        if (imageBefore) {
-            const imageBeforePath = await staticManagement.staticCreate(imageBefore);
-            await staticManagement.staticDelete(work.imageBeforeSrc);
-            work.imageBeforeSrc = imageBeforePath;
-        }
-
-        let otherImagesPaths = [];
-        if (otherImages) {
-            otherImagesPaths = await staticManagement.manyStaticCreate(otherImages);
-            if (work.works_images) {
-                await Promise.all(otherImagesPaths.map(async (image, index) => {
-                    await WorksImages.create({
-                        name: `${workValues.name}: ${index + 1}`,
-                        imageSrc: image,
-                        workId: work.id,
-                    });
-                }));
-
-            }
-        }
-
-
-        await work.save();
-        const newWork = await Works.findOne({
-            where: { id: work.id },
+        const newReview = await Reviews.findOne({
+            where: { id: review.id },
             include: [
                 {
-                    model: WorksImages,
+                    model: ReviewsImages,
                     attributes: ['id', 'name', 'imageSrc']
                 },
                 {
-                    model: WorkTypes,
-                    attributes: ['id', 'name']
+                    model: Users,
+                    attributes: ['id', 'name', 'email', 'imageSrc', 'visitsNumber']
                 }
             ],
         });
-        return new WorkDto(newWork);
+        return new ReviewDto(newReview);
     }
 
 

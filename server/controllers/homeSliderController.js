@@ -1,5 +1,4 @@
 const homeSliderService = require('../service/HomeSliderService');
-const ApiError = require('../error/ApiError');
 
 class HomeSliderController {
 
@@ -12,14 +11,14 @@ class HomeSliderController {
         }
     }
 
-    async addImage(req, res, next) {
+    async addImages(req, res, next) {
         try {
 
-            let image;
-            if (req.files && req.files.image) {
-                image = req.files.image
+            let uploadImages;
+            if (req.files && req.files.images) {
+                uploadImages = req.files.images
             }
-            const images = await homeSliderService.addImage(image);
+            const images = await homeSliderService.addImages(uploadImages);
             return res.json(images);
         } catch (e) {
             next(e);

@@ -7,15 +7,23 @@ class HomeSliderService {
         const images = await HomeSlider.findAndCountAll();
         return images;
     }
-    async addImage(image) {
-        if (image) {
-            const fileName = await staticManagement.staticCreate(image);
-            const images = await HomeSlider.create({ imageSrc: fileName });
-            return images
+    async addImages(images) {
+
+        let imagesPaths = [];
+        if (images) {
+            imagesPaths = await staticManagement.manyStaticCreate(images);
         }
         else {
-            throw ApiError.BadRequest('Изображение не передано');
+            throw ApiError.BadRequest('Изображения не переданы');
         }
+        await Promise.all(imagesPaths.map(async image => {
+            await HomeSlider.create({
+                name: image,
+                imageSrc: image,
+            });
+        }));
+        return imagesPaths.length
+
     }
     async deleteById(id) {
         const image = await HomeSlider.findOne({ where: { id } });

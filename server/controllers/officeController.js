@@ -1,5 +1,4 @@
 const officeService = require('../service/OfficeService');
-const ApiError = require('../error/ApiError');
 
 class OfficeController {
 
@@ -12,14 +11,14 @@ class OfficeController {
         }
     }
 
-    async addImage(req, res, next) {
+    async addImages(req, res, next) {
         try {
 
-            let image;
-            if (req.files && req.files.image) {
-                image = req.files.image
+            let uploadImages;
+            if (req.files && req.files.images) {
+                uploadImages = req.files.images
             }
-            const images = await officeService.addImage(image);
+            const images = await officeService.addImages(uploadImages);
             return res.json(images);
         } catch (e) {
             next(e);
