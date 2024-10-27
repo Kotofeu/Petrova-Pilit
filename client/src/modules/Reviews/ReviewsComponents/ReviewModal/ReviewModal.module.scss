@@ -85,12 +85,14 @@
             font-weight: 600;
         }
     }
-    &__registerBox{
+
+    &__registerBox {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 8px;
     }
+
     &__nameInput {
         font-size: 20px;
         width: 100%;
@@ -130,9 +132,6 @@
         }
     }
 
-    &__imagesContainer {
-        padding: 0 0 6px;
-    }
 
     &__send {
         margin-left: auto;
@@ -145,9 +144,96 @@
 
 }
 
+.reviewImages {
+    padding: 0 0 6px;
+    &__filesInfo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 7px;
+
+        & span {
+            font-weight: 600;
+            font-size: 18px;
+        }
+    }
+
+    &__images {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+
+    }
+
+    &__imageBox {
+        max-height: 150px;
+        width: 100%;
+        aspect-ratio: 1/1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        background-color: $secondary-color;
+        overflow: hidden;
+        position: relative;
+        will-change: scale, opacity, width !important;
+
+        &_empty {
+            opacity: .5;
+        }
+
+
+    }
+
+    &__image {
+        position: relative;
+        z-index: 1;
+        object-fit: contain;
+        height: 100%;
+        width: 100%;
+    }
+
+    &__background {
+        position: absolute;
+        top: -0;
+        right: -0;
+        bottom: -0;
+        left: -0;
+        height: 100%;
+        width: 100%;
+        scale: 1.1;
+        display: block;
+        opacity: .4;
+        object-fit: cover;
+        filter: blur(13px);
+
+    }
+
+    &__button {
+        position: absolute;
+        z-index: 2;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
 @media (min-width: 479.98px) {
     .reviewModal {
         width: auto;
+
+    }
+
+    .reviewImages {
+        &__images {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+
+        }
 
     }
 
@@ -162,10 +248,11 @@
             }
         }
 
-        &__imagesContainer {
-            padding: 10px 0;
-        }
 
+
+    }
+    .imagesContainer {
+        padding: 10px 0;
     }
 }
 
@@ -183,14 +270,17 @@
         &__registerButton {
             padding: 5px 0;
         }
+
         &__nameInput {
             border: none;
             background-color: transparent !important;
             border-bottom: 3px solid $text-color;
         }
-        &__registerBox{
+
+        &__registerBox {
             gap: 15px;
         }
+
         &__nameInputContainer {
             display: flex;
             flex-direction: row;

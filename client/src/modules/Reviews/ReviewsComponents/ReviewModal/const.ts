@@ -10,7 +10,7 @@ export interface IValues {
     [NAME]: string,
     [RATING]: number,
     [COMMENT]: string,
-    [IMAGES]: FileList | null,
+    [IMAGES]: File[] | null,
 }
 
 export interface IReviewForm {

@@ -41,7 +41,7 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
                 />
             </div>
             <p className={classes.headerUserModal__level}>
-                {userLevel(user?.visitsNumber)}
+                {userLevel(user?.visitsNumber || null)}
             </p>
             <p className={classes.headerUserModal__name}>
                 {user?.name}

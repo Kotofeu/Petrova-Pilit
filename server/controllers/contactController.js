@@ -1,7 +1,7 @@
 const contactsService = require('../service/ContactsService');
 const ContactDto = require('../dtos/ContactDto');
 
-class ContactsController {
+class ContactController {
 
     async getContacts(req, res, next) {
         try {
@@ -51,4 +51,4 @@ class ContactsController {
 }
 
 
-module.exports = new ContactsController();
+module.exports = new ContactController();

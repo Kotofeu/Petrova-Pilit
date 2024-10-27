@@ -32,7 +32,7 @@ class ServicesService {
 
         const service = await Services.findOne({ where: { id } })
         if (!service) {
-            throw ApiError.BadRequest(`Услуга с id ${id} не существует`);
+            throw ApiError.NotFound(`Услуга с id ${id} не существует`);
         }
 
         if (serviceValues.name) {
@@ -53,7 +53,7 @@ class ServicesService {
     async deleteById(id) {
         const service = await Services.findOne({ where: { id } });
         if (!service) {
-            throw ApiError.BadRequest(`Услуга с id ${id} не существует`);
+            throw ApiError.NotFound(`Услуга с id ${id} не существует`);
         }
         return await Services.destroy({ where: { id } });
     }

@@ -106,7 +106,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                         alt={user?.name || 'Фото пользователя'}
                     />
                     <p className={classes.userCard__userLevel}>
-                        {userLevel(user?.visitsNumber)}
+                        {userLevel(user?.visitsNumber || null)}
                     </p>
 
                 </div>

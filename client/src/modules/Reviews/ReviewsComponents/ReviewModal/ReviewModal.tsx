@@ -46,9 +46,9 @@ export const ReviewModal: FC<IReviewModal> = observer(({ isOpen, closeModal }) =
                 visitsNumber: userStore.user?.visitsNumber
             },
             comment: formValues[COMMENT],
-            time: Date.now(),
+            updatedAt: Date.now(),
             rating: formValues[RATING],
-            shared_images: Array.from(formValues[IMAGES] || []).map((image, index) => {
+            reviews_images: Array.from(formValues[IMAGES] || []).map((image, index) => {
                 return {
                     id: index,
                     imageSrc: URL.createObjectURL(image)

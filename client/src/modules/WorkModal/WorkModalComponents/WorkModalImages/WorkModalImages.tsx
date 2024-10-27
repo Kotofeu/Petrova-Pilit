@@ -15,7 +15,8 @@ interface IWorkModalImages {
     initialOtherImages?: IImages[];
     setAfter: (file: File | null) => void;
     setBefore: (file: File | null) => void;
-    setOthers: (file: FileList | undefined) => void;
+    setOthers: (file: File[] | null) => void;
+    setImagesToDelete: (images: React.SetStateAction<IImages[]>) => void
 }
 
 export const WorkModalImages: FC<IWorkModalImages> = memo(({
@@ -26,39 +27,26 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
     initialOtherImages,
     setAfter,
     setBefore,
-    setOthers
+    setOthers,
+    setImagesToDelete
 }) => {
-    const [otherImages, setOtherImages] = useState<FileList>()
-
-
-    useEffect(() => {
-        const fetchFiles = async () => {
-            if (initialOtherImages?.length) {
-                const files = await Promise.all(initialOtherImages.map(async (image) => {
-                    const response = await fetch(image.imageSrc);
-                    const blob = await response.blob();
-                    return new File([blob], `image_${image.id}.png`, { type: blob.type });
-                }));
-
-                const dataTransfer = new DataTransfer();
-                files.forEach(file => dataTransfer.items.add(file));
-                setOtherImages(dataTransfer.files);
-            }
-        };
-
-        fetchFiles();
-    }, [initialOtherImages, setOtherImages]);
-
+    const [otherImages, setOtherImages] = useState<File[] | null>(null)
+    const [initialImages, setInitialImages] = useState(initialOtherImages ? initialOtherImages : [])
     useEffect(() => {
         setOthers(otherImages)
     }, [otherImages])
+
+    const handleInitialImageDelete = useCallback((id: number) => {
+        const deletedImage = initialImages.find(image => image.id === id)
+        setImagesToDelete(prev => deletedImage ? [...prev, deletedImage] : prev)
+        setInitialImages(prev => prev.filter(image => image.id !== id))
+
+    }, [initialImages, setInitialImages, setImagesToDelete])
+
     const handleImagesDelete = useCallback((index: number) => {
         if (!otherImages || otherImages.length === 0) return;
-        const imagesArray = Array.from(otherImages);
-        const updatedImagesArray = imagesArray.filter((_, i) => i !== index);
-        const newFileList = new DataTransfer();
-        updatedImagesArray.forEach(file => newFileList.items.add(file));
-        setOtherImages(newFileList.files);
+        const updatedImagesArray = otherImages.filter((_, i) => i !== index);
+        setOtherImages(updatedImagesArray);
     }, [otherImages, setOtherImages]);
 
     return (
@@ -84,44 +72,62 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
             <div className={classes.workModalImages__othersPhotos}>
                 <MultipleFileInput
                     className={classes.workModalImages__photosInput}
-                    maxFilesCount={12}
-                    handleFilesChange={(files) => setOtherImages(files || undefined)}
+                    maxFilesCount={12 - initialImages?.length}
+                    setFiles={(files) => setOtherImages(files)}
                     title='Другие фотографии'
+                    currentFiles={otherImages}
                 />
+                <div className={classes.workModalImages__photosList}>
+                    {
+                        initialImages?.length ? initialImages.map((image) => {
+                            return (
+                                <div
+                                    className={classes.workModalImages__photosItem}
+                                    key={image.id}
+                                >
+                                    <img
 
-                {
-                    !!otherImages?.length
-                        ? <div className={classes.workModalImages__photosList}>
-                            {
-                                Array.from(otherImages).map((image, index) => {
-                                    return (
-                                        <div
-                                            className={classes.workModalImages__photosItem}
-                                            key={image.name}
-                                        >
-                                            <img
+                                        src={image.imageSrc}
+                                        alt={`Изображение ${image.id} к посту ${title}`}
+                                    />
+                                    <ControllerButton
+                                        className={classes.workModalImages__photosDelete}
+                                        type='delete'
+                                        title={`Удалить фото ${image.id}`}
+                                        onClick={() => handleInitialImageDelete(image.id)}
+                                    />
+                                </div>
+                            )
+                        })
+                            : null
+                    }
+                    {
+                        otherImages?.length ? otherImages.map((image, index) => {
+                            return (
+                                <div
+                                    className={classes.workModalImages__photosItem}
+                                    key={index}
+                                >
+                                    <img
 
-                                                src={URL.createObjectURL(image)}
-                                                alt={`Изображение №${index + 1} к посту ${title}`}
-                                            />
-                                            <ControllerButton
-                                                className={classes.workModalImages__photosDelete}
-                                                type='delete'
-                                                title={`Удалить фото №${index + 1}`}
-                                                onClick={() => handleImagesDelete(index)}
-                                            />
-                                        </div>
+                                        src={URL.createObjectURL(image)}
+                                        alt={`Изображение №${index + 1} к посту ${title}`}
+                                    />
+                                    <ControllerButton
+                                        className={classes.workModalImages__photosDelete}
+                                        type='delete'
+                                        title={`Удалить фото №${index + 1}`}
+                                        onClick={() => handleImagesDelete(index)}
+                                    />
+                                </div>
 
-                                    )
+                            )
 
+                        })
+                            : null
+                    }
 
-                                })
-                            }
-
-                        </div>
-
-                        : null
-                }
+                </div>
 
 
             </div>

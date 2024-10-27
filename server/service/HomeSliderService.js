@@ -20,7 +20,7 @@ class HomeSliderService {
     async deleteById(id) {
         const image = await HomeSlider.findOne({ where: { id } });
         if (!image) {
-            throw ApiError.BadRequest('Изображение отсутствует');
+            throw ApiError.NotFound('Изображение отсутствует');
         }
         await staticManagement.staticDelete(image.imageSrc);
         return await HomeSlider.destroy({ where: { id } });

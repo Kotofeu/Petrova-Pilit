@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react'
 import ModalSend from '../../../../components/Modal/ModalSend'
 import { observer } from 'mobx-react-lite'
-import { IWorks, worksStore } from '../../../../store'
+import { IImages, IWorks, worksStore } from '../../../../store'
 
 import classes from './WorkModal.module.scss'
 import Button from '../../../../UI/Button/Button'
@@ -26,12 +26,11 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
     const [name, setName] = useState<string>(work?.name || '')
     const [description, setDescription] = useState<string>(work?.description || '')
 
-    const [beforeImage, setBeforeImage] = useState<File | null>()
-    const [afterImage, setAfterImage] = useState<File | null>()
+    const [beforeImage, setBeforeImage] = useState<File | null>(null)
+    const [afterImage, setAfterImage] = useState<File | null>(null)
 
-
-    const [otherImages, setOtherImages] = useState<FileList>()
-
+    const [otherImages, setOtherImages] = useState<File[] | null>(null)
+    const [imagesToDelete, setImagesToDelete] = useState<IImages[]>([])
 
 
     const onConfirm = useCallback(() => {
@@ -49,7 +48,7 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                 setAction('text')
             }
         }
-        if (action === 'text') {
+        else if (action === 'text') {
             if (name.length < 2) {
                 addMessage('Введите название больше 2 символов', 'error')
             }
@@ -68,20 +67,20 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
             if (otherImages?.length) {
 
             }
+            console.log(imagesToDelete)
         }
-    }, [worksStore, newType, typeId, name, action])
+    }, [worksStore, newType, typeId, name, action, imagesToDelete])
 
     const closeModal = useCallback(() => {
-       
         worksStore.setIsWorkCreating(false)
         setTypeId(work?.workType?.id)
         setNewType('')
         setName(work?.name || '')
         setDescription(work?.description || '')
         setAction('type')
-        setBeforeImage(undefined)
-        setAfterImage(undefined)
-        setOtherImages(undefined)
+        setBeforeImage(null)
+        setAfterImage(null)
+        setOtherImages(null)
     }, [worksStore])
 
     const onBack = useCallback(() => {
@@ -162,10 +161,11 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                             ? <WorkModalImages
                                 initialAfter={work?.imageAfterSrc}
                                 initialBefore={work?.imageBeforeSrc}
-                                initialOtherImages={work?.othersImage}
+                                initialOtherImages={work?.images}
                                 setAfter={setAfterImage}
                                 setBefore={setBeforeImage}
                                 setOthers={setOtherImages}
+                                setImagesToDelete={setImagesToDelete}
                                 title={name}
                                 className={classes.workModal__photos}
                             />

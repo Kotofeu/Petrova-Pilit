@@ -45,7 +45,7 @@ class AdvantagesService {
         }
         const advantage = await Advantages.findOne({ where: { id } })
         if (!advantage) {
-            throw ApiError.BadRequest(`Преимущество с id ${id} не существует`);
+            throw ApiError.NotFound(`Преимущество с id ${id} не существует`);
         }
 
         if (advantagesValues.name) {
@@ -88,7 +88,7 @@ class AdvantagesService {
     async deleteById(id) {
         const advantage = await Advantages.findOne({ where: { id } });
         if (!advantage) {
-            throw ApiError.BadRequest(`Преимущество с id ${id} не существует`);
+            throw ApiError.NotFound(`Преимущество с id ${id} не существует`);
         }
         await staticManagement.staticDelete(advantage.imageSrc);
         await staticManagement.staticDelete(advantage.iconSrс);

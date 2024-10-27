@@ -81,14 +81,6 @@ const Works = sequelize.define('works', {
     freezeTableName: true
 })
 
-const SharedImages = sequelize.define('shared_images', {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING, allowNull: true },
-    imageSrc: { type: DataTypes.STRING, allowNull: false },
-}, {
-    freezeTableName: true
-})
-
 const OfficeImages = sequelize.define('office_images', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     imageSrc: { type: DataTypes.STRING, allowNull: false },
@@ -150,13 +142,18 @@ const RefreshTokens = sequelize.define('refresh_tokens', {
 })
 
 const ReviewsImages = sequelize.define('reviews_images', {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    imageSrc: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: true },
+
 }, {
     freezeTableName: true
 })
 
 const WorksImages = sequelize.define('works_images', {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    imageSrc: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: true },
 }, {
     freezeTableName: true
 })
@@ -176,11 +173,23 @@ Works.belongsTo(WorkTypes, {
     }
 });
 
-Works.belongsToMany(SharedImages, { through: WorksImages })
-SharedImages.belongsToMany(Works, { through: WorksImages })
+Works.hasMany(WorksImages, {
+    foreignKey: {
+        name: 'workId',
+        allowNull: false,
+    },
+    onDelete: 'CASCADE',
+})
+WorksImages.belongsTo(Works)
 
-Reviews.belongsToMany(SharedImages, { through: ReviewsImages })
-SharedImages.belongsToMany(Reviews, { through: ReviewsImages })
+Reviews.hasMany(ReviewsImages, {
+    foreignKey: {
+        name: 'reviewId',
+        allowNull: false,
+    },
+    onDelete: 'CASCADE',
+})
+ReviewsImages.belongsTo(Reviews)
 
 Users.hasOne(Reviews, {
     foreignKey: {
@@ -220,12 +229,12 @@ module.exports = {
     Services,
     WorkTypes,
     Works,
-    SharedImages,
     OfficeImages,
     HomeSlider,
     Reviews,
     Users,
     AuthValues,
     RefreshTokens,
-    ReviewsImages
+    ReviewsImages,
+    WorksImages
 }

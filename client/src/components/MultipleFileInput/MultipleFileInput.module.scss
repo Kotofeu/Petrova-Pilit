@@ -15,7 +15,10 @@
     align-items: center;
     justify-content: center;
     transition: border-color .2s ease-in-out;
-
+    &_dis{
+        cursor: default;
+        pointer-events: none;
+    }
     &_error {
         border-color: $active-color ;
 

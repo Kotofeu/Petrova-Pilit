@@ -33,7 +33,7 @@ class ContactsService {
 
         const contactLink = await Contacts.findOne({ where: { id } })
         if (!contactLink) {
-            throw ApiError.BadRequest(`Контакст с id ${id} не существует`);
+            throw ApiError.NotFound(`Контакст с id ${id} не существует`);
         }
         if (contactValues.name) {
             const candidate = await Contacts.findOne({ where: { name: contactValues.name } })
@@ -57,7 +57,7 @@ class ContactsService {
     async deleteById(id) {
         const contactLink = await Contacts.findOne({ where: { id } });
         if (!contactLink) {
-            throw ApiError.BadRequest(`Контакст с id ${id} не существует`);
+            throw ApiError.NotFound(`Контакст с id ${id} не существует`);
         }
         await staticManagement.staticDelete(contactLink.imageSrc);
         return await Contacts.destroy({ where: { id } });

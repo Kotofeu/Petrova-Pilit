@@ -1,13 +1,14 @@
-const { Users, AuthValues, Reviews, SharedImages } = require('../models/models');
+const { Users, AuthValues, Reviews, ReviewsImages } = require('../models/models');
 const UserDto = require('../dtos/UserDto');
 const bcrypt = require('bcrypt');
 const mailService = require('./MailService');
 const tokenService = require('./TokenService');
 const ApiError = require('../error/ApiError');
 const staticManagement = require('../helpers/staticManagement')
+const { Op } = require('sequelize');
 class UserService {
 
-    async createUserWithToken(confirmToken, password, anonUserId) {
+    async createUserWithToken(confirmToken, password, reviewId) {
         this.validatePassword(password);
         const { id, email } = tokenService.validateConfirmToken(confirmToken);
         const user = await this.findUserByEmail(email);
@@ -22,20 +23,22 @@ class UserService {
         const hashPassword = await this.hashPassword(password);
         await AuthValues.create({ userId: user.id, password: hashPassword });
 
-        if (anonUserId) {
-            const anonUser = await Users.findOne({ where: { id: anonUserId } });
-            if (anonUser) {
-                user.name = anonUser.name;
-                await user.save();
-                const review = await Reviews.findOne({ where: { userId: anonUser.id } });
-                if (review) {
-                    review.userId = user.id;
-                    await review.save();
+        if (reviewId) {
+            const existReview = await Reviews.findOne({ where: { id: reviewId } })
+            if (existReview) {
+                const anonUser = await Users.findOne({ where: { id: existReview.userId } });
+                if (anonUser && anonUser.role === 'ANON') {
+                    user.name = anonUser.name;
+                    await user.save();
+                    existReview.userId = user.id;
+                    await existReview.save();
+                    await anonUser.destroy();
                 }
-                await anonUser.destroy();
             }
         }
-        const userDto = new UserDto(user);
+        const newUser = await this.findUserById(user.id)
+        const userDto = new UserDto(newUser);
+
         const tokens = this.generateAndStoreTokens(userDto);
         return { ...tokens, user: userDto };
     }
@@ -170,13 +173,15 @@ class UserService {
         return token;
     }
 
-    async refresh(refreshToken) {
+    async refresh(refreshToken, res) {
         if (!refreshToken) {
+            res.clearCookie('refreshToken');
             throw ApiError.UnauthorizedError();
         }
-        const { id, role } = tokenService.validateRefreshToken(refreshToken);
+        const { id } = tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
         if (!id || !tokenFromDb) {
+            res.clearCookie('refreshToken');
             throw ApiError.UnauthorizedError();
         }
         const user = await this.findUserById(id);
@@ -275,7 +280,15 @@ class UserService {
     }
 
     async getAllUsers() {
-        const users = await Users.findAndCountAll({ order: [['id', 'ASC']] });
+        const users = await Users.findAndCountAll({
+            where: {
+                [Op.or]: [
+                    { visitsNumber: { [Op.ne]: -1 } },
+                    { visitsNumber: null }
+                ]
+            },
+            order: [['id', 'DESC']]
+        });
         return users;
     }
     async getUserById(id) {
@@ -297,10 +310,7 @@ class UserService {
                 model: Reviews,
                 attributes: ['id', 'comment', 'rating'],
                 include: [{
-                    model: SharedImages,
-                    through: {
-                        attributes: []
-                    },
+                    model: ReviewsImages,
                     order: [['id', 'ASC']],
                     attributes: ['id', 'name', 'imageSrc']
                 }],
@@ -313,10 +323,10 @@ class UserService {
         }
 
         if (user.review) {
-            if (user.review.shared_images) {
-                await staticManagement.manyStaticDelete(user.review.shared_images);
-                await Promise.all(user.review.shared_images.map(image =>
-                    SharedImages.destroy({ where: { id: image.id } })
+            if (user.review.reviews_images) {
+                await staticManagement.manyStaticDelete(user.review.reviews_images);
+                await Promise.all(user.review.reviews_images.map(async image =>
+                    await ReviewsImages.destroy({ where: { id: image.id } })
                 ));
             }
             await Reviews.destroy({ where: { id: user.review.id } })
@@ -346,10 +356,7 @@ class UserService {
                 model: Reviews,
                 attributes: ['id', 'comment', 'rating'],
                 include: [{
-                    model: SharedImages,
-                    through: {
-                        attributes: []
-                    },
+                    model: ReviewsImages,
                     order: [['id', 'ASC']],
                     attributes: ['id', 'name', 'imageSrc']
                 }],
@@ -371,10 +378,8 @@ class UserService {
                 model: Reviews,
                 attributes: ['id', 'comment', 'rating'],
                 include: [{
-                    model: SharedImages,
-                    through: {
-                        attributes: []
-                    },
+                    model: ReviewsImages,
+                    order: [['id', 'ASC']],
                     attributes: ['id', 'name', 'imageSrc']
                 }],
             }],

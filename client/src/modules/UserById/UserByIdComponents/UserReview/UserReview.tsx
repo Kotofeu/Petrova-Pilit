@@ -20,8 +20,8 @@ export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {
     const { addMessage } = useMessage();
     const images = useMemo(() => {
         if (!userReview) return null
-        if (!userReview.shared_images?.length) return null
-        return userReview.shared_images
+        if (!userReview.reviews_images?.length) return null
+        return userReview.reviews_images
     }, [userReview])
     const userAction = useCallback(() => {
         if (action === 'deleteReview') {

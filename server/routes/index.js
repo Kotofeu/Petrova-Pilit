@@ -7,6 +7,9 @@ const contactsRouter = require('./contactsRouter');
 const advantagesRouter = require('./advantagesRouter');
 const settingsRoutes = require('./settingsRoutes');
 const servicesRouter = require('./servicesRouter');
+const workTypeRouter = require('./workTypeRouter');
+const worksRouter = require('./worksRouter');
+const reviewsRouter = require('./reviewsRouter');
 
 
 router.use('/user', userRouter);
@@ -15,5 +18,9 @@ router.use('/home-slider', homeSliderRouter);
 router.use('/contact', contactsRouter);
 router.use('/advantage', advantagesRouter);
 router.use('/service', servicesRouter);
+router.use('/main', settingsRoutes);
+router.use('/work-type', workTypeRouter);
+router.use('/work', worksRouter);
+router.use('/review', reviewsRouter);
 
 module.exports = router;

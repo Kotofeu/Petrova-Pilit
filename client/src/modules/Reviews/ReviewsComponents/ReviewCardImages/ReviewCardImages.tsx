@@ -24,10 +24,10 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
     }
     const images = useMemo(() => {
         const maxLength = 6
-        if (!review.shared_images?.length) return null
-        return review.shared_images.length > maxLength
-            ? review.shared_images.slice(0, maxLength)
-            : review.shared_images;
+        if (!review.reviews_images?.length) return null
+        return review.reviews_images.length > maxLength
+            ? review.reviews_images.slice(0, maxLength)
+            : review.reviews_images;
     }, [review])
     return (
         <ReviewCard
@@ -47,7 +47,7 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                                     <img
                                         className={classes.reviewCard__image}
                                         src={image.imageSrc}
-                                        alt={`Фотография к отзыву пользователя ${review.user?.name} №${index+1}`}
+                                        alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
 
                                     />
                                 </div>
@@ -62,7 +62,7 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                                     className={classes.reviewCard__modalImage}
                                     key={image.id}
                                     src={image.imageSrc}
-                                    alt={`Фотография к отзыву пользователя ${review.user?.name} №${index+1}`}
+                                    alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
                                 />
                             )}
                             initialSlide={activeImage}

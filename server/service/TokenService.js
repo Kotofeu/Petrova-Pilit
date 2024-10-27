@@ -6,7 +6,7 @@ class TokenService {
     generateTokens(userDto) {
         const {id, role, email, phone, name, imageSrc, visitsNumber} = new UserDto(userDto)
         const accessToken = jwt.sign({id, role, email, phone, name, imageSrc, visitsNumber}, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' })
-        const refreshToken = jwt.sign({id, role}, process.env.JWT_REFRESH_SECRET, { expiresIn: '60d' })
+        const refreshToken = jwt.sign({id}, process.env.JWT_REFRESH_SECRET, { expiresIn: '60d' })
         return {
             accessToken,
             refreshToken

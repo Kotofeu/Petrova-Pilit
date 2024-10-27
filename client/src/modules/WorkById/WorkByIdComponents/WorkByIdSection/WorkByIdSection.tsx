@@ -35,7 +35,7 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
     }
     return (
         <>
-            <Section className={classes.workById} isUnderline={!!work.othersImage?.length}>
+            <Section className={classes.workById} isUnderline={!!work.images?.length}>
                 {
                     isAdmin
                         ? <div className={classes.workById__buttons}>
@@ -95,9 +95,9 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                 </div>
             </Section>
             {
-                work.othersImage?.length ?
+                work.images?.length ?
                     <WorkImagesGrid
-                        images={work.othersImage}
+                        images={work.images}
                     />
                     : null
             }

@@ -10,11 +10,16 @@ class UserController {
             if (!req.cookies || !req.cookies.confirmToken) {
                 return next(ApiError.Forbidden('Вы не подтвердили адрес электронной почты'))
             }
-            const { confirmToken, anonUserId } = req.cookies;
+            const { confirmToken, reviewId } = req.cookies;
             const { password } = req.body;
-            const userData = await userService.createUserWithToken(confirmToken, password, anonUserId);
+            const userData = await userService.createUserWithToken(confirmToken, password, reviewId);
+            if (userData.user.review) {
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+            }
+            else {
+                res.clearCookie('reviewId');
+            }
             res.clearCookie('confirmToken');
-            res.clearCookie('anonUserId');
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
         } catch (e) {
@@ -29,6 +34,12 @@ class UserController {
             const { confirmToken } = req.cookies;
             const { password } = req.body;
             const userData = await userService.recoverUser(confirmToken, password);
+            if (userData.user.review) {
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+            }
+            else {
+                res.clearCookie('reviewId');
+            }
             res.clearCookie('confirmToken');
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
@@ -49,6 +60,12 @@ class UserController {
             }
             const { newEmail } = req.body;
             const userData = await userService.changeEmail(confirmToken, newEmail);
+            if (userData.user.review) {
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+            }
+            else {
+                res.clearCookie('reviewId');
+            }
             res.clearCookie('confirmToken');
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
@@ -97,7 +114,7 @@ class UserController {
             }
             const { email } = req.body;
             const userData = await userService.newUserSendCode(email);
-            res.clearCookie('confirm');
+            res.clearCookie('confirmToken');
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -126,6 +143,12 @@ class UserController {
             }
             const { email, password } = req.body;
             const userData = await userService.login(email, password);
+            if (userData.user.review) {
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+            }
+            else {
+                res.clearCookie('reviewId');
+            }
             res.clearCookie('confirmToken');
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
@@ -153,7 +176,13 @@ class UserController {
                 return next(ApiError.UnauthorizedError());
             }
             const { refreshToken } = req.cookies;
-            const userData = await userService.refresh(refreshToken);
+            const userData = await userService.refresh(refreshToken, res);
+            if (userData.user.review) {
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+            }
+            else {
+                res.clearCookie('reviewId');
+            }
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
         } catch (e) {
@@ -171,6 +200,12 @@ class UserController {
             const { refreshToken } = req.cookies;
             const { id, role, email } = req.user
             const userData = await userService.getUser(id, refreshToken);
+            if (userData.user.review) {
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+            }
+            else {
+                res.clearCookie('reviewId');
+            }
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
             return res.json(userData);
         } catch (e) {
@@ -273,6 +308,7 @@ class UserController {
             const userData = await userService.deleteUser(id);
             res.clearCookie('refreshToken');
             res.clearCookie('confirmToken');
+            res.clearCookie('reviewId');
             return res.json(userData);
         } catch (e) {
             next(e);

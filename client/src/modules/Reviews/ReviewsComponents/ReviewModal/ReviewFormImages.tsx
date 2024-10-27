@@ -1,29 +1,32 @@
-import { memo, FC, useCallback } from 'react'
-import { motion } from 'framer-motion';
-import { ReviewImages } from '../ReviewImages/ReviewImages';
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion';
 import Button from '../../../../UI/Button/Button';
 import { IMAGES, IReviewForm } from './const';
-
 import classes from './ReviewModal.module.scss'
 import PolicyAgree from '../../../../UI/PolicyAgree/PolicyAgree';
+import MultipleFileInput from '../../../../components/MultipleFileInput/MultipleFileInput';
+import { classConnection } from '../../../../utils/function';
+import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
+const MAX_IMAGE_COUNT = 6
+const MAX_IMAGES_WEIGHT = 10485760
 
 export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, formValues, setFormValues }) => {
-
-
-    const handleImagesChange = useCallback((images: FileList | null) => {
-        setFormValues(prev => ({ ...prev, [IMAGES]: images }));
-    }, []);
+    const [uploaderImages, setUploadedImages] = useState(formValues[IMAGES])
+    const generalWeight = useMemo(() => {
+        if (!uploaderImages?.length) return 0
+        return Math.round(uploaderImages.reduce((acc, curr) => acc + curr.size, 0) / 1024 / 1024 * 100) / 100
+    }, [uploaderImages])
     const handleImagesDelete = useCallback((index: number) => {
-        if (!formValues[IMAGES] || formValues[IMAGES].length === 0) return;
-        const imagesArray = Array.from(formValues[IMAGES]);
-        const updatedImagesArray = imagesArray.filter((_, i) => i !== index);
-        const newFileList = new DataTransfer();
-        updatedImagesArray.forEach(file => newFileList.items.add(file));
-        setFormValues(prevValues => ({
-            ...prevValues,
-            [IMAGES]: newFileList.files
-        }));
-    }, [formValues, setFormValues]);
+        if (!uploaderImages || uploaderImages.length === 0) return;
+        const updatedImagesArray = uploaderImages.filter((_, i) => i !== index);
+        setUploadedImages(updatedImagesArray);
+    }, [uploaderImages, setUploadedImages]);
+    useEffect(() => {
+        setFormValues(prev => ({
+            ...prev,
+            [IMAGES]: uploaderImages
+        }))
+    }, [uploaderImages])
     if (!isOpen) return null
     return (
         <motion.div
@@ -37,12 +40,61 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({ isOpen, closeModal, for
                 <span>если есть и если хочется 😉</span>
             </h3>
             <div className={classes.modalContent__inner}>
-                <ReviewImages
-                    className={classes.modalContent__imagesContainer}
-                    images={formValues.images}
-                    handleFilesChange={handleImagesChange}
-                    handleImagesDelete={handleImagesDelete}
-                />
+                <div className={classConnection(classes.reviewImages)}>
+                    <MultipleFileInput
+                        className={classes.reviewImages__fileInput}
+                        currentFiles={uploaderImages}
+                        setFiles={setUploadedImages}
+                        maxFilesCount={MAX_IMAGE_COUNT}
+                        maxTotalSize={MAX_IMAGES_WEIGHT}
+                    />
+
+                    <div className={classes.reviewImages__filesInfo}>
+                        <span>{`${uploaderImages?.length ? uploaderImages.length : 0}/${MAX_IMAGE_COUNT}`}</span>
+                        <span>{`${generalWeight}Мб/${MAX_IMAGES_WEIGHT / 1024 / 1024}Мб`}</span>
+                    </div>
+                    <div className={
+                        classConnection(
+                            classes.reviewImages__images,
+                            uploaderImages && uploaderImages.length > 3 ? classes.reviewImages__images_grid : ''
+                        )
+                    }
+                    >
+                        <AnimatePresence>
+                            {
+                                uploaderImages?.length ? uploaderImages.map((image, index) => {
+                                    return (
+                                        <motion.div
+                                            className={classes.reviewImages__imageBox}
+                                            key={index}
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                        >
+                                            <img
+                                                className={classes.reviewImages__background}
+                                                src={URL.createObjectURL(image)}
+                                                alt={image.name}
+                                            />
+                                            <img
+                                                className={classes.reviewImages__image}
+                                                src={URL.createObjectURL(image)}
+                                                alt={image.name}
+                                            />
+                                            <ControllerButton
+                                                className={classes.reviewImages__button}
+                                                type='delete'
+                                                onClick={() => handleImagesDelete(index)}
+                                                title='Удалить фото'
+                                            />
+                                        </motion.div>
+                                    )
+                                })
+                                    : null
+                            }
+                        </AnimatePresence>
+                    </div>
+                </div>
                 <Button className={classes.modalContent__send} onClick={closeModal}>
                     Отправить
                 </Button>

@@ -1,5 +1,5 @@
 const Router = require('express')
-const contactController = require('../controllers/contactsController');
+const contactController = require('../controllers/contactController');
 const router = new Router()
 const checkRole = require('../middleware/CheckRoleMiddleware')
 

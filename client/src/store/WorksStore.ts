@@ -19,7 +19,7 @@ export interface IWorks {
     name: string;
     description?: string;
     workType?: IWorksType;
-    othersImage?: IImages[];
+    images?: IImages[];
     time: number;
 }
 const mockWorks: IGetAllJSON<IWorks> = {
@@ -34,7 +34,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
                 id: 1,
             },
             time: 1724233268040,
-            othersImage: [
+            images: [
                 {
                     id: 1,
                     imageSrc: sliderImage1
@@ -77,7 +77,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
 Все еще впереди💪да, сейчас мастером быть не просто, но мы продолжаем работать, учиться и осваиваться в этой профессии,ведь в ней нет предела
 С любовью и заботой, Ваш мастер Настасья🥰`,
             time: 1724233267040,
-            othersImage: [
+            images: [
                 {
                     id: 1,
                     imageSrc: sliderImage1

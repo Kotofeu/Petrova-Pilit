@@ -14,7 +14,7 @@ class OfficeService {
     async changeSetting(key, value, file) {
         const setting = await MainSettings.findOne({ where: { key } });
         if (!setting) {
-            throw ApiError.BadRequest(`Настройка ${key} не найдена`);
+            throw ApiError.NotFound(`Настройка ${key} не найдена`);
         }
         await staticManagement.staticDelete(setting.value);
 
