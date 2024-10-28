@@ -2,13 +2,13 @@ module.exports = class AdvantageDto {
     id;
     name;
     description;
-    iconSrс;
+    iconSrc;
     imageSrc;
     constructor(model) {
         this.id = model.id;
         this.name = model.name;
         this.description = model.description;
-        this.iconSrс = model.iconSrс;
+        this.iconSrc = model.iconSrc;
         this.imageSrc = model.imageSrc;
     }
 }

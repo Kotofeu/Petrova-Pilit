@@ -8,11 +8,14 @@ import { Slider } from '../../../../components/Slider'
 import { reviewsStore } from '../../../../store'
 import ReviewCard from '../../../../components/ReviewCard/ReviewCard'
 import classes from './HomeReviewsSlider.module.scss'
+import { classConnection } from '../../../../utils/function'
 
 interface IHomeReviewsSlider {
     className?: string;
+    isLoading?: boolean;
+
 }
-export const HomeReviewsSlider: FC<IHomeReviewsSlider> = observer(({ className }) => {
+export const HomeReviewsSlider: FC<IHomeReviewsSlider> = observer(({ className, isLoading }) => {
     const router = useNavigate()
 
     const onSlideClick = useCallback((event: React.MouseEvent<HTMLElement>, id: number) => {
@@ -20,11 +23,19 @@ export const HomeReviewsSlider: FC<IHomeReviewsSlider> = observer(({ className }
         window.scrollTo(0, 0)
         router(`${REVIEWS_ROUTE}/?${ID_PARAM}=${id}`)
     }, [])
-
+    if (!reviewsStore.reviews.length) {
+        return (
+            <div className={classConnection(classes.homeReviewsSlider_empty, className)}>
+                <div className={classConnection(isLoading ? 'loading' : '')}></div>
+                <div className={classConnection(isLoading ? 'loading' : '')}></div>
+                <div className={classConnection(isLoading ? 'loading' : '')}></div>
+            </div >
+        )
+    }
     return (
         <Slider
             className={className}
-            items={reviewsStore.reviews.filter(review => !!review.comment)}
+            items={reviewsStore.reviews || []}
             renderItem={
                 (review) =>
                     <ReviewCard

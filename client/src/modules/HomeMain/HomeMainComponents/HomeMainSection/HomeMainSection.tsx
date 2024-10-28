@@ -1,4 +1,4 @@
-import { useRef, memo } from "react"
+import { useRef, memo, useEffect } from "react"
 
 import Section from "../../../../components/Section/Section"
 import { HomeMainSlider } from "../HomeMainSlider/HomeMainSlider"
@@ -7,8 +7,23 @@ import Arrow from '../../../../assets/icons/Arrow.svg'
 import classes from './HomeMainSection.module.scss'
 import ContactList from "../../../../components/ContactList/ContactList"
 import { classConnection } from "../../../../utils/function"
+import useRequest from "../../../../utils/hooks/useRequest"
+import { contactApi, homeSliderApi } from "../../../../http"
+import { applicationStore, IContactLink, IGetAllJSON, IImages } from "../../../../store"
+import { useMessage } from "../../../MessageContext"
 
 export const HomeMainSection = memo(() => {
+    const [
+        contacts,
+        contactsIsLoading,
+        contactsError
+    ] = useRequest<IGetAllJSON<IContactLink>>(contactApi.getContacts);
+    const [
+        sliderImages,
+        sliderImagesIsLoading,
+        sliderImagesError
+    ] = useRequest<IGetAllJSON<IImages>>(homeSliderApi.getImages);
+    const { addMessage } = useMessage()
     const homeMainBottom = useRef<HTMLDivElement>(null)
     const lookMoreClick = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault()
@@ -18,9 +33,30 @@ export const HomeMainSection = memo(() => {
                 block: 'start',
             });
         }
-
     }
+    useEffect(() => {
+        if (contactsError && contactsError.toString() !== applicationStore.error.toString()) {
+            applicationStore.setError(contactsError)
+            addMessage(applicationStore.error.toString(), 'error')
+        }
+    }, [contactsError])
+    useEffect(() => {
+        if (sliderImagesError && sliderImagesError.toString() !== applicationStore.error.toString()) {
+            applicationStore.setError(sliderImagesError)
+            addMessage(applicationStore.error.toString(), 'error')
+        }
+    }, [sliderImagesError])
 
+    useEffect(() => {
+        if (contacts?.rows.length) {
+            applicationStore.setContactsLinks(contacts.rows)
+        }
+    }, [contacts])
+    useEffect(() => {
+        if (sliderImages?.rows.length) {
+            applicationStore.setSliderImages(sliderImages.rows)
+        }
+    }, [sliderImages])
     return (
         <Section className={classes.homeMain} isUnderline>
             <div className={classes.homeMain__titleBox}>
@@ -32,11 +68,12 @@ export const HomeMainSection = memo(() => {
                 <div className={classes.homeMain__contact}>
                     <ContactList
                         className={classes.homeMain__links}
+                        isLoading={contactsIsLoading}
                     />
                     <h6 className={classes.homeMain__contactDecoration}>Связь со мной</h6>
 
                 </div>
-                <HomeMainSlider />
+                <HomeMainSlider isLoading={sliderImagesIsLoading && !sliderImages} />
                 <div className={classes.homeMain__lookMore}>
                     <button
                         className={classes.homeMain__lookMoreArrow}

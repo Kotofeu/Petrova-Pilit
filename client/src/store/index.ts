@@ -7,7 +7,7 @@ import { EmailConfirmStore } from './EmailConfirmStore'
 import { RegistrationStore } from './RegistrationStore'
 
 export type { ILink } from './ApplicationStore'
-export type { IReviews } from './ReviewsStore'
+export type { IReview } from './ReviewsStore'
 export type { IWork } from './WorksStore'
 export type { IWorksType } from './WorksStore'
 export type { IUser } from './UserStore'

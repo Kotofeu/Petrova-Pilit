@@ -1,16 +1,38 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import classes from './Footer.module.scss'
 import Map from '../../../../UI/Map/Map'
-import { applicationStore } from '../../../../store'
+import { applicationStore, IWorkSchedule } from '../../../../store'
 import { observer } from 'mobx-react-lite'
 import { ContactLinks } from '../ContactLinks/ContactLinks'
 import { PageLinks } from '../PageLinks/PageLinks'
+import { workScheduleApi } from '../../../../http'
+import useRequest from '../../../../utils/hooks/useRequest'
+import { useMessage } from '../../../MessageContext'
 
 export const Footer = observer(() => {
 
     const onLinkClick = useCallback(() => {
         window.scrollTo(0, 0);
     }, []);
+    const [
+        workSchedule,
+        workScheduleIsLoading,
+        workScheduleError
+    ] = useRequest<IWorkSchedule[]>(workScheduleApi.getWorkSchedule);
+    const { addMessage } = useMessage()
+
+    useEffect(() => {
+        if (workSchedule?.length) {
+            applicationStore.setWorkSchedule(workSchedule)
+        }
+    }, [workSchedule])
+
+    useEffect(() => {
+        if (workScheduleError && workScheduleError.toString() !== applicationStore.error.toString()) {
+            applicationStore.setError(workScheduleError)
+            addMessage(applicationStore.error.toString(), 'error')
+        }
+    }, [workScheduleError])
 
     return (
         <footer className={classes.footer}>
@@ -21,7 +43,9 @@ export const Footer = observer(() => {
                     src={applicationStore.addressMap || ''}
                     height='300px'
                     width='300px'
+                    isLoading
                 />
+                
                 <ContactLinks />
                 <PageLinks onLinkClick={onLinkClick} />
                 {
@@ -31,7 +55,12 @@ export const Footer = observer(() => {
                             <div className={classes.footer__linksList}>
                                 {
                                     applicationStore.workSchedule.map(workDay => (
-                                        <p className={classes.footer__workDay} key={workDay.id}><span>{workDay.name}</span><span>{workDay.value}</span></p>
+                                        <p
+                                            className={classes.footer__workDay}
+                                            key={workDay.id}
+                                        >
+                                            <span>{workDay.name}</span><span>{workDay.value || '00:00 - 00:00'}</span>
+                                        </p>
                                     ))
                                 }
                             </div>

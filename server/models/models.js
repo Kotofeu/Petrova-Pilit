@@ -15,7 +15,7 @@ const Advantages = sequelize.define('advantages', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
     description: { type: DataTypes.STRING, allowNull: false, unique: true },
-    iconSrс: { type: DataTypes.STRING, allowNull: false },
+    iconSrc: { type: DataTypes.STRING, allowNull: false },
     imageSrc: { type: DataTypes.STRING, allowNull: true },
 }, {
     freezeTableName: true,

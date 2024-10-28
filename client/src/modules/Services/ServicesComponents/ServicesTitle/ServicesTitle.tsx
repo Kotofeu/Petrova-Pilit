@@ -4,13 +4,13 @@ import classes from './ServicesTitle.module.scss'
 import { classConnection } from '../../../../utils/function';
 interface IServicesTitle {
     className?: string;
-    title: string;
+    name: string;
     price: number;
     time: number;
 }
 export const ServicesTitle: FC<IServicesTitle> = memo(({
     className,
-    title,
+    name,
     price,
     time,
 }) => {
@@ -41,7 +41,7 @@ export const ServicesTitle: FC<IServicesTitle> = memo(({
     return (
         <div className={classConnection(classes.service, className)}>
             <div className={classes.service__infoBox}>
-                <h5 className={classes.service__title}>{title}</h5>
+                <h5 className={classes.service__title}>{name}</h5>
                 <p
                     className={classConnection(classes.service__price, !price ? classes.service__price_free : '')}
                 >

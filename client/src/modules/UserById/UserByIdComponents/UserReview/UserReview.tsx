@@ -1,6 +1,6 @@
 import { useMemo, FC, useCallback, useState } from 'react'
 import ReviewCard from '../../../../components/ReviewCard/ReviewCard'
-import { IReviews, IUser, reviewsStore } from '../../../../store'
+import { IReview, IUser, reviewsStore } from '../../../../store'
 
 import classes from './UserReview.module.scss'
 import { observer } from 'mobx-react-lite';
@@ -11,7 +11,7 @@ import { useMessage } from '../../../MessageContext';
 
 interface IUserReview {
     user: IUser;
-    userReview: IReviews;
+    userReview: IReview;
 }
 
 export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {

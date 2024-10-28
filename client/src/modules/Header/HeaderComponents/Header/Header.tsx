@@ -66,7 +66,7 @@ export const Header: FC = observer(() => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
-  const isHiddenBanner: boolean = scrollingDown || !applicationStore.promoBanner
+  const isHiddenBanner: boolean = scrollingDown
   return (
     <header className={classes.header}>
       <motion.div className={
@@ -75,7 +75,7 @@ export const Header: FC = observer(() => {
           isHiddenBanner ? classes.header__banner_hidden : ''
         )}
       >
-        <h3 className={classes.header__bannerText}>{userStore.isAuth ? bannerForAuth : applicationStore.promoBanner}</h3>
+        <h3 className={classes.header__bannerText}>{userStore.isAuth ? bannerForAuth : applicationStore.promoBanner || bannerForAuth}</h3>
       </motion.div>
       <nav className={
         classConnection(

@@ -70,7 +70,7 @@ export const AdminServices: FC = observer(() => {
 
 
     useEffect(() => {
-        setServices(servicesStore.services)
+        setServices(servicesStore.services || [])
     }, [servicesStore.services])
 
     return (

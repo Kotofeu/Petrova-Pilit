@@ -6,15 +6,16 @@ import ContactLink from '../../UI/ContactLink/ContactLink'
 
 import classes from './ContactList.module.scss'
 import { classConnection } from '../../utils/function'
-interface IContactList{
-    className?: string
+interface IContactList {
+    className?: string;
+    isLoading?: boolean;
 }
 
 const ContactList: FC<IContactList> = observer((props) => {
     return (
         <nav className={classConnection(classes.contactList, props.className)}>
             {
-                applicationStore.contactLinks.map(link => {
+                applicationStore.contactLinks.length ? applicationStore.contactLinks.map(link => {
                     if (!link.link || !link.name || !link.imageSrc) return null
                     return (
                         <ContactLink
@@ -27,6 +28,12 @@ const ContactList: FC<IContactList> = observer((props) => {
                         />
                     )
                 })
+                    : [1, 2, 3].map(item => (
+                        <span
+                            key={item}
+                            className={classConnection(classes.contactList__empty, props.isLoading ? 'loading' : '')}
+                        />
+                    ))
             }
         </nav>)
 })

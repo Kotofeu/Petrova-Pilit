@@ -5,13 +5,13 @@ export type loadingTypes = "lazy" | "eager" | undefined
 interface IMap {
     className?: string;
     name: string;
-    src: string;
+    src?: string | null;
     width?: string;
     height?: string;
     allowFullScreen?: boolean;
     loading?: loadingTypes;
     referrerPolicy?: HTMLAttributeReferrerPolicy;
-    frameBorder?: number;
+    isLoading?: boolean;
 }
 const Map: FC<IMap> = memo((props) => {
     const {
@@ -23,8 +23,26 @@ const Map: FC<IMap> = memo((props) => {
         allowFullScreen = false,
         loading = "lazy",
         referrerPolicy = "no-referrer-when-downgrade",
-        frameBorder = 0,
+        isLoading,
     } = props
+    if (!src) {
+        return (
+            <div
+                className={classConnection(
+                    classes.map,
+                    classes.map_empty,
+                    className,
+                    isLoading ? 'loading' : ''
+                )}
+                title={name}
+                style={{
+                    width: width,
+                    height: height
+                }}
+            >
+            </div>
+        )
+    }
     return (
         <iframe
             className={classConnection(classes.map, className)}
@@ -33,9 +51,9 @@ const Map: FC<IMap> = memo((props) => {
             width={width}
             height={height}
             allowFullScreen={allowFullScreen}
-            loading = {loading}
-            referrerPolicy= {referrerPolicy}
-            frameBorder = {frameBorder}
+            loading={loading}
+            referrerPolicy={referrerPolicy}
+            frameBorder = {0}
         />)
 })
 

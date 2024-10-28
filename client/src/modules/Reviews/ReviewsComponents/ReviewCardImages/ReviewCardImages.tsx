@@ -1,13 +1,13 @@
 import { FC, memo, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { IReviews } from '../../../../store';
+import { IReview } from '../../../../store';
 import ReviewCard from '../../../../components/ReviewCard/ReviewCard';
 import { ModalSlider } from '../../../../components/Slider';
 import classes from './ReviewCardImages.module.scss'
 import { classConnection } from '../../../../utils/function';
 interface IReviewCard {
     className?: string;
-    review: IReviews;
+    review: IReview;
 }
 
 export const ReviewCardImages: FC<IReviewCard> = memo((props) => {

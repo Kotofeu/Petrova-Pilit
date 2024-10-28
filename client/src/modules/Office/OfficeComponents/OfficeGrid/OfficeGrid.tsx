@@ -1,28 +1,31 @@
-import { FC } from 'react';
-import { observer } from 'mobx-react-lite';
+import { FC, memo } from 'react';
 import Grid from '../../../../components/Grid/Grid';
-import { applicationStore } from '../../../../store';
+import { IImages } from '../../../../store';
 import classes from './OfficeGrid.module.scss';
 
 export interface IOfficeGrid {
     openModal: (index: number) => void;
+    images?: IImages[];
 }
 
-export const OfficeGrid: FC<IOfficeGrid> = observer(({ openModal }) => (
-    <Grid
-        className={classes.officeGrid}
-        items={applicationStore.officeImages}
-        renderItem={(image, index) => {
-            if (!image.imageSrc || !image.id) return null
-            return (
-                <img
-                    className={classes.officeGrid__image}
-                    key={image.id}
-                    src={image.imageSrc}
-                    alt={`Мой офис: ${index + 1}`}
-                    onClick={() => openModal(index)}
-                />
-            )
-        }}
-    />
-));
+export const OfficeGrid: FC<IOfficeGrid> = memo(({ openModal, images}) => {
+    return (
+        <Grid
+            className={classes.officeGrid}
+            items={images || []}
+            renderItem={(image, index) => {
+                if (!image.imageSrc || !image.id) return null
+                return (
+                    <img
+                        className={classes.officeGrid__image}
+                        key={image.id}
+                        src={image.imageSrc}
+                        alt={`Мой офис: ${index + 1}`}
+                        onClick={() => openModal(index)}
+                    />
+                )
+            }}
+        />
+    )
+}
+);

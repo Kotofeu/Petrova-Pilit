@@ -1,5 +1,5 @@
 import React, { FC, memo, ReactNode, useMemo } from 'react';
-import { IReviews } from '../../store';
+import { IReview } from '../../store';
 import StarRating from '../../UI/StarRating/StarRating';
 import DateTime from '../../UI/DateTime/DateTime';
 import defaultUSerIcon from '../../assets/icons/User-icon.svg';
@@ -9,7 +9,7 @@ import { classConnection, userLevel } from '../../utils/function';
 
 interface IReviewCard {
     className?: string;
-    review: IReviews;
+    review: IReview;
     isShortCard?: boolean;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
     children?: ReactNode;

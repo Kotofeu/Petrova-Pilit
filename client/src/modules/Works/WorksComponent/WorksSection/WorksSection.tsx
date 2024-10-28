@@ -12,14 +12,6 @@ import { WorkTab } from '../WorkTab/WorkTab'
 export const WorksSection: FC = observer(() => {
     const [workTypes, setWorkTypes] = useState<number | null>(null)
     const [isTypesModalOpen, setIsTypesModalOpen] = useState<boolean>(false)
-    useEffect(() => {
-        worksStore.loadWorks()
-    }, [])
-    const setActiveType = (activeType: number | null) => {
-        setWorkTypes(activeType)
-        worksStore.setWorkType(activeType)
-        window.scrollTo(0, 0);
-    }
 
     const items = Array.from(worksStore.works || []);
     const gridItems = [...items];
@@ -51,7 +43,7 @@ export const WorksSection: FC = observer(() => {
                             classes.works__tab,
                             workTypes === null ? classes.works__tab_active : ''
                         )}
-                        onClick={() => setActiveType(null)}
+                        onClick={() => setWorkTypes(null)}
                         title='Все работы'
                         isActive={workTypes === null}
                     />
@@ -65,7 +57,7 @@ export const WorksSection: FC = observer(() => {
                                         workTypes === tab.id ? classes.works__tab_active : ''
                                     )}
                                     key={tab.id}
-                                    onClick={() => setActiveType(tab.id)}
+                                    onClick={() => setWorkTypes(tab.id)}
                                     title={tab.name}
                                     isActive={workTypes === tab.id}
                                 />

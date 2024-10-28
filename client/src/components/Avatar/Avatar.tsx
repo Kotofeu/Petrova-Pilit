@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { motion } from 'framer-motion'
-import defaultAvatar from '../../assets/images/main 3.png'
+import defaultAvatar from '../../assets/images/main.png'
 import defaultBlob from '../../assets/images/blob.svg'
 import defaultSplashes from '../../assets/images/splashes.png'
 import classes from './Avatar.module.scss'

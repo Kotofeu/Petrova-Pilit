@@ -1,21 +1,30 @@
 @import '../../../../styles/settings.scss';
+
 .homeMainSlider {
     aspect-ratio: 16/9;
     max-height: calc(100vh - 100px);
     min-height: 160px;
     max-width: 1500px;
-    width: auto;
-    &__slide{
+    width: 100%;
+
+    &__slide {
         width: 100%;
         height: 100%;
         background-color: $secondary-color;
     }
+
     &__imageBox {
         width: 100%;
         height: 100%;
         display: flex;
         justify-content: center;
     }
+
+    &__loader {
+        width: 100%;
+        height: 100%;
+    }
+
     &__image {
         height: 100%;
         width: 100%;
@@ -23,4 +32,3 @@
         pointer-events: none;
     }
 }
-

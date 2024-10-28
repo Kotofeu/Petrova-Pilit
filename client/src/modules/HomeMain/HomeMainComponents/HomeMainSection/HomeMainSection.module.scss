@@ -178,7 +178,7 @@
             width: 16px;
             height: 16px;
             background-color: rgba($title-color, .9);
-    
+            display: block;
             &::after,
             &::before {
                 content: '';
@@ -224,6 +224,7 @@
         &__contact {
             margin-top: -180px;
             justify-content: center;
+            gap: 15px;
             padding: 0;
         }
         &__lookMore {

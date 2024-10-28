@@ -1,9 +1,6 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
-
-import adminImage from '../assets/images/12_11zon.jpg'
-import userImage from '../assets/images/main.png'
 import { IGetAllJSON } from '.';
 import { IUserValue } from '../http';
 
@@ -12,36 +9,10 @@ import { IUserValue } from '../http';
 export interface IUser extends IUserValue {
     id: number;
 }
-const mockUser: IUser = {
-    id: 1,
-    imageSrc: userImage,
-    role: 'ADMIN',
-    visitsNumber: 1,
-    email: 'cras.petrov@yandex.ru',
-    phone: '+79114968216',
-    review: {
-        id: 1,
-    }
-}
-const mockAdmin: IUser = {
-    id: 2,
-    name: 'Бурятский Бублик',
-    email: 'buryat@gmail.ru',
-    imageSrc: adminImage,
-    role: 'USER',
-    visitsNumber: 0
-}
-const allUsers: IGetAllJSON<IUser> = {
-    count: 6,
-    rows: [mockAdmin, mockUser,
-        { ...mockAdmin, id: 3, name: 'Данил Петров' },
-        { ...mockUser, id: 4, name: 'Константин Петров' },
-        { ...mockUser, id: 5, name: 'Анна Борисова Петрова' },
-        { ...mockUser, id: 6, name: 'Петрова Анастасия' }
-    ]
-}
+
+
 export class UserStore {
-    private _user: IUser | null = mockUser;
+    private _user: IUser | null = null;
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
@@ -51,12 +22,12 @@ export class UserStore {
     }
 
     //
-    getAllUsers() {
-        return allUsers
+    getAllUsers(): IGetAllJSON<IUser> {
+        return {count: 0, rows: []}
     }
     //
-    getUserById(id: number) {
-        return allUsers.rows.find(user => user.id === id)
+    getUserById(id: number) : IUser {
+        return {id: 0}
     }
     //
     changeUserById(user: IUser) {

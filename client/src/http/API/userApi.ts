@@ -1,5 +1,5 @@
 import { $api, $authHost, AuthResponse, baseUser } from "..";
-import { IReviews } from "../../store";
+import { IReview } from "../../store";
 
 
 export interface IUserValue {
@@ -10,7 +10,7 @@ export interface IUserValue {
     email?: string;
     phone?: string | null;
     role?: 'ANON' | 'USER' | 'ADMIN' | null;
-    review?: IReviews | null;
+    review?: IReview | null;
 }
 
 export class UserApi {

@@ -11,9 +11,9 @@ import { WorkTypeApi } from './API/workTypeApi';
 import { WorkApi } from './API/workApi';
 import { ReviewApi } from './API/reviewApi';
 import { WorkScheduleApi } from './API/workScheduleApi';
+import { SERVER_ADDRESS } from '../utils/const/main';
 
-const baseAPI = `${process.env.API_URL}api/`;
-
+const baseAPI = `${SERVER_ADDRESS}api/`;
 export const baseUser = `${baseAPI}user/`;
 export const baseOffice = `${baseAPI}office/`;
 export const baseHomeSlider = `${baseAPI}home-slider/`;

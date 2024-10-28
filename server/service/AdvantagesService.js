@@ -33,7 +33,7 @@ class AdvantagesService {
         const advantage = await Advantages.create({
             name: advantagesValues.name,
             description: advantagesValues.description,
-            iconSrс: iconName,
+            iconSrc: iconName,
             imageName: imageName,
         })
         return new AdvantageDto(advantage)
@@ -74,8 +74,8 @@ class AdvantagesService {
         });
         if (icon) {
             const iconName = await staticManagement.staticCreate(icon);
-            await staticManagement.staticDelete(advantage.iconSrс);
-            advantage.iconSrс = iconName;
+            await staticManagement.staticDelete(advantage.iconSrc);
+            advantage.iconSrc = iconName;
         }
         if (image) {
             const fileName = await staticManagement.staticCreate(image);
@@ -91,7 +91,7 @@ class AdvantagesService {
             throw ApiError.NotFound(`Преимущество с id ${id} не существует`);
         }
         await staticManagement.staticDelete(advantage.imageSrc);
-        await staticManagement.staticDelete(advantage.iconSrс);
+        await staticManagement.staticDelete(advantage.iconSrc);
         return await Advantages.destroy({ where: { id } });
     }
 }

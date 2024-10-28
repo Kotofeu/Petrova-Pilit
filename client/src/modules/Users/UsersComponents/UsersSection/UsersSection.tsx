@@ -22,7 +22,8 @@ export const UsersSection = observer(() => {
     return userStore.getAllUsers()
   }, [])
   const fuse = new Fuse(users.rows, options);
-  const filteredUsers: IGetAllJSON<IUser> = useMemo(() => {
+  const filteredUsers: IGetAllJSON<IUser> | null = useMemo(() => {
+    if (!users.rows.length) return null
     if (!debounceFilter) return users
     const result = fuse.search(debounceFilter);
     return {
@@ -46,7 +47,7 @@ export const UsersSection = observer(() => {
 
       </header>
       {
-        filteredUsers.rows.length
+        !!filteredUsers && filteredUsers.rows.length
           ? <div className={classes.users__users}>
             {
               filteredUsers.rows.map(user => {

@@ -8,22 +8,11 @@ import {
     USER_ROUTE,
     WORKS_ROUTE
 } from '../utils/const/routes';
+import defaultOfficeImage1 from '../assets/images/defaultImages/office/office_1.jpeg'
+import defaultOfficeImage2 from '../assets/images/defaultImages/office/office_2.jpeg'
+import defaultOfficeImage3 from '../assets/images/defaultImages/office/office_3.jpeg'
+import defaultSliderImage from '../assets/images/defaultImages/mainSlider/main_slider_1.jpeg'
 
-import HowToGetMp4 from '../assets/video/howToGet.mp4';
-import HowToGet from '../assets/video/howToGet.png';
-
-import Instagram from '../assets/icons/social/instagram.svg'
-import Whatsapp from '../assets/icons/social/whatsapp.svg'
-import Map from '../assets/icons/social/map.svg'
-
-import sliderImage1 from '../assets/images/12_11zon.jpg'
-import sliderImage2 from '../assets/images/background/1.png'
-import sliderImage3 from '../assets/images/background/2.png'
-
-import fast from '../assets/icons/fast.svg'
-import quality from '../assets/icons/quality.svg'
-import comfortable from '../assets/icons/comfortable.svg'
-import beautifully from '../assets/icons/beautifully.svg'
 import { IImages } from '.';
 import { IAdvantageValue, IContactsValue, IMainInfoValue } from '../http';
 
@@ -52,9 +41,9 @@ export interface ICreateAdvantages extends IAdvantageValue {
 
 export interface IWorkSchedule {
     id: number;
-    name?: string;
-    shortName?: string;
-    value?: string;
+    name?: string | null;
+    shortName?: string | null;
+    value?: string | null;
 }
 
 export class ApplicationStore {
@@ -72,163 +61,78 @@ export class ApplicationStore {
         { name: "Админка", link: ADMIN_ROUTE }
     ]
     private _generalData: IMainInfoValue = {
-        promoBanner: 'Скидка 50% на первый маникюр!',
-        addressMap: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2304.608889733823!2d20.522914741385073!3d54.71650388760703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e3160bea68a3bf%3A0x47e628c68d0b71c0!2z0YPQuy4g0JHQvtGC0LrQuNC90LAsIDLQkCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtNGB0LrQsNGPINC-0LHQuy4sIDIzNjAxNg!5e0!3m2!1sru!2sru!4v1724979269501!5m2!1sru!2sru',
-        aboutMe: `Здравствуйте дамы и господа
-Сертифицированный и ответственный мастер Hacтacья приглашает вас на маникюр 👐
-Прелесть маникюра со мной:
-☝️ никакого страха, дискомфорта, болeвыx ощущений; стeрильно и бeзoпaснo
-💪 вcе включено в cтoимоcть по комплексу: cнятиe, рeмoнт, пoстaнoвкa формы, укрепление + выравнивание, дизайн (френч, слайдеры, втирка, стемпинг, блестки)
-🗣️ нахожусь в центре города; вода/чай/сладкое предложу в процессе
-🤤только тонкое и прочное покрытие, никаких плюшек, кривых квадратов, ран на кутикуле и пропилов на ногтях (терпеть их не могу)`,
-        howToGetPreview: HowToGet,
-        howToGetVideo: HowToGetMp4,
-
+        promoBanner: null,
+        addressMap: null,
+        aboutMe: null,
+        howToGetPreview: null,
+        howToGetVideo: null,
     }
-    private _contactLinks: IContactLink[] = [
+    private _contactLinks: IContactLink[] = []
+    private _homeSlider: IImages[] = []
+    private _defaultHomeSlider: IImages[] = [
         {
-            id: 1,
-            name: 'WhatsApp',
-            link: 'https://wa.me/+79814621828',
-            imageSrc: Whatsapp,
-        },
-        {
-            id: 2,
-            name: 'Instagram',
-            link: 'https://www.instagram.com/petrova.pilit?utm_source=qr',
-            imageSrc: Instagram,
-        },
-        {
-            id: 3,
-            name: 'Калининград, Боткина 2А',
-            link: 'https://yandex.ru/maps/22/kaliningrad/house/ulitsa_botkina_2a/ZkkYcwVkSUUAQFtufXtwd3phYw==/?ll=20.524086%2C54.716129&pt=20.5805%2C54.7104&utm_medium=mapframe&utm_source=maps&z=17.75',
-            imageSrc: Map,
+            id: -1,
+            imageSrc: defaultSliderImage
         }
     ]
-    private _homeSlider: IImages[] = [
+    private _officeImages: IImages[] = []
+    private _defaultOfficeImages: IImages[] = [
         {
-            id: 1,
-            imageSrc: sliderImage1,
+            id: -1,
+            imageSrc: defaultOfficeImage1
         },
         {
-            id: 2,
-            imageSrc: sliderImage2,
+            id: -2,
+            imageSrc: defaultOfficeImage2
         },
         {
-            id: 3,
-            imageSrc: sliderImage3,
-        },
-    ]
-    private _officeImages: IImages[] = [
-        {
-            id: 1,
-            imageSrc: sliderImage1,
-        },
-        {
-            id: 2,
-            imageSrc: sliderImage2,
-        },
-        {
-            id: 3,
-            imageSrc: sliderImage3,
-        },
-        {
-            id: 5,
-            imageSrc: sliderImage3,
-        },
-        {
-            id: 6,
-            imageSrc: sliderImage1,
-        },
-        {
-            id: 7,
-            imageSrc: sliderImage3,
-        },
-
-    ]
-    private _advantages: IAdvantages[] = [
-        {
-            id: 1,
-            iconSrc: fast,
-            name: 'Быстро',
-            description: 'Скорость и стиль — ваши ногти в лучшем виде за мгновение!',
-            imageSrc: sliderImage1,
-        },
-        {
-            id: 2,
-            iconSrc: quality,
-            name: 'Качественно',
-            description: 'Качество на первом месте — ваши ногти заслуживают лучшего!',
-            imageSrc: sliderImage2,
-
-        },
-        {
-            id: 3,
-            iconSrc: beautifully,
-            name: 'Красиво',
-            description: 'Красота, которая вдохновляет — ваши ногти засияют как никогда прежде!',
-            imageSrc: sliderImage1,
-
-        },
-        {
-            id: 4,
-            iconSrc: comfortable,
-            name: 'Комфортно',
-            description: 'Релакс и стиль — наслаждайтесь маникюром в комфортной обстановке!',
-            imageSrc: sliderImage3,
-
+            id: -3,
+            imageSrc: defaultOfficeImage3
         }
     ]
+    private _advantages: IAdvantages[] = []
     private _workSchedule: IWorkSchedule[] = [
         {
             id: 1,
-            name: 'Понеденьник',
-            shortName: 'Пн',
-            value: '08:00 - 20:00',
+            name: "Понедельник",
+            shortName: "Пн."
         },
         {
             id: 2,
-            name: 'Вторник',
-            shortName: 'Вт',
-            value: '08:00 - 20:00',
+            name: "Вторник",
+            shortName: "Вт."
         },
         {
             id: 3,
-            name: 'Среда',
-            shortName: 'Ср',
-            value: '08:00 - 20:00',
-        },
-        {
-            id: 4,
-            name: 'Четверг',
-            shortName: 'Чт',
-            value: '08:00 - 20:00',
-        },
-        {
-            id: 5,
-            name: 'Пятница',
-            shortName: 'Пт',
-            value: '08:00 - 20:00',
+            name: "Среда",
+            shortName: "Ср."
         },
         {
             id: 6,
-            name: 'Суббота',
-            shortName: 'Сб',
-            value: '08:00 - 20:00',
+            name: "Суббота",
+            shortName: "Сб."
         },
         {
             id: 7,
-            name: 'Воскресенье',
-            shortName: 'Вс',
-            value: 'Выходной',
+            name: "Воскресенье",
+            shortName: "Вс."
         },
-
+        {
+            id: 4,
+            name: "Четверг",
+            shortName: "Чт."
+        },
+        {
+            id: 5,
+            name: "Пятница",
+            shortName: "Пт."
+        }
     ]
 
 
+    private _error: AxiosError | string = ''
 
-    private _isLoading: boolean = true;
-    private _error: AxiosError | null = null
+
     get promoBanner() {
         return this._generalData.promoBanner;
     }
@@ -244,6 +148,9 @@ export class ApplicationStore {
     get homeSlider() {
         return this._homeSlider
     }
+    get defaultHomeSlider() {
+        return this._defaultHomeSlider
+    }
     get advantages() {
         return this._advantages
     }
@@ -253,7 +160,9 @@ export class ApplicationStore {
     get officeImages() {
         return this._officeImages
     }
-
+    get defaultOfficeImages() {
+        return this._defaultOfficeImages
+    }
     get howToGetVideo() {
         return this._generalData.howToGetVideo
     }
@@ -268,11 +177,27 @@ export class ApplicationStore {
         return this._workSchedule
     }
 
-    get isLoading() {
-        return this._isLoading
-    }
     get error() {
         return this._error
+    }
+
+    setContactsLinks(contactLinks: IContactLink[]) {
+        this._contactLinks = contactLinks
+    }
+    setSliderImages(sliderImages: IImages[]) {
+        this._homeSlider = sliderImages
+    }
+    setOfficeImages(officeImages: IImages[]) {
+        this._officeImages = officeImages
+    }
+    setAdvantages(advantages: IAdvantages[]) {
+        this._advantages = advantages
+    }
+    setWorkSchedule(workSchedule: IWorkSchedule[]) {
+        this._workSchedule = workSchedule
+    }
+    setGeneralData(generalData: IMainInfoValue) {
+        this._generalData = generalData
     }
 
     changeHowToGetPreview(preview: File) {
@@ -382,13 +307,10 @@ export class ApplicationStore {
         this._generalData.aboutMe = aboutMe
     }
 
-
-    private setIsLoading(isLoading: boolean) {
-        this._isLoading = isLoading
-    }
-
-    private setErrore(error: AxiosError) {
-        this._error = error
+    setError(error: AxiosError | string) {
+        if (error.toString() !== this._error.toString()) {
+            this._error = error
+        }
     }
 
     private createImageSrc(imageFile?: File, imageSrc?: string | null): string {

@@ -7,8 +7,34 @@ import { WORKS_ROUTE } from '../../../../utils/const/routes'
 import Background from '../../../../assets/images/hand.png';
 
 import classes from './HomeWorksSection.module.scss'
+import useRequest from '../../../../utils/hooks/useRequest';
+import { applicationStore, IGetAllJSON, IWork, worksStore } from '../../../../store';
+import { workApi } from '../../../../http';
+import { useEffect } from 'react';
+import { useMessage } from '../../../MessageContext';
+import { observer } from 'mobx-react-lite';
 
-export const HomeWorksSection = () => {
+export const HomeWorksSection = observer(() => {
+    const [
+        works,
+        worksIsLoading,
+        worksError
+    ] = useRequest<IGetAllJSON<IWork>>(workApi.getWorks);
+    const { addMessage } = useMessage()
+
+    useEffect(() => {
+        if (works?.rows.length) {
+            worksStore.setHomeWorks(works.rows)
+        }
+    }, [works])
+
+    useEffect(() => {
+        if (worksError && worksError.toString() !== applicationStore.error.toString()) {
+            applicationStore.setError(worksError)
+            addMessage(applicationStore.error.toString(), 'error')
+        }
+    }, [worksError])
+
     return (
         <Section className={classes.homeWorks} backgroundImage={Background}>
             <div className={classes.homeWorks__titleBox}>
@@ -18,7 +44,7 @@ export const HomeWorksSection = () => {
                     <span className={classes.homeWorks__buttonDecoration}>Смотреть больше работ</span>
                 </NavLink>
             </div>
-            <HomeWorksSlider className={classes.homeWorks__slider}/>
+            <HomeWorksSlider className={classes.homeWorks__slider} isLoading = {worksIsLoading}/>
         </Section>
     )
-}
+})

@@ -47,7 +47,7 @@ export const AdminWorkDay: FC = observer(() => {
                         className={classes.adminWorkDay__input}
                         value={workDay.value || ''}
                         onChange={workScheduleHandler}
-                        name={workDay.name}
+                        name={workDay?.name || ''}
                         placeholder='00:00 - 00:00'
                         title={`Расписание на ${workDay.name}`}
                     />
