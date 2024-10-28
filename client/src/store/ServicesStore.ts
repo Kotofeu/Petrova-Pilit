@@ -2,8 +2,7 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import { IGetAllJSON } from '.';
-import { IServiceValue } from '../http/service';
-
+import { IServiceValue } from '../http';
 
 export interface IService extends IServiceValue {
     id: number;

@@ -41,7 +41,7 @@ export const AdminHowToGet: FC = observer(() => {
                                     width='100%'
                                     height='100%'
                                     style={{ pointerEvents: 'all', aspectRatio: '3/4' }}
-                                    url={video ? URL.createObjectURL(video) : applicationStore.howToGetVideo}
+                                    url={video ? URL.createObjectURL(video) : applicationStore.howToGetVideo || ''}
                                     controls
                                 />
                                 : null
@@ -80,7 +80,7 @@ export const AdminHowToGet: FC = observer(() => {
                             preview || applicationStore.howToGetPreview
                                 ? <img
                                     className={classes.adminHowToGet__previewImage}
-                                    src={preview ? URL.createObjectURL(preview) : applicationStore.howToGetPreview}
+                                    src={preview ? URL.createObjectURL(preview) : applicationStore.howToGetPreview || ''}
                                     alt='Превью как добраться'
                                 />
                                 : null

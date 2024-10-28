@@ -35,28 +35,34 @@ export const WorkImagesGrid: FC<IWorkImagesGrid> = memo(({
             <Grid
                 className={classes.workImages__grid}
                 items={images}
-                renderItem={(image, index) => (
-                    <img
-                        className={classes.workImages__image}
-                        key={image.id}
-                        src={image.imageSrc}
-                        alt={`${title}: ${index + 1}`}
-                        onClick={() => modalHandler(index)}
-                    />
-                )}
+                renderItem={(image, index) => {
+                    if (!image.imageSrc || !image.id) return null
+                    return (
+                        <img
+                            className={classes.workImages__image}
+                            key={image.id}
+                            src={image.imageSrc}
+                            alt={`${title}: ${index + 1}`}
+                            onClick={() => modalHandler(index)}
+                        />
+                    )
+                }}
             />
             <ModalSlider
                 isOpen={isOpen}
                 closeModal={() => modalHandler()}
                 items={images}
-                renderItem={(image, index) => (
-                    <motion.img
-                        className={classes.workImages__modalImg}
-                        key={image.id}
-                        src={image.imageSrc}
-                        alt={`${title}: ${index + 1}`}
-                    />
-                )}
+                renderItem={(image, index) => {
+                    if (!image.imageSrc || !image.id) return null
+                    return (
+                        <motion.img
+                            className={classes.workImages__modalImg}
+                            key={image.id}
+                            src={image.imageSrc}
+                            alt={`${title}: ${index + 1}`}
+                        />
+                    )
+                }}
                 initialSlide={activeImage}
                 addArrows
                 slideClassName={classes.workImages__slide}

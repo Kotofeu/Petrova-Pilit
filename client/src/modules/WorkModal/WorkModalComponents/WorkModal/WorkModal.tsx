@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react'
 import ModalSend from '../../../../components/Modal/ModalSend'
 import { observer } from 'mobx-react-lite'
-import { IImages, IWorks, worksStore } from '../../../../store'
+import { IImages, IWork, worksStore } from '../../../../store'
 
 import classes from './WorkModal.module.scss'
 import Button from '../../../../UI/Button/Button'
@@ -12,7 +12,7 @@ import { WorkModalImages } from '../WorkModalImages/WorkModalImages'
 import TextArea from '../../../../UI/TextArea/TextArea'
 
 interface IWorkModal {
-    work?: IWorks;
+    work?: IWork;
 }
 export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
     // undefined - тип не установлен, -1 - новый тип, другое число - выбранный тип

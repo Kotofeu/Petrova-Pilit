@@ -12,11 +12,14 @@ export const HomeMainSlider = observer(() => {
             items={applicationStore.homeSlider}
             slideClassName={classes.homeMainSlider__slide}
             renderItem={
-                (item) =>
-                    <div className={classes.homeMainSlider__imageBox}>
-                        <img className={classes.homeMainSlider__image} src={item.imageSrc} alt={item.imageSrc}/>
-                    </div>
-            }
+                (item) => {
+                    if (!item.imageSrc) return null
+                    return (
+                        <div className={classes.homeMainSlider__imageBox}>
+                            <img className={classes.homeMainSlider__image} src={item.imageSrc} alt={item.imageSrc} />
+                        </div>
+                    )
+                }}
             addArrows
             draggable
             looped

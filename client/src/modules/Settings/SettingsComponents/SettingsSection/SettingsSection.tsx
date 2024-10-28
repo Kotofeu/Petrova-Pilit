@@ -20,7 +20,7 @@ import NewPassword from '../../../../components/NewPassword/NewPassword'
 import { classConnection } from '../../../../utils/function'
 export const SettingsSection = observer(() => {
     const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
-    const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name
+    const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name || ''
 
     const router = useNavigate();
     const { addMessage } = useMessage();
@@ -122,7 +122,7 @@ export const SettingsSection = observer(() => {
                     <div className={classes.settings__content}>
                         <UserCropper
                             onImageSave={userImageHandler}
-                            userIcon={userStore.user?.imageSrc}
+                            userIcon={userStore.user?.imageSrc || ''}
                             className={classes.settings__userCropper}
                         />
                         <div className={classes.settings__values}>

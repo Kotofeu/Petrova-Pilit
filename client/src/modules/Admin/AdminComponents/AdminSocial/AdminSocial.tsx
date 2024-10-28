@@ -13,7 +13,7 @@ import { IconLoader } from '../IconLoader/IconLoader'
 import TextArea from '../../../../UI/TextArea/TextArea'
 
 interface IChooseContactLink extends IContactLink, ICreateContactLink {
-
+    id: number
 }
 export const AdminSocial: FC = observer(() => {
     const [socialLinks, setSocialLinks] = useState<IChooseContactLink[]>([]);
@@ -84,7 +84,7 @@ export const AdminSocial: FC = observer(() => {
                             className={classes.adminSocial__icon}
                             type='dark'
                             setImage={(image) => handleImageChange(image, socialLink.id)}
-                            image={socialLink.imageFile ? URL.createObjectURL(socialLink.imageFile) : socialLink.imageSrc}
+                            image={socialLink.imageFile ? URL.createObjectURL(socialLink.imageFile) : socialLink.imageSrc || ''}
                             title='Иконка'
                         />
                     </div>

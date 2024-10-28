@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode, useEffect, useRe
 import Message, { MessageType } from '../../../UI/Message/Message';
 import classes from './MessageContext.module.scss'
 import { AnimatePresence } from 'framer-motion';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Message {
     id: string;
@@ -29,7 +30,7 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
     const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
     const addMessage = (text: string, type: MessageType) => {
-        const id = Date.now().toString();
+        const id =  uuidv4();
         setMessages((prev) => [...prev, { id, text, type }]);
 
         setTimeout(() => {

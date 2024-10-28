@@ -1,6 +1,13 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
-import { ABOUT_ROUTE, ADMIN_ROUTE, HOME_ROUTE, REVIEWS_ROUTE, USER_ROUTE, WORKS_ROUTE } from '../utils/const/routes';
+import {
+    ABOUT_ROUTE,
+    ADMIN_ROUTE,
+    HOME_ROUTE,
+    REVIEWS_ROUTE,
+    USER_ROUTE,
+    WORKS_ROUTE
+} from '../utils/const/routes';
 
 import HowToGetMp4 from '../assets/video/howToGet.mp4';
 import HowToGet from '../assets/video/howToGet.png';
@@ -18,8 +25,7 @@ import quality from '../assets/icons/quality.svg'
 import comfortable from '../assets/icons/comfortable.svg'
 import beautifully from '../assets/icons/beautifully.svg'
 import { IImages } from '.';
-import { IAdvantageValue } from '../http/advantageApi';
-
+import { IAdvantageValue, IContactsValue, IMainInfoValue } from '../http';
 
 
 export interface ILink {
@@ -27,11 +33,10 @@ export interface ILink {
     link?: string;
 }
 
-export interface IContactLink extends ILink {
+export interface IContactLink extends IContactsValue {
     id: number;
-    imageSrc?: string;
 }
-export interface ICreateContactLink extends ILink {
+export interface ICreateContactLink extends IContactsValue {
     imageFile?: File;
 }
 
@@ -39,7 +44,7 @@ export interface IAdvantages extends IAdvantageValue {
     id: number;
 }
 
-export interface ICreateAdvantages extends IAdvantageValue{
+export interface ICreateAdvantages extends IAdvantageValue {
     iconFile?: File;
     imageFile?: File;
 }
@@ -51,13 +56,7 @@ export interface IWorkSchedule {
     shortName?: string;
     value?: string;
 }
-interface IGeneralData {
-    promoBanner?: string;
-    aboutMe?: string;
-    addressMap?: string;
-    howToGetVideo?: string;
-    howToGetPreview?: string;
-}
+
 export class ApplicationStore {
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
@@ -72,7 +71,7 @@ export class ApplicationStore {
         { name: "Клиенты", link: USER_ROUTE },
         { name: "Админка", link: ADMIN_ROUTE }
     ]
-    private _generalData: IGeneralData = {
+    private _generalData: IMainInfoValue = {
         promoBanner: 'Скидка 50% на первый маникюр!',
         addressMap: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2304.608889733823!2d20.522914741385073!3d54.71650388760703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e3160bea68a3bf%3A0x47e628c68d0b71c0!2z0YPQuy4g0JHQvtGC0LrQuNC90LAsIDLQkCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtCwg0JrQsNC70LjQvdC40L3Qs9GA0LDQtNGB0LrQsNGPINC-0LHQuy4sIDIzNjAxNg!5e0!3m2!1sru!2sru!4v1724979269501!5m2!1sru!2sru',
         aboutMe: `Здравствуйте дамы и господа
@@ -348,7 +347,7 @@ export class ApplicationStore {
     addMainSlider(image: File): IImages {
 
         const newImage: IImages = {
-            id: Date.now(),
+            id: -Math.random(),
             imageSrc: this.createImageSrc(image),
         };
         this._homeSlider.push(newImage);
@@ -363,7 +362,7 @@ export class ApplicationStore {
     addOfficeImage(image: File): IImages {
 
         const newImage: IImages = {
-            id: Date.now(),
+            id: -Math.random(),
             imageSrc: this.createImageSrc(image),
         };
         this._officeImages.push(newImage);
@@ -392,7 +391,7 @@ export class ApplicationStore {
         this._error = error
     }
 
-    private createImageSrc(imageFile?: File, imageSrc?: string): string {
+    private createImageSrc(imageFile?: File, imageSrc?: string | null): string {
         return imageFile ? URL.createObjectURL(imageFile) : imageSrc || '';
     }
 

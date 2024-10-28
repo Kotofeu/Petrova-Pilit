@@ -10,9 +10,9 @@ import { classConnection } from '../../../../utils/function';
 interface IWorkCard {
     id: number;
     className?: string;
-    image?: string;
-    title?: string;
-    date?: number;
+    image?: string | null;
+    title?: string | null;
+    date?: number | null;
 }
 
 const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => {
@@ -23,7 +23,7 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => 
         router(`${WORKS_ROUTE}/${id}`);
     }, [id]);
 
-    if (!image) return null;
+    if (!image || !title) return null;
 
     return (
         <motion.article

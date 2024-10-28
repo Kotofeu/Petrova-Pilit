@@ -34,7 +34,7 @@ export const WorksSection: FC = observer(() => {
     }, [items.length]);
     if (items.length > 0) {
         for (let i = 0; i < emptyCellsCount; i++) {
-            gridItems.push({ id: -1, name: '', time: 0 });
+            gridItems.push({ id: -1, name: '', createdAt: 0 });
         }
     }
 

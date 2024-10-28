@@ -5,11 +5,11 @@ import { makeAutoObservable } from 'mobx'
 import adminImage from '../assets/images/12_11zon.jpg'
 import userImage from '../assets/images/main.png'
 import { IGetAllJSON } from '.';
-import { IUserValues } from '../http/userApi';
+import { IUserValue } from '../http';
 
 
 
-export interface IUser extends IUserValues {
+export interface IUser extends IUserValue {
     id: number;
 }
 const mockUser: IUser = {

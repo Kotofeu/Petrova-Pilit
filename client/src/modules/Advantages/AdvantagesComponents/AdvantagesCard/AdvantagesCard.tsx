@@ -4,9 +4,9 @@ import classes from './AdvantagesCard.module.scss'
 import { classConnection } from '../../../../utils/function';
 interface IAdvantagesCard {
     className?: string;
-    title?: string;
-    description?: string;
-    imageSrc?: string;
+    title?: string | null;
+    description?: string | null;
+    imageSrc?: string | null;
 }
 export const AdvantagesCard: FC<IAdvantagesCard> = memo(({
     className,

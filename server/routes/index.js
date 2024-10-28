@@ -10,6 +10,7 @@ const servicesRouter = require('./servicesRouter');
 const workTypeRouter = require('./workTypeRouter');
 const worksRouter = require('./worksRouter');
 const reviewsRouter = require('./reviewsRouter');
+const workScheduleRouter = require('./workScheduleRouter');
 
 
 router.use('/user', userRouter);
@@ -22,5 +23,6 @@ router.use('/main', settingsRoutes);
 router.use('/work-type', workTypeRouter);
 router.use('/work', worksRouter);
 router.use('/review', reviewsRouter);
+router.use('/work-schedule', workScheduleRouter);
 
 module.exports = router;

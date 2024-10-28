@@ -1,21 +1,20 @@
 import { FC, useCallback, useState } from 'react'
 import ModalSend from '../../../../components/Modal/ModalSend';
 import { observer } from 'mobx-react-lite';
-import { IWorksType } from '../../../../store/WorksStore';
 
 
 import classes from './WorkTypesModal.module.scss';
 
 import ListItemController from '../../../../components/ListItemController/ListItemController';
 import { useMessage } from '../../../MessageContext';
-import { worksStore } from '../../../../store';
+import { IWork, worksStore } from '../../../../store';
 import Input from '../../../../UI/Input/Input';
 import { WorkEditType } from '../WorkEditType/WorkEditType';
 
 interface IWorkTypesModal {
     isOpen: boolean;
     closeModal: () => void;
-    tabs?: IWorksType[]
+    tabs?: IWork[]
 }
 export const WorkTypesModal: FC<IWorkTypesModal> = observer(({
     isOpen,

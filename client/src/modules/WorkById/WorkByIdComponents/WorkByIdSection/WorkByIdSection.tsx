@@ -1,7 +1,6 @@
 import { FC, memo, useState } from 'react'
 import classes from './WorkByIdSection.module.scss'
 import Section from '../../../../components/Section/Section'
-import { IWorks } from '../../../../store'
 import DateTime from '../../../../UI/DateTime/DateTime'
 import BeforeAfterSlider from '../../../../components/BeforeAfterSlider/BeforeAfterSlider'
 import { WorkImagesGrid } from '../WorkImagesGrid/WorkImagesGrid'
@@ -9,9 +8,10 @@ import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 import ModalOk from '../../../../components/Modal/ModalOk'
 import Error404 from '../../../../components/Error404/Error404'
 import { WORKS_ROUTE } from '../../../../utils/const/routes'
+import { IWork } from '../../../../store'
 
 interface IWorkByIdSection {
-    work?: IWorks;
+    work?: IWork;
     isAdmin?: boolean;
     openModal: () => void;
     deleteWork: (id: number) => void;
@@ -66,17 +66,17 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                             />
                             : <img
                                 className={classes.workById__preview}
-                                src={work.imageAfterSrc || work.imageBeforeSrc}
+                                src={work.imageAfterSrc || work.imageBeforeSrc || ''}
                                 alt={work.name}
                             />
                     }
                     <div className={classes.workById__text}>
                         <h1 className={classes.workById__title}>{work.name}</h1>
                         {
-                            work.time
+                            work.createdAt
                                 ? <DateTime
                                     className={classes.workById__date}
-                                    date={work.time}
+                                    date={work.createdAt}
                                     addTime
                                 />
                                 : null
@@ -86,7 +86,7 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                             className={classes.workById__desc}
                         >
                             {
-                                work.description?.split('\n').map(paragraph =>
+                                !!work.description && work.description?.split('\n').map(paragraph =>
                                     <p
                                         className={classes.workById__paragraph}
                                         key={paragraph}

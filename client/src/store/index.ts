@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 import { ApplicationStore } from './ApplicationStore'
 import { WorksStore } from './WorksStore'
 import { ServicesStore } from './ServicesStore'
@@ -10,9 +8,10 @@ import { RegistrationStore } from './RegistrationStore'
 
 export type { ILink } from './ApplicationStore'
 export type { IReviews } from './ReviewsStore'
+export type { IWork } from './WorksStore'
+export type { IWorksType } from './WorksStore'
 export type { IUser } from './UserStore'
 export type { IService } from './ServicesStore'
-export type { IWorks } from './WorksStore'
 export type {IWorkSchedule} from './ApplicationStore'
 export type {IAdvantages} from './ApplicationStore'
 export type {ICreateAdvantages} from './ApplicationStore'
@@ -28,8 +27,8 @@ export interface IGetAllJSON<T> {
 }
 export interface IImages {
     id: number;
-    imageSrc: string;
-    name?: string;
+    imageSrc?: string | null;
+    name?: string | null;
 
 }
 

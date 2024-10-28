@@ -38,33 +38,40 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                 images ?
                     <div>
                         <div className={classes.reviewCard__userImages}>
-                            {images.map((image, index) =>
-                                <div
-                                    className={classes.reviewCard__imageBox}
-                                    key={image.id}
-                                    onClick={() => openModal(index)}
-                                >
-                                    <img
-                                        className={classes.reviewCard__image}
-                                        src={image.imageSrc}
-                                        alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
+                            {images.map((image, index) => {
+                                if (!image.imageSrc || !image.id) return null
+                                return (
+                                    <div
+                                        className={classes.reviewCard__imageBox}
+                                        key={image.id}
+                                        onClick={() => openModal(index)}
+                                    >
+                                        <img
+                                            className={classes.reviewCard__image}
+                                            src={image.imageSrc}
+                                            alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
 
-                                    />
-                                </div>
+                                        />
+                                    </div>
+                                )
+                            }
                             )}
                         </div>
                         <ModalSlider
                             isOpen={isOpen}
                             closeModal={closeModal}
                             items={images}
-                            renderItem={(image, index) => (
-                                <motion.img
-                                    className={classes.reviewCard__modalImage}
-                                    key={image.id}
-                                    src={image.imageSrc}
-                                    alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
-                                />
-                            )}
+                            renderItem={(image, index) => {
+                                if (!image.imageSrc || !image.id) return null
+                                return (
+                                    <motion.img
+                                        className={classes.reviewCard__modalImage}
+                                        key={image.id}
+                                        src={image.imageSrc}
+                                        alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
+                                    />
+                                )
+                            }}
                             initialSlide={activeImage}
                             addArrows
                             slideClassName={classes.reviewCard__slide}

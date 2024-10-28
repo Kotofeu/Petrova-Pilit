@@ -7,17 +7,12 @@ import strengtheningNails from '../assets/images/services/Strengthening nails.jp
 import AlignmentNailPlate from '../assets/images/services/Alignment of the nail plate.jpg'
 import MensManicure from '../assets/images/services/Mens manicure.jpg'
 
-import { IGetAllJSON, IImages } from '.';
-import { IUser } from './UserStore';
+import { IGetAllJSON } from '.';
+import { IReviewValue } from '../http';
 
 
-export interface IReviews {
+export interface IReviews extends IReviewValue {
     id: number;
-    user?: IUser;
-    comment?: string;
-    updatedAt?: number;
-    rating?: number;
-    reviews_images?: IImages[];
 }
 export class ReviewsStore {
     constructor() {

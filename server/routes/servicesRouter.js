@@ -2,7 +2,6 @@ const Router = require('express')
 const serviceController = require('../controllers/serviceController');
 const router = new Router()
 const checkRole = require('../middleware/CheckRoleMiddleware')
-const { body } = require('express-validator');
 
 router.get('/', serviceController.getServices)
 router.post('/', checkRole('ADMIN'), serviceController.addService)

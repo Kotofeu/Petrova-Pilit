@@ -10,9 +10,9 @@ import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCro
 interface IWorkModalImages {
     className?: string;
     title?: string;
-    initialAfter?: string;
-    initialBefore?: string;
-    initialOtherImages?: IImages[];
+    initialAfter?: string | null;
+    initialBefore?: string | null;
+    initialOtherImages?: IImages[] | null;
     setAfter: (file: File | null) => void;
     setBefore: (file: File | null) => void;
     setOthers: (file: File[] | null) => void;
@@ -86,8 +86,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                                     key={image.id}
                                 >
                                     <img
-
-                                        src={image.imageSrc}
+                                        src={image.imageSrc || ''}
                                         alt={`Изображение ${image.id} к посту ${title}`}
                                     />
                                     <ControllerButton
@@ -109,7 +108,6 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                                     key={index}
                                 >
                                     <img
-
                                         src={URL.createObjectURL(image)}
                                         alt={`Изображение №${index + 1} к посту ${title}`}
                                     />

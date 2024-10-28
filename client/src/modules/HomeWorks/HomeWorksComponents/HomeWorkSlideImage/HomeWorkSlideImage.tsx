@@ -4,12 +4,13 @@ import { classConnection } from '../../../../utils/function';
 
 interface IHomeWorkSlideImage {
     className?: string
-    imageSrc?: string;
+    imageSrc?: string | null;
     alt?: string;
     type?: 'after' | 'before'
 }
 
 export const HomeWorkSlideImage: FC<IHomeWorkSlideImage> = memo((props) => {
+    if (!props.imageSrc) return null
     return (
         <div
             className={classConnection(

@@ -35,7 +35,7 @@ export const AdminSection = observer(() => {
             paragraphs: [
                 {
                     title: 'Промо баннер', item: <AdminTextArea
-                        initialValue={applicationStore.promoBanner}
+                        initialValue={applicationStore.promoBanner || ''}
                         saveValue={(promo) => applicationStore.changePromoBanner(promo)}
                         minHeight='2.3em'
                         maxHeight='4em'
@@ -46,7 +46,7 @@ export const AdminSection = observer(() => {
                 { title: 'Твои преимущества (фото 4:3)', item: <AdminAdvantages /> },
                 {
                     title: 'Ссылка на карту', item: <AdminTextArea
-                        initialValue={applicationStore.addressMap}
+                        initialValue={applicationStore.addressMap || ''}
                         saveValue={(address) => applicationStore.setAddressMap(address)}
                     />
                 },
@@ -74,7 +74,7 @@ export const AdminSection = observer(() => {
             paragraphs: [
                 {
                     title: 'Текст', item: <AdminTextArea
-                        initialValue={applicationStore.aboutMe}
+                        initialValue={applicationStore.aboutMe || ''}
                         saveValue={(aboutMe) => applicationStore.setAboutMe(aboutMe)}
                     />
                 },

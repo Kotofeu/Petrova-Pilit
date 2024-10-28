@@ -6,7 +6,7 @@ module.exports = class WorkDto {
     description;
     workType;
     images;
-    time;
+    createdAt;
     constructor(model) {
         this.id = model.id;
         this.imageAfterSrc = model.imageAfterSrc;
@@ -15,6 +15,6 @@ module.exports = class WorkDto {
         this.description = model.description;
         this.workType = model.work_type;
         this.images = model.works_images;
-        this.time = model.time
+        this.createdAt = model.createdAt
     }
 }

@@ -87,7 +87,7 @@ export const AdminAdvantages: FC = observer(() => {
                             className={classes.adminAdvantages__icon}
                             type='light'
                             setImage={(image) => handleImageChange(image, advantage.id, 'iconFile')}
-                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrc}
+                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrc || ''}
                             title='Иконка'
                         />
                         <div className={classes.adminAdvantages__inputs}>

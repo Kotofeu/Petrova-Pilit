@@ -7,22 +7,18 @@ import sliderImage3 from '../assets/images/nails/3.jpg'
 import sliderImage4 from '../assets/images/nails/4.jpg'
 import sliderImage5 from '../assets/images/nails/5.jpg'
 import { IGetAllJSON, IImages } from '.';
+import { IWorksTypeValue, IWorkValue } from '../http';
 
-export interface IWorksType {
-    id: number;
-    name?: string;
+export interface IWorksType extends IWorksTypeValue{
+    id: number
 }
-export interface IWorks {
-    id: number;
-    imageAfterSrc?: string;
-    imageBeforeSrc?: string;
-    name?: string;
-    description?: string;
-    workType?: IWorksType;
-    images?: IImages[];
-    time?: number;
+
+
+export interface IWork extends IWorkValue{
+    id: number
 }
-const mockWorks: IGetAllJSON<IWorks> = {
+
+const mockWorks: IGetAllJSON<IWork> = {
     count: 7,
     rows: [
         {
@@ -33,7 +29,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
             workType: {
                 id: 1,
             },
-            time: 1724233268040,
+            createdAt: 1724233268040,
             images: [
                 {
                     id: 1,
@@ -76,7 +72,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
 и продолжение онлайн обучения☝
 Все еще впереди💪да, сейчас мастером быть не просто, но мы продолжаем работать, учиться и осваиваться в этой профессии,ведь в ней нет предела
 С любовью и заботой, Ваш мастер Настасья🥰`,
-            time: 1724233267040,
+createdAt: 1724233267040,
             images: [
                 {
                     id: 1,
@@ -107,7 +103,7 @@ const mockWorks: IGetAllJSON<IWorks> = {
         {
             id: 3,
             imageBeforeSrc: sliderImage4,
-            time: 1724233258040,
+            createdAt: 1724233258040,
             name: 'Закрываем апрель🔥🔥',
             workType: {
                 id: 3
@@ -121,14 +117,14 @@ const mockWorks: IGetAllJSON<IWorks> = {
             workType: {
                 id: 1
             },
-            time: 1724233268040,
+            createdAt: 1724233268040,
 
         },
         {
             imageBeforeSrc: sliderImage4,
             id: 5,
             name: 'Очень Очень БОЛЬШОООООООЙ ТЕКСТ  БЛА БЛА',
-            time: 1724233168040,
+            createdAt: 1724233168040,
         },
     ]
 }
@@ -154,7 +150,7 @@ export class WorksStore {
             name: 'Сложный дизайн'
         },
     ]
-    private _works: IWorks[] = [];
+    private _works: IWork[] = [];
     private _isLoading: boolean = true;
     private _error: AxiosError | null = null
     private _activeWorkType: number | null = null;
@@ -163,7 +159,7 @@ export class WorksStore {
 
     private _hasMoreWorks = false;
 
-    private _worksCache: IWorks[] = [...this._works];
+    private _worksCache: IWork[] = [...this._works];
 
     private _isWorkCreating: boolean = false
 
@@ -230,7 +226,7 @@ export class WorksStore {
 
     }
 
-    editWork(work: IWorks) {
+    editWork(work: IWork) {
 
     }
     addWork() {

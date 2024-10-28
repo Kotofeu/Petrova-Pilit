@@ -1,4 +1,4 @@
-import{FC} from 'react';
+import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import Grid from '../../../../components/Grid/Grid';
 import { applicationStore } from '../../../../store';
@@ -12,14 +12,17 @@ export const OfficeGrid: FC<IOfficeGrid> = observer(({ openModal }) => (
     <Grid
         className={classes.officeGrid}
         items={applicationStore.officeImages}
-        renderItem={(image, index) => (
-            <img
-                className={classes.officeGrid__image}
-                key={image.id}
-                src={image.imageSrc}
-                alt={`Мой офис: ${index+1}`}
-                onClick={() => openModal(index)}
-            />
-        )}
+        renderItem={(image, index) => {
+            if (!image.imageSrc || !image.id) return null
+            return (
+                <img
+                    className={classes.officeGrid__image}
+                    key={image.id}
+                    src={image.imageSrc}
+                    alt={`Мой офис: ${index + 1}`}
+                    onClick={() => openModal(index)}
+                />
+            )
+        }}
     />
 ));

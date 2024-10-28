@@ -16,14 +16,17 @@ export const OfficeModal: FC<IOfficeModal> = observer(({ isOpen, closeModal, act
     isOpen={isOpen}
     closeModal={closeModal}
     items={applicationStore.officeImages}
-    renderItem={(image, index) => (
-      <motion.img
-        className={classes.officeModal__image}
-        key={image.id}
-        src={image.imageSrc}
-        alt={`Мой офис:${index+1}`}
-      />
-    )}
+    renderItem={(image, index) => {
+      if (!image.imageSrc || !image.id) return null
+      return (
+        <motion.img
+          className={classes.officeModal__image}
+          key={image.id}
+          src={image.imageSrc}
+          alt={`Мой офис:${index + 1}`}
+        />
+      )
+    }}
     initialSlide={activeImage}
     addArrows
     slideClassName={classes.officeModal__slide}

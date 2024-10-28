@@ -24,8 +24,8 @@ export const AboutAdvantages: FC = observer(() => {
                         >
                             <img
                                 className={classes.aboutAdvantages__image}
-                                src={advantages.imageSrc}
-                                alt={advantages.name}
+                                src={advantages.imageSrc || ''}
+                                alt={advantages.name || ''}
                             />
                         </div>
                     )}

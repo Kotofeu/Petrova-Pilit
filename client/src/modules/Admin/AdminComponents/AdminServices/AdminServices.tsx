@@ -10,7 +10,7 @@ import Input from '../../../../UI/Input/Input'
 import TextArea from '../../../../UI/TextArea/TextArea'
 
 import classes from './AdminServices.module.scss'
-import { IServiceValue } from '../../../../http/service'
+import { IServiceValue } from '../../../../http/API/serviceApi'
 
 interface IServices extends IService, IServiceValue {
     id: number

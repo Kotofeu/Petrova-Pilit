@@ -110,8 +110,8 @@ export const Header: FC = observer(() => {
             </Button>
             <HeaderUser
               className={classes.header__user}
-              name={userStore.user?.name}
-              imageSrc={userStore.user?.imageSrc}
+              name={userStore.user?.name || ''}
+              imageSrc={userStore.user?.imageSrc || ''}
               isAdmin={userStore.isAdmin}
               isAuth={userStore.isAuth}
               openModal={userModalHandler}

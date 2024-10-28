@@ -6,13 +6,13 @@ import { WORKS_ROUTE } from '../../../../utils/const/routes';
 import { HomeWorkSlideImage } from '../HomeWorkSlideImage/HomeWorkSlideImage';
 
 import classes from './HomeWorkSlide.module.scss'
-import { IWorks } from '../../../../store';
 import { classConnection } from '../../../../utils/function';
+import { IWork } from '../../../../store';
 
 
 interface IHomeWorkSlide {
     className?: string;
-    work: IWorks;
+    work: IWork;
 }
 export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
     const { className, work } = props
@@ -50,7 +50,7 @@ export const HomeWorkSlide: FC<IHomeWorkSlide> = memo((props) => {
                         <HomeWorkSlideImage
                             className={classes.homeWorkSlide__image}
                             imageSrc={imageAfterSrc || imageBeforeSrc}
-                            alt={name}
+                            alt={`${name} работа`}
                         />
                 }
             </div >

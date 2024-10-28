@@ -1,11 +1,9 @@
 import { ChangeEvent, FC, memo, useCallback } from 'react'
-
-import { IWorksType } from '../../../../store/WorksStore';
-
 import classes from './WorkModalTag.module.scss'
+import { IWorksTypeValue } from '../../../../http';
 
 interface IWorkModalTag {
-    types: IWorksType[];
+    types: IWorksTypeValue[];
     typeId?: number;
     setTypeId: (typeId?: number) => void;
 }
