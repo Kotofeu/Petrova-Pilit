@@ -36,7 +36,7 @@ class ReviewsService {
         let offset = (page - 1) * limit;
 
         if (!reviewId) {
-            return await Reviews.findAndCountAll({
+            const reviews = await Reviews.findAndCountAll({
                 limit,
                 offset,
                 order: [['id', 'DESC']],
@@ -52,6 +52,7 @@ class ReviewsService {
                 ],
                 distinct: true
             });
+            return { reviews: reviews }
         }
 
         const review = await Reviews.findOne({
@@ -290,7 +291,7 @@ class ReviewsService {
         if (isValid) {
             throw ApiError.BadRequest("Вы превысили доспуск в 6 изображений");
         }
-        if (validRating){
+        if (validRating) {
             review.rating = validRating
         }
         if (comment) {

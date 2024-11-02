@@ -8,7 +8,6 @@ function useCountDown(initial: number, isAutoPlay: boolean = false): [number, ()
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
-
         if (isActive && countdown > 0) {
             interval = setInterval(() => {
                 setCountdown(prev => prev - 1);
@@ -27,6 +26,8 @@ function useCountDown(initial: number, isAutoPlay: boolean = false): [number, ()
 
 
     const resetCountDown = useCallback((time?: number) => {
+        console.log(isActive)
+
         setCountdown(time || initial);
         setIsActive(true)
     }, [initial]);

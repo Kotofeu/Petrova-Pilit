@@ -35,15 +35,15 @@ export const HomeMainSection = memo(() => {
         }
     }
     useEffect(() => {
-        if (contactsError && contactsError.toString() !== applicationStore.error.toString()) {
+        if (contactsError && contactsError !== applicationStore.error) {
             applicationStore.setError(contactsError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(contactsError, 'error')
         }
     }, [contactsError])
     useEffect(() => {
-        if (sliderImagesError && sliderImagesError.toString() !== applicationStore.error.toString()) {
+        if (sliderImagesError && sliderImagesError !== applicationStore.error) {
             applicationStore.setError(sliderImagesError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(sliderImagesError, 'error')
         }
     }, [sliderImagesError])
 
@@ -68,7 +68,6 @@ export const HomeMainSection = memo(() => {
                 <div className={classes.homeMain__contact}>
                     <ContactList
                         className={classes.homeMain__links}
-                        isLoading={contactsIsLoading}
                     />
                     <h6 className={classes.homeMain__contactDecoration}>Связь со мной</h6>
 

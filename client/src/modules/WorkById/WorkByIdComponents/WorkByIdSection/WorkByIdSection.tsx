@@ -9,30 +9,49 @@ import ModalOk from '../../../../components/Modal/ModalOk'
 import Error404 from '../../../../components/Error404/Error404'
 import { WORKS_ROUTE } from '../../../../utils/const/routes'
 import { IWork } from '../../../../store'
+import { classConnection } from '../../../../utils/function'
 
 interface IWorkByIdSection {
     work?: IWork;
     isAdmin?: boolean;
+    isLoading?: boolean;
     openModal: () => void;
-    deleteWork: (id: number) => void;
+    deleteWork: () => void;
 }
 
 export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
     work,
     isAdmin = false,
+    isLoading,
     openModal,
     deleteWork
 }) => {
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    if (!work || (!work.imageAfterSrc && !work.imageBeforeSrc) || !work.name) {
-        return (
-            <Error404
-                page={WORKS_ROUTE}
-                text='Работа не найдена'
-                buttonText='Вернуться к работам'
-            />
-        )
+
+    if ((!work || (!work.imageAfterSrc && !work.imageBeforeSrc) || !work.name) || isLoading) {
+
+        if (isLoading) {
+            return (
+                <Section className={classes.workById}>
+                    <div className={classConnection(classes.workById__inner, 'loading')}>
+                        <div className={classes.workById__inner_empty}>
+                            
+                        </div>
+                    </div>
+                </Section>
+            )
+        }
+        else {
+            return (
+                <Error404
+                    page={WORKS_ROUTE}
+                    text='Работа не найдена'
+                    buttonText='Вернуться к работам'
+                />
+            )
+        }
     }
+
     return (
         <>
             <Section className={classes.workById} isUnderline={!!work.images?.length}>
@@ -109,45 +128,10 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
             <ModalOk
                 isOpen={isDelete}
                 closeModal={() => setIsDelete(false)}
-                onOkClick={() => deleteWork(work.id)}
+                onOkClick={deleteWork}
             />
         </>
 
 
     )
 })
-
-/**
- * 
-const images: IImages[] = useMemo(() => {
-    if (!work) return [];
-    return [
-        work.afterImage,
-        work.beforeImage,
-        ...(work.othersImage !== undefined
-            ? work.othersImage.filter(image => image !== null)
-            : []),
-    ].filter(image => image !== null) as IImages[];
-}, [work]);
-
-
-
-<Slider
-    className={classes.workById__slider}
-    items={images}
-    renderItem={
-        (work) =>
-            <img
-                className={classes.workById__image}
-                key={work.id}
-                src={work.imageSrc}
-            />
-    }
-    slideClassName={classes.workById__slide}
-    draggable
-    looped
-    slidesToShow={1}
-    slidesToScroll={1}
-/>
-                        
- */

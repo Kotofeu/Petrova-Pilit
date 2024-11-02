@@ -8,13 +8,21 @@ import { IReviewValue } from '../http';
 export interface IReview extends IReviewValue {
     id: number;
 }
+export interface IReviewAllJSON {
+    reviews?: IGetAllJSON<IReview>;
+    page?: number;
+    found?: boolean;
+}
 export class ReviewsStore {
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
     private _reviews: IReview[] = []
     private _mainReviews: IReview[] = []
-    private _page: number = 1;
+    private _activeReview: number | null = null;
+    get activeReview() {
+        return this._activeReview;
+    }
 
     get reviews() {
         return this._reviews
@@ -24,20 +32,14 @@ export class ReviewsStore {
         return this._mainReviews
     }
 
-    get page() {
-        return this._page
-    }
-    setPage(page: number){
-        this._page = page
-    }
     setReviews(reviews: IReview[]) {
-        if (!this._mainReviews.length && this._page === 1) {
+        if (!this._mainReviews.length) {
             this._mainReviews = reviews
         }
         this._reviews = reviews
     }
     setMainReviews(mainReviews: IReview[]) {
-        if (!this._reviews.length && this._page === 1) {
+        if (!this._reviews.length) {
             this._reviews = mainReviews
         }
         this._mainReviews = mainReviews

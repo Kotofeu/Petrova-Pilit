@@ -8,7 +8,6 @@ import classes from './ContactList.module.scss'
 import { classConnection } from '../../utils/function'
 interface IContactList {
     className?: string;
-    isLoading?: boolean;
 }
 
 const ContactList: FC<IContactList> = observer((props) => {
@@ -31,7 +30,7 @@ const ContactList: FC<IContactList> = observer((props) => {
                     : [1, 2, 3].map(item => (
                         <span
                             key={item}
-                            className={classConnection(classes.contactList__empty, props.isLoading ? 'loading' : '')}
+                            className={classConnection(classes.contactList__empty, 'loading')}
                         />
                     ))
             }

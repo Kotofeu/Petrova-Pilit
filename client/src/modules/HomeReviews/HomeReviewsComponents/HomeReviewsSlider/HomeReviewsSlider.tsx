@@ -23,7 +23,7 @@ export const HomeReviewsSlider: FC<IHomeReviewsSlider> = observer(({ className, 
         window.scrollTo(0, 0)
         router(`${REVIEWS_ROUTE}/?${ID_PARAM}=${id}`)
     }, [])
-    if (!reviewsStore.reviews.length) {
+    if (!reviewsStore.mainReviews.length) {
         return (
             <div className={classConnection(classes.homeReviewsSlider_empty, className)}>
                 <div className={classConnection(isLoading ? 'loading' : '')}></div>
@@ -35,7 +35,7 @@ export const HomeReviewsSlider: FC<IHomeReviewsSlider> = observer(({ className, 
     return (
         <Slider
             className={className}
-            items={reviewsStore.reviews || []}
+            items={reviewsStore.mainReviews || []}
             renderItem={
                 (review) =>
                     <ReviewCard

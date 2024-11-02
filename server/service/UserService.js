@@ -80,10 +80,14 @@ class UserService {
         return { ...tokens, user: userDto };
 
     }
-    // Готово
+
     async recoverUserSendCode(email) {
         await this.validateEmail(email);
         const user = await this.findUserByEmail(email);
+        const candidateAuthValues = await AuthValues.findOne({ where: { userId: user ? user.id : null } });
+        if (!candidateAuthValues) {
+            throw ApiError.BadRequest(`Пользователь не создавался (вместо восстановления завершите регистрацию)`);
+        }
         const codeConfirm = this.generateActivationCode();
         user.activateCode = codeConfirm;
         await Promise.all([
@@ -113,7 +117,7 @@ class UserService {
         return new UserDto(user)
 
     }
-    // 50/50
+
     async newUserSendCode(email) {
         const candidate = await this.validateEmail(email);
         const candidateAuthValues = await AuthValues.findOne({ where: { userId: candidate ? candidate.id : null } });

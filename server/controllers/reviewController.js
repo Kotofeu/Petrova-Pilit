@@ -43,7 +43,7 @@ class ReviewController {
             }
             const { name, rating, comment } = req.body;
             const review = await reviewsService.addReview(reviewId, name, rating, comment, refreshToken, images)
-            res.cookie('reviewId', review.id, { httpOnly: true, secure: true })
+            res.cookie('reviewId', review.id, { httpOnly: true,  secure: true, sameSite: 'None', })
             return res.json(review);
         } catch (e) {
             next(e);
@@ -76,7 +76,7 @@ class ReviewController {
             if (req.files && req.files.images) {
                 images = req.files.images
             }
-            const { rating, comment, deletedIds} = req.body;
+            const { rating, comment, deletedIds } = req.body;
 
             const review = await reviewsService.changeById(reviewId, rating, comment, images, deletedIds, res)
             return res.json(review);

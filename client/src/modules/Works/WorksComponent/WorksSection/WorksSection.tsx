@@ -1,35 +1,64 @@
-import { useState, useEffect, FC, useMemo } from 'react'
+import { useState, useEffect, FC, useMemo, useCallback } from 'react'
 import classes from './WorksSection.module.scss'
-import { userStore, worksStore } from '../../../../store'
+import { applicationStore, IGetAllJSON, IWork, IWorksType, userStore, worksStore } from '../../../../store'
 import { observer } from 'mobx-react-lite'
 import { WorksGrid } from '../WorksGrid/WorksGrid'
 import Button from '../../../../UI/Button/Button'
 import { WorkTypesModal } from '../WorkTypesModal/WorkTypesModal'
 import { classConnection } from '../../../../utils/function'
 import { WorkTab } from '../WorkTab/WorkTab'
-
+import useRequest from '../../../../utils/hooks/useRequest'
+import { IWorkGetParam, workApi, workTypeApi } from '../../../../http'
+import { useMessage } from '../../../MessageContext'
+import { Pagination } from '../../../../components/Pagination/Pagination'
 
 export const WorksSection: FC = observer(() => {
-    const [workTypes, setWorkTypes] = useState<number | null>(null)
     const [isTypesModalOpen, setIsTypesModalOpen] = useState<boolean>(false)
-
-    const items = Array.from(worksStore.works || []);
-    const gridItems = [...items];
-    const emptyCellsCount = useMemo(() => {
-        if (items.length < 4) {
-            return 4 - items.length;
-        } else if (items.length > 4 && items.length % 2 !== 0) {
-            return 1;
-        } else {
-            return 0;
+    const [currentParam, setCurrentParam] = useState<IWorkGetParam>({
+        page: 1,
+        limit: 10,
+        typeId: undefined
+    })
+    const [
+        works,
+        worksIsLoading,
+        worksError,
+        _,
+        setFetchParam
+    ] = useRequest<IGetAllJSON<IWork>>(workApi.getWorks, currentParam);
+    const [
+        workTypes,
+        workTypesIsLoading,
+        workTypesError,
+    ] = useRequest<IGetAllJSON<IWorksType>>(workTypeApi.getWorkTypes);
+    const { addMessage } = useMessage()
+    useEffect(() => {
+        worksStore.setWorks(works?.rows || [])
+    }, [works])
+    useEffect(() => {
+        if (workTypes?.count) {
+            worksStore.setWorkTypes(workTypes.rows)
         }
-    }, [items.length]);
-    if (items.length > 0) {
-        for (let i = 0; i < emptyCellsCount; i++) {
-            gridItems.push({ id: -1, name: '', createdAt: 0 });
+    }, [workTypes])
+    useEffect(() => {
+        if (worksError && worksError !== applicationStore.error) {
+            applicationStore.setError(worksError)
+            addMessage(worksError, 'error')
         }
-    }
-
+    }, [worksError])
+    useEffect(() => {
+        if (workTypesError && workTypesError !== applicationStore.error) {
+            applicationStore.setError(workTypesError)
+            addMessage(workTypesError, 'error')
+        }
+    }, [workTypesError])
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        setFetchParam(currentParam)
+    }, [currentParam])
+    const changeActiveTab = useCallback((id?: number) => {
+        setCurrentParam(prev => ({ ...prev, typeId: id, page: 1 }))
+    }, [setCurrentParam])
     return (
         <div className={classes.works}>
             <aside className={classes.works__aside}>
@@ -38,33 +67,46 @@ export const WorksSection: FC = observer(() => {
                     className={classConnection(classes.works__tabs)}
                     aria-label={'Виды работ'}
                 >
-                    <WorkTab
-                        className={classConnection(
-                            classes.works__tab,
-                            workTypes === null ? classes.works__tab_active : ''
-                        )}
-                        onClick={() => setWorkTypes(null)}
-                        title='Все работы'
-                        isActive={workTypes === null}
-                    />
                     {
-                        worksStore.workTypes.map(tab => {
-                            if (!tab.name) return
-                            return (
+                        workTypesIsLoading
+                            ? [1, 2, 3, 4].map(i => (<div key={i} className={classConnection(classes.works__tab, classes.works__tab_empty, 'loading')}>{i}</div>))
+                            : null
+                    }
+                    {
+                        !!worksStore.workTypes.length
+                            ? <>
                                 <WorkTab
                                     className={classConnection(
                                         classes.works__tab,
-                                        workTypes === tab.id ? classes.works__tab_active : ''
+                                        !currentParam.typeId ? classes.works__tab_active : ''
                                     )}
-                                    key={tab.id}
-                                    onClick={() => setWorkTypes(tab.id)}
-                                    title={tab.name}
-                                    isActive={workTypes === tab.id}
+                                    onClick={() => changeActiveTab(undefined)}
+                                    title='Все работы'
+                                    isActive={currentParam.typeId === undefined}
                                 />
+                                {
+                                    worksStore.workTypes.map(tab => {
+                                        if (!tab.name) return
+                                        return (
+                                            <WorkTab
+                                                className={classConnection(
+                                                    classes.works__tab,
+                                                    currentParam.typeId === tab.id
+                                                        ? classes.works__tab_active
+                                                        : ''
+                                                )}
+                                                key={tab.id}
+                                                onClick={() => changeActiveTab(tab.id)}
+                                                title={tab.name}
+                                                isActive={currentParam.typeId === tab.id}
+                                            />
 
-                            )
-                        })
+                                        )
+                                    })
+                                }</>
+                            : null
                     }
+
                 </nav>
                 {
                     userStore.isAdmin
@@ -89,16 +131,18 @@ export const WorksSection: FC = observer(() => {
 
                 <WorksGrid
                     className={classes.works__list}
-                    works={gridItems}
+                    works={worksStore.works}
+                    isLoading={worksIsLoading}
+                />
+                <Pagination
+                    className={classes.works__pagination}
+                    currentPage={currentParam.page || 1}
+                    itemCount={works?.count || 0}
+                    limit={currentParam.limit || 10}
+                    onChange={(page) => setCurrentParam((prev) => ({ ...prev, page }))}
                 />
                 {
-                    worksStore.hasMoreWorks &&
-                    <Button className={classes.works__showMore}>
-                        <span>Показать ещё</span>
-                    </Button>
-                }
-                {
-                    !worksStore.works.length
+                    !worksStore.works.length && !worksIsLoading
                         ? <div className={classes.works__empty}>
                             К сожалению, работы в эту категорию <br />ещё не добавлены
                         </div>
@@ -106,7 +150,6 @@ export const WorksSection: FC = observer(() => {
                 }
 
             </div>
-
             <WorkTypesModal
                 isOpen={isTypesModalOpen}
                 closeModal={() => setIsTypesModalOpen(false)}

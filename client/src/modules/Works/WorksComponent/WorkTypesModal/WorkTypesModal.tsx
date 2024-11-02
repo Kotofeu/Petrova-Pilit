@@ -25,13 +25,13 @@ export const WorkTypesModal: FC<IWorkTypesModal> = observer(({
 
     const { addMessage } = useMessage()
     const deleteHandler = useCallback((id: number | string) => {
-        worksStore.deleteType(+id)
+        //tore.deleteType(+id)
         addMessage('Тип удалён', 'complete')
     }, [worksStore])
 
     const addHandler = useCallback((name: string) => {
         if (name.length > 2) {
-            worksStore.addType(name)
+            //worksStore.addType(name)
             setNewType('')
             addMessage('Тип добавлен', 'complete')
         }

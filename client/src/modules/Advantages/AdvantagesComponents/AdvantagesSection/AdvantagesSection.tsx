@@ -19,9 +19,9 @@ export const AdvantagesSection = observer(() => {
     const { addMessage } = useMessage()
 
     useEffect(() => {
-        if (advantagesError && advantagesError.toString() !== applicationStore.error.toString()) {
+        if (advantagesError && advantagesError !== applicationStore.error) {
             applicationStore.setError(advantagesError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(advantagesError, 'error')
         }
     }, [advantagesError])
     useEffect(() => {

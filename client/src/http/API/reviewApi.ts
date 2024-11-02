@@ -1,4 +1,4 @@
-import { $api, $authHost, baseReview, IUserValue } from "..";
+import { $api, $authHost, baseReview, IGetParams, IUserValue } from "..";
 import { IImages } from "../../store";
 
 export interface IReviewValue {
@@ -9,16 +9,14 @@ export interface IReviewValue {
     rating?: number | null;
     reviews_images?: IImages[] | null;
 }
-
+export interface IReviewGetParam extends IGetParams {
+    reviewId?: number
+}
 export class ReviewApi {
 
-    getReviews = async (limit?: number, page?: number, reviewId?: number) => {
+    getReviews = async (params?: IReviewGetParam) => {
         const { data } = await $api.get(`${baseReview}all`, {
-            params: {
-                limit,
-                page,
-                reviewId
-            }
+            params
         })
         return data
     }

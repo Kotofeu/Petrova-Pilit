@@ -14,7 +14,7 @@ interface IHomeWorksSlider {
 }
 
 export const HomeWorksSlider: FC<IHomeWorksSlider> = observer(({ className, isLoading }) => {
-    if (!worksStore.works.length) {
+    if (!worksStore.homeWorks.length) {
         return (
             <div className={classConnection(classes.homeWorksSlider_empty, className)}>
                 <div className={classConnection(isLoading ? 'loading' : '')}></div>
@@ -26,7 +26,7 @@ export const HomeWorksSlider: FC<IHomeWorksSlider> = observer(({ className, isLo
     return (
         <Slider
             className={className}
-            items={worksStore.works}
+            items={worksStore.homeWorks}
             renderItem={
                 (work) =>
                     <HomeWorkSlide

@@ -45,6 +45,7 @@
         flex-direction: column;
         gap: 10px;
         font-weight: 600;
+        overflow: hidden;
     }
 
     &__tab {
@@ -52,6 +53,11 @@
         padding: 12px 8px;
         font-size: 16px;
         background-color: $title-color;
+
+        &_empty {
+            color: transparent !important;
+            opacity: .3;
+        }
 
         &_active {
             color: inherit !important;
@@ -86,6 +92,15 @@
         position: relative;
         padding-right: 10px;
         padding-left: 10px;
+    }
+
+    &__loader {
+        font-size: 62px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        right: 0;
+        transform: translate(-50%);
     }
 
     &__empty {
@@ -146,83 +161,15 @@
         width: 100%;
     }
 
-    &__showMore {
-        width: 100%;
-        margin-top: auto;
+    &__pagination {
         background-color: transparent;
-        border: none;
-        padding: 20px 0 0;
-        font-size: 22px;
-
-        & span {
-            display: inline-block;
-            position: relative;
-            padding: 0px 40px;
-            animation: show .2s ease-in-out backwards;
-            will-change: translate, scale, transform, color, background-color;
-
-            &::before,
-            &::after {
-                content: '';
-                position: absolute;
-                top: 47%;
-                width: 22px;
-                height: 2px;
-                background-color: $text-color;
-                transition: all .2s ease-in-out;
-                will-change: translate, scale, transform, background-color, left, right;
-
-            }
-
-            &::after {
-                right: 5px;
-            }
-
-            &::before {
-                left: 5px;
-            }
-        }
-
-        @media (hover: hover) {
-            &:hover {
-                & span {
-
-                    &::before,
-                    &::after {
-                        background-color: $active-color;
-                    }
-
-                    &::after {
-                        right: 0;
-                    }
-
-                    &::before {
-                        left: 0;
-                    }
-                }
-            }
-        }
-
-        @media (hover: none) {
-            &:active {
-                & span {
-
-                    &::before,
-                    &::after {
-                        background-color: $active-color;
-                    }
-
-                    &::after {
-                        right: 0;
-                    }
-
-                    &::before {
-                        left: 0;
-                    }
-                }
-            }
-        }
-
+        margin: 0 auto;
+        margin-top: auto;
+        position: relative;
+        padding-top: 10px;
+        z-index: 9;
+        width: 100%;
+        background-color: $primary-color;
 
     }
 }
@@ -246,6 +193,7 @@
         &__title {
             font-size: 60px;
         }
+
         &__tabs {
             max-width: 500px;
             width: 100%;
@@ -253,14 +201,16 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
+
         &__buttons {
             max-width: 500px;
         }
+
         &__list {
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
-    
+
     }
 }
 
@@ -268,9 +218,12 @@
     .works {
         display: flex;
         align-items: flex-start;
+
         &__title {
             font-size: 40px;
         }
+
+
         &__empty {
             margin: 0 40px;
             font-size: 18px;
@@ -281,6 +234,7 @@
             right: 0;
             transform: translateY(-50%);
         }
+
         &__aside {
             position: sticky;
             height: 100vh;
@@ -290,11 +244,12 @@
             width: 100%;
             min-width: 300px;
         }
+
         &__content {
             padding-top: 80px;
             min-height: 100vh;
         }
-    
+
         &__tabs {
             max-width: none;
             padding: 20px 40px 20px;
@@ -304,6 +259,7 @@
             font-size: 18px;
             font-weight: 600;
         }
+
         &__buttons {
             gap: 10px;
             width: 100%;
@@ -311,6 +267,7 @@
             max-width: none;
 
         }
+
         &__list {
             display: flex;
             flex-direction: column;
@@ -326,29 +283,32 @@
             width: 360px;
 
         }
+
         &__buttons {
             gap: 15px;
             width: 100%;
             padding: 20px 30px 20px;
         }
-    
+
         &__button {
             font-size: 18px;
             padding: 0;
             border: none;
             color: #FFF;
         }
-    
+
         &__content {
             padding-top: 110px;
             padding-right: 10px;
             padding-left: 10px;
 
         }
+
         &__list {
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
+
         &__title {
             font-size: 50px;
         }
@@ -368,6 +328,7 @@
             min-width: 550px;
             width: 60%
         }
+
         &__tabs {
             width: 100%;
             padding: 30px 15px 20px;
@@ -377,7 +338,7 @@
             font-size: 18px;
             font-weight: 600;
         }
-    
+
         &__tab {
             width: 100%;
             padding: 15px 10px;

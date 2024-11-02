@@ -23,15 +23,15 @@ export const HomeWorksSection = observer(() => {
     const { addMessage } = useMessage()
 
     useEffect(() => {
-        if (works?.rows.length) {
+        if (works?.count) {
             worksStore.setHomeWorks(works.rows)
         }
     }, [works])
 
     useEffect(() => {
-        if (worksError && worksError.toString() !== applicationStore.error.toString()) {
+        if (worksError && worksError !== applicationStore.error) {
             applicationStore.setError(worksError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(worksError, 'error')
         }
     }, [worksError])
 

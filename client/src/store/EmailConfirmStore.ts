@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
+import { userApi } from '../http';
 
 export class EmailConfirmStore {
 
@@ -18,7 +19,6 @@ export class EmailConfirmStore {
         return this._email;
     }
 
-
     get isCodeSent() {
         return this._isCodeSent;
     }
@@ -26,7 +26,6 @@ export class EmailConfirmStore {
     get countdown() {
         return this._countdown;
     }
-
 
     get isLoading() {
         return this._isLoading;
@@ -40,14 +39,7 @@ export class EmailConfirmStore {
         return this._jwt
     }
 
-    setEmail(email: string) {
-        if (email !== this._email){
-            this.reset()
-            this._email = email;
-        }
-    }
-
-    private set isLoading(isLoading: boolean){
+    private set isLoading(isLoading: boolean) {
         this._isLoading = isLoading
     }
 
@@ -55,68 +47,119 @@ export class EmailConfirmStore {
         this._countdown = countdown
     }
 
-    private set error(error: string | null) {
-        this._error = error;
-    }
-
     private set isCodeSent(isCodeSent: boolean) {
         this._isCodeSent = isCodeSent;
     }
+
     private set jwt(jwt: string | null) {
         this._jwt = jwt;
     }
+
     private set intervalId(intervalId: NodeJS.Timeout | null) {
         this._intervalId = intervalId;
     }
+
     private set email(email: string) {
         this._email = email;
     }
-    sendCode() {
-        if (this.isCodeSent) {
-            this.error = 'Письмо уже отправлено'
-            return
-        };
-        if (!this.email) {
-            this.error = 'Почта не задана'
-            return
+
+    setEmail(email: string) {
+        if (email !== this._email) {
+            this.reset()
+            this._email = email;
         }
-        this.isLoading = true
-        this.error = null;
-
-        // Логика отправки кода на почту в зависимости от типа действия
-
-        setTimeout(() => {
-            this.isCodeSent = true;
-            this.countdown = 40;
-
-            this.intervalId = setInterval(() => {
-                this.countdown -= 1;
-                if (this.countdown <= 0) {
-                    this.countdownReset();
-                }
-            }, 1000);
-
-            this.isLoading = false;
+    }
+    startCounting() {
+        this.countdownReset()
+        this.countdown = 40;
+        this.intervalId = setInterval(() => {
+            this.countdown -= 1;
+            if (this.countdown <= 0) {
+                this.countdownReset();
+            }
         }, 1000);
     }
 
-    confirmCode(code: string) {
-        this.isLoading = true;
-        this.error = null;
-
-        // Логика подтверждения кода в зависимости от типа действия
-
-
-        setTimeout(() => {
-            if (code === '1') {
-                this.countdownReset();
-                this.jwt = 'sdgfhfdjhgdkjhgdfjdhgjsgfj'
+    private isCanSend(): boolean {
+        this._error = null
+        if (this.isCodeSent) {
+            this._error = 'Письмо уже отправлено'
+            return false
+        };
+        if (!this.email) {
+            this._error = 'Почта не задана'
+            return false
+        }
+        this.isLoading = true
+        this.startCounting()
+        return true
+    }
+    async createSendCode() {
+        this.isCanSend()
+        try {
+            await userApi.newUserSendCode(this._email);
+        }
+        catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
             }
-            else{
-                this.error = 'Введен неверный код'   
-            }
+        }
+        finally {
             this.isLoading = false;
-        }, 1000);
+        }
+    }
+    async changeSendCode() {
+        this.isCanSend()
+        try {
+            await userApi.changeEmailSendCode(this._email);
+        }
+        catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        }
+        finally {
+            this.isLoading = false;
+        }
+    }
+    async recoverSendCode() {
+        this.isCanSend()
+        try {
+            await userApi.recoverUserSendCode(this._email);
+        }
+        catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        }
+        finally {
+            this.isLoading = false;
+        }
+    }
+
+    async confirmCode(code: string) {
+        this.isLoading = true;
+        this._error = null
+        try {
+            const response = await userApi.activate(this._email, code);
+            this.jwt = response;
+        }
+        catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        }
+        finally {
+            this.isLoading = false;
+        }
     }
 
     countdownReset() {
@@ -131,8 +174,8 @@ export class EmailConfirmStore {
     reset() {
         this.email = '';
         this.isLoading = false;
-        this.error = null;
         this.jwt = null
+        this._error = null
         this.countdownReset()
     }
 }

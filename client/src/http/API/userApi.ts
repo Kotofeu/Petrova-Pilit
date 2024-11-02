@@ -13,8 +13,17 @@ export interface IUserValue {
     review?: IReview | null;
 }
 
+export interface ILoginParams {
+    email: string;
+    password: string;
+}
+export interface IActiveParams {
+    email: string;
+    code: string;
+}
+
 export class UserApi {
-    
+
     private catchData = (data: any): AuthResponse | any => {
         if (data && data?.accessToken && data?.user && data?.refreshToken) {
             localStorage.setItem('accessToken', data.accessToken)
@@ -62,7 +71,7 @@ export class UserApi {
         return this.catchData(data)
     }
 
-    login = async (email: string, password: string) => {
+    login = async ({ email, password }: ILoginParams) => {
         const { data } = await $api.post(`${baseUser}login`, { email, password })
         return this.catchData(data)
     }
@@ -77,6 +86,9 @@ export class UserApi {
 
     refresh = async () => {
         const { data } = await $authHost.post(`${baseUser}refresh`)
+        if (!data) {
+            localStorage.removeItem('accessToken')
+        }
         return this.catchData(data)
     }
 

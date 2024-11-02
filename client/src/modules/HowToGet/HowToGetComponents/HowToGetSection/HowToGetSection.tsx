@@ -13,24 +13,7 @@ import { useEffect } from 'react';
 
 export const HowToGetSection = observer(() => {
 
-  const [
-    mainInfo,
-    mainInfoIsLoading,
-    mainInfosError
-  ] = useRequest<IMainInfoValue>(mainInfoApi.getInfos);
-  const { addMessage } = useMessage()
 
-  useEffect(() => {
-    if (mainInfosError && mainInfosError.toString() !== applicationStore.error.toString()) {
-      applicationStore.setError(mainInfosError)
-      addMessage(applicationStore.error.toString(), 'error')
-    }
-  }, [mainInfosError])
-  useEffect(() => {
-    if (mainInfo) {
-      applicationStore.setGeneralData(mainInfo)
-    }
-  }, [mainInfo])
   return (
     <Section className={classes.howToGet} isUnderline>
       <h2 className={classes.howToGet__title}>Как меня найти</h2>
@@ -41,7 +24,6 @@ export const HowToGetSection = observer(() => {
           name='Моя мастерская'
           src={applicationStore.addressMap}
           height='100%'
-          isLoading={mainInfoIsLoading}
         />
 
         {

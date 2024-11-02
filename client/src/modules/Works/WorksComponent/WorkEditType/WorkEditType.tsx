@@ -20,10 +20,7 @@ export const WorkEditType: FC<IWorkEditType> = observer(({ className, initialVal
     useEffect(() => {
         console.log(debouncedName, initialValue, id)
         if (debouncedName && debouncedName !== initialValue && id !== undefined) {
-            worksStore.editType({
-                id: id,
-                name: debouncedName
-            })
+
             addMessage('Тип изменён', 'complete')
         }
     }, [initialValue, id, debouncedName])

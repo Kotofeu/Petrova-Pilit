@@ -29,9 +29,8 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => 
         <motion.article
             className={classConnection(classes.workCard, isShowMore ? classes.workCard_active : '', className)}
             layout
-            initial={{ opacity: 0, scale: 0.9 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0}}
+            animate={{ opacity: 1}}
         >
             <img className={classes.workCard__image} src={image} alt={title} />
             <h4 className={classes.workCard__title}>{title}</h4>

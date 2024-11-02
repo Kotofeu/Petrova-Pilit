@@ -5,28 +5,29 @@ import classes from './HomeReviewsSection.module.scss'
 import { NavLink } from 'react-router-dom';
 import { IS_WRITING_PARAM, REVIEWS_ROUTE } from '../../../../utils/const/routes';
 import { HomeReviewsSlider } from '../HomeReviewsSlider/HomeReviewsSlider';
-import { applicationStore, IGetAllJSON, IReview, reviewsStore } from '../../../../store';
+import { applicationStore, IGetAllJSON, IReview, IReviewAllJSON, reviewsStore } from '../../../../store';
 import { reviewApi } from '../../../../http';
 import useRequest from '../../../../utils/hooks/useRequest';
 import { useMessage } from '../../../MessageContext';
+
 export const HomeReviewsSection = memo(() => {
     const [
         reviews,
         reviewsIsLoading,
         reviewsError
-    ] = useRequest<IGetAllJSON<IReview>>(reviewApi.getReviews);
+    ] = useRequest<IReviewAllJSON>(reviewApi.getReviews);
     const { addMessage } = useMessage()
 
     useEffect(() => {
-        if (reviews?.rows.length) {
-            reviewsStore.setMainReviews(reviews.rows)
+        if (reviews?.reviews?.rows.length) {
+            reviewsStore.setMainReviews(reviews.reviews.rows)
         }
     }, [reviews])
 
     useEffect(() => {
-        if (reviewsError && reviewsError.toString() !== applicationStore.error.toString()) {
+        if (reviewsError && reviewsError !== applicationStore.error) {
             applicationStore.setError(reviewsError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(reviewsError, 'error')
         }
     }, [reviewsError])
 

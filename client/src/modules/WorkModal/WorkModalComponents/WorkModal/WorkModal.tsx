@@ -37,7 +37,7 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
         if (action === 'type') {
             if (!worksStore.workTypes.length || typeId === -1) {
                 if (newType.length > 2) {
-                    setTypeId(worksStore.addType(newType))
+                   // setTypeId(worksStore.addType(newType))
                     setAction('text')
                 }
                 else {

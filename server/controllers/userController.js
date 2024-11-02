@@ -14,13 +14,13 @@ class UserController {
             const { password } = req.body;
             const userData = await userService.createUserWithToken(confirmToken, password, reviewId);
             if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
             }
             else {
                 res.clearCookie('reviewId');
             }
             res.clearCookie('confirmToken');
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -35,13 +35,13 @@ class UserController {
             const { password } = req.body;
             const userData = await userService.recoverUser(confirmToken, password);
             if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
             }
             else {
                 res.clearCookie('reviewId');
             }
             res.clearCookie('confirmToken');
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -61,13 +61,13 @@ class UserController {
             const { newEmail } = req.body;
             const userData = await userService.changeEmail(confirmToken, newEmail);
             if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
             }
             else {
                 res.clearCookie('reviewId');
             }
             res.clearCookie('confirmToken');
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -128,7 +128,7 @@ class UserController {
             }
             const { email, code } = req.body;
             const token = await userService.activate(email, code);
-            res.cookie('confirmToken', token, { maxAge: 10 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('confirmToken', token, { maxAge: 10 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(token);
         } catch (e) {
             next(e);
@@ -144,13 +144,13 @@ class UserController {
             const { email, password } = req.body;
             const userData = await userService.login(email, password);
             if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
             }
             else {
                 res.clearCookie('reviewId');
             }
             res.clearCookie('confirmToken');
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -178,12 +178,12 @@ class UserController {
             const { refreshToken } = req.cookies;
             const userData = await userService.refresh(refreshToken, res);
             if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
             }
             else {
                 res.clearCookie('reviewId');
             }
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -201,12 +201,12 @@ class UserController {
             const { id } = req.user
             const userData = await userService.getUser(id, refreshToken);
             if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true })
+                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
             }
             else {
                 res.clearCookie('reviewId');
             }
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true })
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
             return res.json(userData);
         } catch (e) {
             next(e);

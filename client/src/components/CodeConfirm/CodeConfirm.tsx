@@ -7,54 +7,63 @@ import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
 
 import { useMessage } from '../../modules/MessageContext';
-import { emailConfirmStore } from '../../store';
 import useDebounce from '../../utils/hooks/useDebounce';
 import { classConnection } from '../../utils/function';
 
 import classes from './CodeConfirm.module.scss'
+import { emailConfirmStore } from '../../store';
 
 interface ICodeConfirm {
   className?: string;
-  onConfirm: (jwt: string) => void
+  onConfirm: (isConfirm: boolean) => void;
+  sendCode: () => void
 }
 
 const CodeConfirm: FC<ICodeConfirm> = observer(({
   className,
   onConfirm,
-
+  sendCode
 }) => {
   const { email, isCodeSent, countdown, isLoading, error, jwt } = emailConfirmStore
+
   const { addMessage } = useMessage();
+
   const [code, setCode] = useState<string>('');
   const debounceCode = useDebounce(code, 1000)
+
   useEffect(() => {
     if (jwt) {
       addMessage('Почта подтверждена', 'complete')
-      onConfirm(jwt)
+      onConfirm(true)
       emailConfirmStore.reset()
     }
   }, [jwt])
+
   useEffect(() => {
     if (error) {
       addMessage(error, 'error')
     }
   }, [error])
+
   useEffect(() => {
     if (debounceCode) {
       emailConfirmStore.confirmCode(debounceCode)
     }
-  }, [debounceCode])
-  const sendCode = useCallback(() => {
+  }, [debounceCode,])
+
+  const onCodeSend = useCallback(() => {
     if (email) {
-      emailConfirmStore.sendCode()
+      sendCode()
       setCode('');
       addMessage('Письмо отправлено', 'message')
     }
-  }, [emailConfirmStore.sendCode, error, email])
+  }, [email, sendCode])
+
   useEffect(() => {
     setCode('')
     if (!isCodeSent) {
-      sendCode()
+      addMessage('Письмо отправлено', 'message')
+      emailConfirmStore.startCounting()
     }
   }, [])
 
@@ -65,8 +74,8 @@ const CodeConfirm: FC<ICodeConfirm> = observer(({
         {
           email ?
             <motion.div
-              initial={{ opacity: 1,  height: 'auto' }}
-              exit={{ opacity: 0,  height: 0  }}
+              initial={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
               layout
               className={classConnection(classes.codeConfirm, className)}
             >
@@ -80,9 +89,8 @@ const CodeConfirm: FC<ICodeConfirm> = observer(({
 
               <Button
                 className={classes.codeConfirm__send}
-                onClick={sendCode}
+                onClick={onCodeSend}
                 disabled={countdown > 0 || isLoading}
-
               >
                 {countdown > 0 ? `Повторно через: ${countdown}с.` : 'Отправить код снова'}
               </Button>

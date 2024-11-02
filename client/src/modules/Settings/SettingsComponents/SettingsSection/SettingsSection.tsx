@@ -95,7 +95,6 @@ export const SettingsSection = observer(() => {
         // Удаление токенов
     }, [])
     const onChangePasswordConfirm = useCallback(() => {
-        console.log(password.length)
         if (password.length) {
             // Запрос на смену пароля
             setIsPasswordChange(false)
@@ -104,7 +103,7 @@ export const SettingsSection = observer(() => {
 
     }, [password])
 
-
+    console.log(userStore.user?.email)
     const deleteAccount = useCallback(() => {
         userStore.setUser(null)
         addMessage('Ваш аккаунт удалён(', 'complete')
@@ -114,7 +113,7 @@ export const SettingsSection = observer(() => {
     }, [])
 
     const isNameError = !(debounceName.length >= 2 && debounceName.length <= MAX_NAME_LENGTH) && debounceName
-    const isPhoneError = !isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone
+    const isPhoneError = !isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone && userPhone
     return (
         <Section >
             <div className={classes.settings}>

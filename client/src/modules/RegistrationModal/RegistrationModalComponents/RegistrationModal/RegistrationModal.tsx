@@ -1,213 +1,183 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 
-
 import { observer } from 'mobx-react-lite'
 import ModalSend from '../../../../components/Modal/ModalSend'
-import { registrationStore, REGISTRATION, AUTHORIZATION, PASSWORD_RECOVERY, emailConfirmStore } from '../../../../store'
+import {
+    registrationStore,
+    REGISTRATION,
+    AUTHORIZATION,
+    PASSWORD_RECOVERY,
+    emailConfirmStore,
+    userStore,
+} from '../../../../store'
+
 import { useMessage } from '../../../MessageContext'
 import EmailField from '../../../../components/EmailField/EmailField'
-import CodeConfirm from '../../../../components/CodeConfirm/CodeConfirm'
 import NewPassword from '../../../../components/NewPassword/NewPassword'
-import PolicyAgree from '../../../../UI/PolicyAgree/PolicyAgree'
 import classes from './RegistrationModal.module.scss'
-import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 
-import { RegistrationGoToAuth } from '../RegistrationGoToAuth/RegistrationGoToAuth'
-import RegistrationProgress from '../RegistrationProgress/RegistrationProgress'
+import { RegistrationFooter } from '../RegistrationFooter/RegistrationFooter'
 import { RegistrationBlock } from '../RegistrationBlock/RegistrationBlock'
-import Input from '../../../../UI/Input/Input'
-import PasswordShowButton from '../../../../components/NewPassword/PasswordShowButton'
-import { classConnection } from '../../../../utils/function'
+import RegistrationHeader from '../RegistrationHeader/RegistrationHeader'
+import AuthBlock from '../AuthBlock/AuthBlock'
+import Loader from '../../../../UI/Loader/Loader'
+import CodeConfirm from '../../../../components/CodeConfirm/CodeConfirm'
+
 export const RegistrationModal: FC = observer(() => {
-    const [actionHeader, setActionHeader] = useState<string>('')
 
     const [email, setEmail] = useState<string>('')
-    const [jwt, setJwt] = useState<string>('')
+    const [isEmailConfirm, setIsEmailConfirm] = useState<boolean>(false)
     const [password, setPassword] = useState<string>('')
 
-    const [isPassAuthShowing, setIsPassAuthShowing] = useState<boolean>(false)
-
     const { addMessage } = useMessage();
+
+    const isAuth = registrationStore.actionType === AUTHORIZATION
+    const isRegN = registrationStore.actionType === REGISTRATION
+    const isRecY = registrationStore.actionType === PASSWORD_RECOVERY
+
+    useEffect(() => {
+        if (registrationStore.isOpen){
+            registrationStore.setActionType(AUTHORIZATION)
+        }
+    }, [registrationStore.isOpen])
 
     useEffect(() => {
         emailConfirmStore.setEmail('')
         setEmail('')
-        setJwt('')
+        setIsEmailConfirm(false)
         setPassword('')
-
-        setActionHeader(
-            registrationStore.actionType === REGISTRATION
-                ? 'Регистрация'
-                : registrationStore.actionType === AUTHORIZATION
-                    ? 'Авторизация'
-                    : registrationStore.actionType === PASSWORD_RECOVERY
-                        ? 'Восстановление'
-                        : ''
-        );
-    }, [registrationStore.actionType])
-
-    useEffect(() => {
         if (registrationStore.isOpen && !registrationStore.actionType) {
             addMessage('Возникла непредвиденная ошибка открытия окна регистрации', 'error')
         }
-    }, [])
+    }, [registrationStore.actionType, registrationStore.isOpen, emailConfirmStore.setEmail])
+
     const closeModal = useCallback(() => {
         registrationStore.setIsOpen(false)
-        registrationStore.setActionType(AUTHORIZATION)
     }, [registrationStore])
-    const onEmailChange = useCallback((email: string) => {
-        if (registrationStore.actionType === PASSWORD_RECOVERY) {
-            // Если такой пользователь есть то окей
-            emailConfirmStore.setEmail(email)
-            setEmail(email)
+
+    const sendCode = useCallback(async () => {
+        if (isRecY) {
+            await emailConfirmStore.recoverSendCode()
         }
-        else if (registrationStore.actionType === REGISTRATION) {
-            // Если такого пользователя нет то окей
-            emailConfirmStore.setEmail(email)
-            setEmail(email)
+        else if (isRegN) {
+            await emailConfirmStore.createSendCode()
         }
         else {
             addMessage('Возникла непредвиденная ошибка открытия окна регистрации', 'error')
         }
-    }, [])
+    }, [isRecY, isRegN, isAuth])
 
-    const onBackClick = useCallback(() => {
-        if (email && (
-            registrationStore.actionType === REGISTRATION ||
-            registrationStore.actionType === PASSWORD_RECOVERY
-        )) {
-            emailConfirmStore.setEmail('')
-            setEmail('')
-            setJwt('')
-            setPassword('')
+    const changeEmail = useCallback(async (email?: string) => {
+        if (email) {
+            emailConfirmStore.setEmail(email)
+            await sendCode()
+            if (emailConfirmStore.error) {
+                addMessage(emailConfirmStore.error, 'error')
+                emailConfirmStore.setEmail('')
+                setEmail('')
+            }
+            else {
+                setEmail(email)
+            }
         }
-        else {
-            closeModal()
-        }
-    }, [email, jwt, password])
+    }, [emailConfirmStore.setEmail, sendCode, emailConfirmStore.error, setEmail])
 
-    const postRequest = useCallback(() => {
+    const postRequest = useCallback(async () => {
         if (password && email) {
-            if (registrationStore.actionType === REGISTRATION) {
-                // Создание пользователя
+            if (isRegN) {
+                const user = await registrationStore.registration(password)
+                userStore.setUser(user?.user || null);
             }
-            if (registrationStore.actionType === AUTHORIZATION) {
-                // Вход в аккаунт
+            if (isAuth) {
+                const user = await registrationStore.login({ email, password });
+                userStore.setUser(user?.user || null);
             }
-            if (registrationStore.actionType === PASSWORD_RECOVERY) {
-                // Сброс пароля
+            if (isRecY) {
+                const user = await registrationStore.recoverUser(password);
+                userStore.setUser(user?.user || null);
             }
-            registrationStore.setIsOpen(false)
+            if (!registrationStore.error) {
+                closeModal()
+            }
+            else {
+                addMessage(registrationStore.error, 'error')
+            }
         }
         else {
             addMessage('Поле пароля или электронной почты некорректны', 'error')
         }
-    }, [email, jwt, password])
-    if (registrationStore.isOpen && !registrationStore.actionType) return null
+    }, [email, password, isRecY, isRegN, isAuth, registrationStore.error])
+
     return (
         <ModalSend
             className={classes.registrationModal}
             isOpen={registrationStore.isOpen && registrationStore.actionType !== null}
             closeModal={closeModal}
-            send={(email && jwt) || registrationStore.actionType === AUTHORIZATION
+            send={(email && isEmailConfirm) || registrationStore.actionType === AUTHORIZATION
                 ? postRequest
                 : undefined
             }
             isButtonDisabled={!password || !email}
             buttonText='Завершить'
         >
-            <header
-                className={classes.registrationModal__header}
-            >
-                <ControllerButton
-                    className={classes.registrationModal__back}
-                    onClick={onBackClick}
-                    type='back'
+            <form>
+                <Loader
+                    className={classes.registrationModal__loader}
+                    isLoading={emailConfirmStore.isLoading || registrationStore.isLoading}
                 />
-                <h3
-                    className={classes.registrationModal__title}
+                <RegistrationHeader
+                    email={email}
+                    isEmailConfirm={isEmailConfirm}
+                    password={password}
+                    setEmail={setEmail}
+                    setIsEmailConfirm={setIsEmailConfirm}
+                    setPassword={setPassword}
+                    closeModal={closeModal}
+                />
+                <RegistrationBlock
+                    isShowing={isAuth}
+                    title='Укажите данные для входа'
                 >
-                    {actionHeader}
-                </h3>
-            </header>
-
-            <RegistrationBlock
-                isShowing={registrationStore.actionType === AUTHORIZATION}
-                title='Укажите данные для входа'
-            >
-                <Input
-                    className={classes.registrationModal__authInput}
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    name='email'
-                    type='email'
-                    title='Электронная почта'
-                    placeholder='Электронная почта'
-
-                />
-                <div className={classes.registrationModal__authPass}>
-                    <Input
-                        className={classConnection(
-                            classes.registrationModal__authInput,
-                            classes.registrationModal__authInput_pass,
-
-                        )}
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        type={isPassAuthShowing ? 'text' : 'password'}
-                        placeholder='Ваш пароль'
-                        name='password'
-                        title='Новый пароль'
+                    <AuthBlock
+                        email={email}
+                        password={password}
+                        setEmail={setEmail}
+                        setPassword={setPassword}
                     />
-                    <PasswordShowButton
-                        className={classes.registrationModal__authPassShow}
-                        isShowPass={isPassAuthShowing}
-                        setIsShowPass={setIsPassAuthShowing}
+                </RegistrationBlock>
+
+                <RegistrationBlock
+                    isShowing={!email && !isAuth}
+                    title='Укажите адрес электронной почты'
+                >
+                    <EmailField
+                        className={classes.registrationModal__emailField}
+                        inputClassName={classes.registrationModal__emailInput}
+                        onConfirm={changeEmail}
                     />
-                </div>
-            </RegistrationBlock>
+                </RegistrationBlock>
 
-
-            <RegistrationProgress email={email} jwt={jwt} />
-            <RegistrationBlock
-                isShowing={!email && registrationStore.actionType !== AUTHORIZATION}
-                title='Укажите адрес электронной почты'
-            >
-                <EmailField
-                    className={classes.registrationModal__emailField}
-                    inputClassName={classes.registrationModal__emailInput}
-                    onConfirm={onEmailChange}
-                />
-            </RegistrationBlock>
-            <RegistrationBlock
-                isShowing={!jwt && !!email && registrationStore.actionType !== AUTHORIZATION}
-                title={`Подтвердите адрес электронной почты: ${email}`}
-            >
-                <CodeConfirm
-                    onConfirm={(jwt) => setJwt(jwt)}
-                />
-            </RegistrationBlock>
-            <RegistrationBlock
-                isShowing={!!email && !!jwt && registrationStore.actionType !== AUTHORIZATION}
-                title='Придумайте новый пароль'
-            >
-                <NewPassword
-                    setNewPassword={(password) => setPassword(password)}
-                />
-            </RegistrationBlock>
-
-
-            <RegistrationGoToAuth />
-
-            {
-                registrationStore.actionType === REGISTRATION
-                    ? <PolicyAgree
-                        className={classes.registrationModal__policy}
-                        agreeWith='При регистрации'
+                <RegistrationBlock
+                    isShowing={!isEmailConfirm && !!email && !isAuth}
+                    title={`Подтвердите адрес электронной почты: ${email}`}
+                >
+                    <CodeConfirm
+                        onConfirm={setIsEmailConfirm}
+                        sendCode={sendCode}
                     />
-                    : null
-            }
+                </RegistrationBlock>
 
+                <RegistrationBlock
+                    isShowing={!!email && isEmailConfirm && !isAuth}
+                    title='Придумайте новый пароль'
+                >
+                    <NewPassword
+                        setNewPassword={(password) => setPassword(password)}
+                    />
+                </RegistrationBlock>
+
+                <RegistrationFooter />
+            </form>
         </ModalSend>
 
     )

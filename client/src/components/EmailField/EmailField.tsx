@@ -31,7 +31,9 @@ const EmailField: FC<IEmailField> = memo(({
     };
     const userEmailHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setUserEmail(event.target.value)
-
+    }, [email])
+    useEffect(() => {
+        setUserEmail(email || '')
     }, [email])
     useEffect(() => {
         setIsEmailEdit(userEmail !== email)

@@ -1,4 +1,4 @@
-import { $api, $authHost, baseWork, IWorksTypeValue } from "..";
+import { $api, $authHost, baseWork, IGetParams, IWorksTypeValue } from "..";
 import { IImages } from "../../store";
 
 export interface IWorkValue {
@@ -12,15 +12,13 @@ export interface IWorkValue {
     createdAt?: number | null;
     typeId?: string | null;
 }
-
+export interface IWorkGetParam extends IGetParams {
+    typeId?: number
+}
 export class WorkApi {
-    getWorks = async (limit?: number, page?: number, typeId?: number) => {
+    getWorks = async (params?: IWorkGetParam) => {
         const { data } = await $api.get(`${baseWork}`, {
-            params: {
-                limit,
-                page,
-                typeId
-            }
+            params
         })
         return data
     }

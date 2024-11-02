@@ -31,7 +31,10 @@ export interface AuthResponse {
     refreshToken: string;
     user: IUser;
 }
-
+export interface IGetParams {
+    page?: number;
+    limit?: number;
+}
 export const $api = axios.create({
     withCredentials: true,
     baseURL: baseAPI
@@ -69,10 +72,10 @@ export type { IAdvantageValue } from './API/advantageApi'
 export type { IContactsValue } from './API/contactApi'
 export type { IMainInfoValue } from './API/mainInfoApi'
 export type { IServiceValue } from './API/serviceApi'
-export type { IUserValue } from './API/userApi'
+export type { IUserValue, ILoginParams, IActiveParams } from './API/userApi'
 export type { IWorksTypeValue } from './API/workTypeApi'
-export type { IWorkValue } from './API/workApi'
-export type { IReviewValue } from './API/reviewApi'
+export type { IWorkValue, IWorkGetParam } from './API/workApi'
+export type { IReviewValue, IReviewGetParam } from './API/reviewApi'
 export type { IWorkScheduleValue } from './API/workScheduleApi'
 
 export const contactApi = new ContactApi();

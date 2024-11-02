@@ -2,7 +2,8 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import { IGetAllJSON } from '.';
-import { IUserValue } from '../http';
+import { AuthResponse, IUserValue } from '../http';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -23,11 +24,11 @@ export class UserStore {
 
     //
     getAllUsers(): IGetAllJSON<IUser> {
-        return {count: 0, rows: []}
+        return { count: 0, rows: [] }
     }
     //
-    getUserById(id: number) : IUser {
-        return {id: 0}
+    getUserById(id: number): IUser {
+        return { id: 0 }
     }
     //
     changeUserById(user: IUser) {
@@ -72,9 +73,23 @@ export class UserStore {
 
 
     get isAuth(): boolean {
+        if (!this._user) {
+            const accessToken = localStorage.getItem('accessToken')
+            const user = accessToken ? jwtDecode<IUser>(accessToken) : null
+            if (user && user.id) {
+                return true
+            }
+        }
         return this._user !== null
     }
     get isAdmin() {
+        if (!this._user) {
+            const accessToken = localStorage.getItem('accessToken') || ''
+            const user = accessToken ? jwtDecode<IUser>(accessToken) : null
+            if (user && user.role) {
+                return user.role === "ADMIN" ? true : false
+            }
+        }
         return this._user?.role === "ADMIN" ? true : false
     }
     get user() {

@@ -1,4 +1,6 @@
 require('dotenv').config();
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
@@ -17,6 +19,10 @@ const initSettings = require('./init/initSettings');
 const app = express();
 
 const allowedOrigins = [process.env.CLIENT_URL];
+const options = {
+    key: fs.readFileSync('./privatekey.pem'),
+    cert: fs.readFileSync('./certificate.pem')
+};
 
 app.use(cors({
     credentials: true,
@@ -46,7 +52,7 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
-        app.listen(PORT, () => console.log('Server started'));
+        https.createServer(options, app).listen(PORT, () => console.log('Server started'));
     } catch (e) {
         console.log(e);
     }

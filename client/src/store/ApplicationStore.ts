@@ -130,7 +130,7 @@ export class ApplicationStore {
     ]
 
 
-    private _error: AxiosError | string = ''
+    private _error: string | null = null
 
 
     get promoBanner() {
@@ -307,8 +307,8 @@ export class ApplicationStore {
         this._generalData.aboutMe = aboutMe
     }
 
-    setError(error: AxiosError | string) {
-        if (error.toString() !== this._error.toString()) {
+    setError(error: string) {
+        if (error !== this._error) {
             this._error = error
         }
     }

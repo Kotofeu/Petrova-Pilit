@@ -17,7 +17,7 @@ router.post('/recover-send-code', body('email').isEmail(), userController.recove
 router.post('/change-email-send-code', body('newEmail').isEmail(), authMiddleware, userController.changeEmailSendCode)
 router.post('/new-user-send-code', body('email').isEmail(), userController.newUserSendCode)
 
-router.post('/activate', body('email').isEmail(), body('code').isLength({ min: 6, max: 6 }), userController.activate)
+router.post('/activate', body('email').isEmail(), userController.activate)
 router.post('/login', body('email').isEmail(), userController.login)
 router.post('/logout', userController.logout)
 router.post('/refresh', userController.refresh)

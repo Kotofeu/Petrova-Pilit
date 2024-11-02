@@ -1,4 +1,4 @@
-import { useState, FC, useCallback } from 'react'
+import { useState, FC, useCallback, useEffect } from 'react'
 import { SettingsRow } from '../SettingsRow/SettingsRow'
 import ModalSend from '../../../../components/Modal/ModalSend';
 import CodeConfirm from '../../../../components/CodeConfirm/CodeConfirm';
@@ -22,16 +22,18 @@ export const SettingsEmailInput: FC<ISettingsEmailInput> = observer(({
     const [userEmail, setUserEmail] = useState<string>(email || '')
     const [emailConfirmOpen, setEmailConfirmOpen] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
-    
+
     const onConfirmClick = useCallback((email: string) => {
         emailConfirmStore.setEmail(email)
         setUserEmail(email)
         setEmailConfirmOpen(true)
         setError('')
     }, [])
-    const onConfirm = useCallback((jwt: string) => {
-        setEmail(userEmail)
-        setEmailConfirmOpen(false)
+    const onConfirm = useCallback((isConfirm: boolean) => {
+        if (isConfirm) {
+            setEmail(userEmail)
+            setEmailConfirmOpen(false)
+        }
     }, [userEmail])
     const onError = useCallback((error: string) => {
         setError(error)
@@ -59,7 +61,7 @@ export const SettingsEmailInput: FC<ISettingsEmailInput> = observer(({
                 <h4 className={classes.settingsEmailInput__modalTitle}>Мы отправили Вам<br />  код на электронную почту</h4>
                 <h5 className={classes.settingsEmailInput__modalEmail}>{emailConfirmStore.email}</h5>
                 <CodeConfirm
-                    onConfirm={onConfirm}
+                    onConfirm={onConfirm} sendCode={emailConfirmStore.changeSendCode}
                 />
             </ModalSend>
         </>

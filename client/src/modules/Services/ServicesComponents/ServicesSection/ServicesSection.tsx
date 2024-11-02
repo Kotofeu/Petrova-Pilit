@@ -23,9 +23,9 @@ export const ServicesSection = observer(() => {
     const { addMessage } = useMessage()
     
     useEffect(() => {
-        if (servicesError && servicesError.toString() !== applicationStore.error.toString()) {
+        if (servicesError && servicesError !== applicationStore.error) {
             applicationStore.setError(servicesError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(servicesError, 'error')
         }
     }, [servicesError])
 

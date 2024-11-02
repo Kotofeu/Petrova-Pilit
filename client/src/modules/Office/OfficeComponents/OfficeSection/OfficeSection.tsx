@@ -11,7 +11,6 @@ import { officeApi } from '../../../../http';
 import { useMessage } from '../../../MessageContext';
 import { observer } from 'mobx-react-lite';
 import Grid from '../../../../components/Grid/Grid';
-import { classConnection } from '../../../../utils/function';
 
 
 export const OfficeSection = observer(() => {
@@ -24,9 +23,9 @@ export const OfficeSection = observer(() => {
     ] = useRequest<IGetAllJSON<IImages>>(officeApi.getImages);
     const { addMessage } = useMessage()
     useEffect(() => {
-        if (officeImagesError && officeImagesError.toString() !== applicationStore.error.toString()) {
+        if (officeImagesError && officeImagesError !== applicationStore.error) {
             applicationStore.setError(officeImagesError)
-            addMessage(applicationStore.error.toString(), 'error')
+            addMessage(officeImagesError, 'error')
         }
     }, [officeImagesError])
     useEffect(() => {
