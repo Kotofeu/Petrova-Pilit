@@ -32,20 +32,9 @@ export const Header: FC = observer(() => {
     setLastScrollY(currentScrollY);
   };
   const userModalHandler = useCallback((isOpen: boolean) => {
-    if (userStore.user) {
-      if (isOpen) {
-        setIsUserOpen(true)
-        document.body.style.overflowY = 'hidden';
-      }
-      else {
-        setIsUserOpen(false)
-        document.body.style.overflowY = 'auto';
-      }
-    }
-    else {
-      registrationStore.setIsOpen(true)
-    }
-
+    document.body.style.overflowY = isOpen ? 'hidden' : 'auto';
+    setIsUserOpen(!!userStore.user && isOpen)
+    registrationStore.setIsOpen(!userStore.user && isOpen)
   }, [userStore.user])
 
   const burgerModalHandler = useCallback((isOpen: boolean) => {
@@ -131,6 +120,16 @@ export const Header: FC = observer(() => {
               <div className={classes.header__burgerLinks}>
                 {
                   applicationStore.headerLinks.map(link =>
+                    <HeaderLink
+                      {...link}
+                      className={classes.header__burgerLink}
+                      key={link.name}
+                      onClick={onLinkClick}
+                    />
+                  )
+                }
+                {
+                  userStore.isAdmin && applicationStore.headerAdminLinks.map(link =>
                     <HeaderLink
                       {...link}
                       className={classes.header__burgerLink}

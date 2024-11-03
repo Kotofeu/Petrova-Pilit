@@ -11,9 +11,8 @@ import { WorkTypeApi } from './API/workTypeApi';
 import { WorkApi } from './API/workApi';
 import { ReviewApi } from './API/reviewApi';
 import { WorkScheduleApi } from './API/workScheduleApi';
-import { SERVER_ADDRESS } from '../utils/const/main';
 
-const baseAPI = `${SERVER_ADDRESS}api/`;
+const baseAPI = `${process.env.REACT_APP_API_URL}/api/`;
 export const baseUser = `${baseAPI}user/`;
 export const baseOffice = `${baseAPI}office/`;
 export const baseHomeSlider = `${baseAPI}home-slider/`;
@@ -54,19 +53,21 @@ $authHost.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
     const originalRequest = error.config;
-    if (error.response.status == 401 && error.config && !error.config._isRetry) {
+    if (error.response.status === 401 && error.config && !error.config._isRetry) {
         originalRequest._isRetry = true;
         try {
-            const response = await axios.get<AuthResponse>(`${baseUser}/refresh`, { withCredentials: true })
+            const response = await axios.post<AuthResponse>(`${baseUser}refresh`, {}, {
+                withCredentials: true
+            });
             localStorage.setItem('accessToken', response.data.accessToken);
-            return $api.request(originalRequest);
+            return $authHost.request(originalRequest);
         } catch (e) {
-            localStorage.removeItem('accessToken')
-            console.log('НЕ АВТОРИЗОВАН')
+            localStorage.removeItem('accessToken');
+            console.log('НЕ АВТОРИЗОВАН');
         }
     }
     throw error;
-})
+});
 
 export type { IAdvantageValue } from './API/advantageApi'
 export type { IContactsValue } from './API/contactApi'

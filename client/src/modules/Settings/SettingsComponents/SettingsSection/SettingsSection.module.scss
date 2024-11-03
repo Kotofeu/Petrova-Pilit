@@ -2,7 +2,13 @@
 
 .settings {
     padding: 85px 0 40px;
-
+    &__loader{
+        position: fixed !important;
+        top: 15px;
+        right: 15px;
+        font-size:  50px;
+        z-index: 99999;
+    }
     &__inner {
         background-color: #FFF;
         max-width: 1000px;
@@ -65,14 +71,6 @@
     &__inputRow {
         display: flex;
         flex-direction: column;
-    }
-
-    &__modalTitle {
-        font-size: 22px;
-        line-height: 1.2em;
-        padding-bottom: 14px;
-        color: $text-color;
-        text-align: center;
     }
 }
 

@@ -47,7 +47,7 @@ export class UserApi {
     }
 
     changeUserEmail = async (newEmail: string) => {
-        const { data } = await $authHost.post(`${baseUser}recover`, { newEmail })
+        const { data } = await $authHost.post(`${baseUser}change-email`, { newEmail })
         return this.catchData(data)
     }
 
@@ -99,7 +99,15 @@ export class UserApi {
 
     changeUserById = async (id: number, user: IUserValue, image?: File) => {
         const formData = new FormData();
-        formData.append('user', JSON.stringify(user));
+        if (user.name) {
+            formData.append('name', user.name);
+        }
+        if (user.visitsNumber) {
+            formData.append('visitsNumber', `${user.visitsNumber}`);
+        }
+        if (user.phone) {
+            formData.append('phone', user.phone)
+        }
         if (image) {
             formData.append('image', image)
         }
@@ -107,9 +115,9 @@ export class UserApi {
         return this.catchData(data)
     }
 
-    changeUserImage = async (image: File) => {
+    changeUserImage = async (image: File | null) => {
         const formData = new FormData();
-        formData.append('image', image);
+        formData.append('image', image || '');
 
         const { data } = await $authHost.post(`${baseUser}change-image`, formData)
         return this.catchData(data)
@@ -124,12 +132,10 @@ export class UserApi {
         const { data } = await $authHost.post(`${baseUser}change-phone`, { phone })
         return this.catchData(data)
     }
-
-    getUser = async () => {
-        const { data } = await $authHost.get(`${baseUser}`)
+    changeUserPassword = async (password: string) => {
+        const { data } = await $authHost.post(`${baseUser}change-password`, { password })
         return this.catchData(data)
     }
-
     getAllUsers = async () => {
         const { data } = await $authHost.get(`${baseUser}all`)
         return this.catchData(data)

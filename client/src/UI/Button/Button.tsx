@@ -1,9 +1,9 @@
-import { FC, memo, ReactNode } from 'react'
+import { FC, memo, MouseEvent, ReactNode } from 'react'
 import classes from './Button.module.scss'
 import { classConnection } from '../../utils/function';
 interface IButton {
     className?: string,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>,
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void,
     children?: string | ReactNode,
     type?: "button" | "submit" | "reset";
     title?: string;

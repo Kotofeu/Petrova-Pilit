@@ -1,9 +1,8 @@
-import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
-import { IGetAllJSON } from '.';
-import { AuthResponse, IUserValue } from '../http';
+import { IUserValue, userApi } from '../http';
 import { jwtDecode } from 'jwt-decode';
+import { AxiosError } from 'axios';
 
 
 
@@ -14,63 +13,100 @@ export interface IUser extends IUserValue {
 
 export class UserStore {
     private _user: IUser | null = null;
+
+    private _isLoading: boolean = false;
+    private _error: string | null = null;
+
     constructor() {
         makeAutoObservable(this, {}, { deep: true })
     }
-    //
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    get error() {
+        return this._error;
+    }
     setUser(user: IUser | null) {
         this._user = user
     }
 
-    //
-    getAllUsers(): IGetAllJSON<IUser> {
-        return { count: 0, rows: [] }
-    }
-    //
-    getUserById(id: number): IUser {
-        return { id: 0 }
-    }
-    //
-    changeUserById(user: IUser) {
+    async handleUserAction(action: () => Promise<IUser>): Promise<IUser | undefined> {
+        this._error = '';
+        this._isLoading = true;
 
+        try {
+            return await action();
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        } finally {
+            this._isLoading = false;
+        }
     }
-    //
-    deleteUserById(id: number) {
 
+    async changeUserById(id: number, user: IUser, image?: File): Promise<IUser | undefined> {
+        return await this.handleUserAction(() => userApi.changeUserById(id, user, image));
     }
-    //
-    giveRoleForUser(id: number, role: "ADMIN" | "USER") {
+    async giveRole(id: number, role: 'ADMIN' | 'USER') {
+        return await this.handleUserAction(() => userApi.giveRole(id, role));
+    }
 
+    async deleteUser() {
+        await this.handleUserAction(() => userApi.deleteUser());
+        if (!this._error) {
+            this.setUser(null)
+        }
     }
-    //
-    setUserImage(image: File | null) {
+    async logout() {
+        await this.handleUserAction(() => userApi.logout());
+        if (!this._error) {
+            this.setUser(null)
+        }
+    }
+    async setUserPassword(password: string) {
+        await this.handleUserAction(() => userApi.changeUserPassword(password));
+    }
+
+    async deleteUserById(id: number) {
+        await this.handleUserAction(() => userApi.deleteUserById(id));
+    }
+
+    async setUserImage(image: File | null) {
+        await this.handleUserAction(() => userApi.changeUserImage(image));
+
         if (this._user) {
             this._user.imageSrc = image ? URL.createObjectURL(image) : undefined
         }
     }
-    //
-    setUserName(userName: string) {
+
+    async setUserName(userName: string) {
+        await this.handleUserAction(() => userApi.changeUserName(userName));
+
         if (this._user) {
             this._user.name = userName
         }
     }
-    //
-    setUserPhone(phone: string) {
+
+    async setUserPhone(phone: string) {
+        await this.handleUserAction(() => userApi.changeUserPhone(phone));
         if (this._user) {
             this._user.phone = phone
         }
-    }
-    //
-    setUserEmail(email: string) {
-        if (this._user) {
 
+    }
+
+
+    async setUserEmail(email: string) {
+        await this.handleUserAction(() => userApi.changeUserEmail(email));
+        if (this._user) {
             this._user.email = email
         }
     }
-
-
-
-
 
     get isAuth(): boolean {
         if (!this._user) {
@@ -82,6 +118,7 @@ export class UserStore {
         }
         return this._user !== null
     }
+
     get isAdmin() {
         if (!this._user) {
             const accessToken = localStorage.getItem('accessToken') || ''

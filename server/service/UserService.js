@@ -45,7 +45,7 @@ class UserService {
 
     async recoverUser(confirmToken, newPassword) {
         this.validatePassword(newPassword);
-        const { id, email } = tokenService.validateConfirmToken(confirmToken);
+        const { email } = tokenService.validateConfirmToken(confirmToken);
         const user = await this.findUserByEmail(email);
         const hashPassword = await this.hashPassword(newPassword);
         const userDto = new UserDto(user);
@@ -59,7 +59,7 @@ class UserService {
     }
 
     async changeEmail(confirmToken, newEmail) {
-        const { id, email } = tokenService.validateConfirmToken(confirmToken);
+        const { email } = tokenService.validateConfirmToken(confirmToken);
         const candidate = await this.validateEmail(newEmail);
 
         if (candidate) {
@@ -84,10 +84,6 @@ class UserService {
     async recoverUserSendCode(email) {
         await this.validateEmail(email);
         const user = await this.findUserByEmail(email);
-        const candidateAuthValues = await AuthValues.findOne({ where: { userId: user ? user.id : null } });
-        if (!candidateAuthValues) {
-            throw ApiError.BadRequest(`Пользователь не создавался (вместо восстановления завершите регистрацию)`);
-        }
         const codeConfirm = this.generateActivationCode();
         user.activateCode = codeConfirm;
         await Promise.all([
@@ -99,6 +95,7 @@ class UserService {
 
     async changeEmailSendCode(userEmail, email) {
         const candidate = await this.validateEmail(email);
+
         if (candidate) {
             throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
         }
@@ -109,7 +106,6 @@ class UserService {
         const codeConfirm = this.generateActivationCode();
 
         user.activateCode = codeConfirm;
-
         await Promise.all([
             user.save(),
             mailService.sendCodeMail(email, codeConfirm)
@@ -196,21 +192,6 @@ class UserService {
         return { ...tokens, user: userDto };
     }
 
-    async getUser(id, refreshToken) {
-        if (!refreshToken || !id) {
-            throw ApiError.UnauthorizedError();
-        }
-        const tokenFromDb = await tokenService.findToken(refreshToken);
-        if (!tokenFromDb) {
-            throw ApiError.UnauthorizedError();
-        }
-        const user = await this.findUserById(id);
-        const userDto = new UserDto(user);
-        const tokens = this.generateAndStoreTokens(userDto, tokenFromDb.id);
-        return { ...tokens, user: userDto };
-    }
-
-
     async giveRole(id, role) {
         if (!role || !id) {
             throw ApiError.BadRequest('Не указаны id и/или новая роль пользователя');
@@ -282,7 +263,26 @@ class UserService {
         await user.save()
         return new UserDto(user)
     }
+    async changePassword(refreshToken, password) {
+        this.validatePassword(password);
+        if (!refreshToken) {
+            throw ApiError.UnauthorizedError();
+        }
+        const { id } = tokenService.validateRefreshToken(refreshToken);
+        const tokenFromDb = await tokenService.findToken(refreshToken);
+        if (!id || !tokenFromDb) {
+            throw ApiError.UnauthorizedError();
+        }
+        const user = await this.findUserById(id);
+        const hashPassword = await this.hashPassword(password);
+        const userDto = new UserDto(user);
 
+        await this.updateAuthValues(userDto.id, hashPassword);
+        await tokenService.removeAllTokens(userDto.id);
+        const tokens = this.generateAndStoreTokens(userDto);
+
+        return { ...tokens, user: userDto };
+    }
     async getAllUsers() {
         const users = await Users.findAndCountAll({
             where: {
@@ -417,7 +417,9 @@ class UserService {
         if (!authValues) {
             throw ApiError.BadRequest(`Пользователь не создавался (вместо восстановления завершите регистрацию)`);
         }
+
         authValues.password = hashPassword;
+        console.log(authValues)
         await authValues.save();
     }
 

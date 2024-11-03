@@ -10,7 +10,14 @@ import classes from './UsersSection.module.scss'
 import UserCard from '../../../../components/UserCard/UserCard'
 import { useNavigate } from 'react-router-dom'
 import { USER_ROUTE } from '../../../../utils/const/routes'
+import useRequest from '../../../../utils/hooks/useRequest'
+import { userApi } from '../../../../http'
 export const UsersSection = observer(() => {
+  const [
+    users,
+    usersIsLoading,
+    usersError,
+] = useRequest<IGetAllJSON<IUser>>(userApi.getAllUsers);
   const options = {
     keys: ['name', 'phone', 'email'],
     threshold: 0.3,
@@ -18,12 +25,10 @@ export const UsersSection = observer(() => {
   const [filter, setFilter] = useState<string>('')
   const debounceFilter = useDebounce(filter, 400)
   const router = useNavigate();
-  const users = useMemo(() => {
-    return userStore.getAllUsers()
-  }, [])
-  const fuse = new Fuse(users.rows, options);
+
+  const fuse = new Fuse(users?.rows || [], options);
   const filteredUsers: IGetAllJSON<IUser> | null = useMemo(() => {
-    if (!users.rows.length) return null
+    if (!users?.rows.length) return null
     if (!debounceFilter) return users
     const result = fuse.search(debounceFilter);
     return {
@@ -36,7 +41,7 @@ export const UsersSection = observer(() => {
       <header className={classes.users__header}>
         <h1 className={classes.users__title}>Поиск по имени, почте и телефону</h1>
 
-        <span className={classes.users__usersCount}>{`Всего пользователей: ${users.count}`}</span>
+        <span className={classes.users__usersCount}>{`Всего пользователей: ${users?.count || 0}`}</span>
         <Input
           className={classes.users__headerInput}
           value={filter}

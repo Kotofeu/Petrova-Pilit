@@ -24,7 +24,7 @@ const CodeConfirm: FC<ICodeConfirm> = observer(({
   onConfirm,
   sendCode
 }) => {
-  const { email, isCodeSent, countdown, isLoading, error, jwt } = emailConfirmStore
+  const { email, countdown, isLoading, error, jwt } = emailConfirmStore
 
   const { addMessage } = useMessage();
 
@@ -58,14 +58,6 @@ const CodeConfirm: FC<ICodeConfirm> = observer(({
       addMessage('Письмо отправлено', 'message')
     }
   }, [email, sendCode])
-
-  useEffect(() => {
-    setCode('')
-    if (!isCodeSent) {
-      addMessage('Письмо отправлено', 'message')
-      emailConfirmStore.startCounting()
-    }
-  }, [])
 
   return (
     <>

@@ -32,59 +32,33 @@ export class RegistrationStore {
         return this._error;
     }
 
+    async handleUserAction(action: () => Promise<AuthResponse>): Promise<AuthResponse | undefined> {
+        this._error = '';
+        this._isLoading = true;
+    
+        try {
+            return await action();
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        } finally {
+            this._isLoading = false;
+        }
+    }
+    
     async registration(password: string): Promise<AuthResponse | undefined> {
-        this._error = ''
-        this._isLoading = true;
-
-        try {
-            return await userApi.registration(password);
-        }
-        catch (err) {
-            if (err instanceof AxiosError) {
-                this._error = err.response?.data.message || err.message;
-            } else {
-                this._error = `${err}`;
-            }
-        }
-        finally {
-            this._isLoading = false;
-        }
+        return this.handleUserAction(() => userApi.registration(password));
     }
+    
     async recoverUser(password: string): Promise<AuthResponse | undefined> {
-        this._error = ''
-        this._isLoading = true;
-
-        try {
-            return await userApi.recoverUser(password);
-        }
-        catch (err) {
-            if (err instanceof AxiosError) {
-                this._error = err.response?.data.message || err.message;
-            } else {
-                this._error = `${err}`;
-            }
-        }
-        finally {
-            this._isLoading = false;
-        }
+        return this.handleUserAction(() => userApi.recoverUser(password));
     }
+    
     async login(params: ILoginParams): Promise<AuthResponse | undefined> {
-        this._error = ''
-        this._isLoading = true;
-
-        try {
-            return await userApi.login(params);
-        }
-        catch (err) {
-            if (err instanceof AxiosError) {
-                this._error = err.response?.data.message || err.message;
-            } else {
-                this._error = `${err}`;
-            }
-        }
-        finally {
-            this._isLoading = false;
-        }
+        return this.handleUserAction(() => userApi.login(params));
     }
 
     setIsOpen(isOpen: boolean) {

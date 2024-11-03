@@ -8,7 +8,7 @@ export enum CounterButtonType {
     char = classes.counter_button___char,
 
 }
-type useStateParam = ((prev: number) => number) | number
+
 interface ICounter {
     className?: string;
     count: number;
@@ -16,7 +16,7 @@ interface ICounter {
     minCount?: number;
     maxCount?: number;
     counterButtonType?: CounterButtonType;
-    setCount?: (prevState: useStateParam) => void
+    setCount?: React.Dispatch<React.SetStateAction<number | null | undefined>>
 }
 const Counter: FC<ICounter> = memo((props) => {
 
@@ -38,10 +38,10 @@ const Counter: FC<ICounter> = memo((props) => {
     }
     const buttonClass = [classes.counter_button, counterButtonType].join(' ')
     const handleDecrement = () => {
-        setCount((prev) => validateValue(prev - step));
+        setCount((prev) => validateValue(prev ? prev - step : 0));
     }
     const handleIncrement = () => {
-        setCount((prev) => validateValue(prev + step));
+        setCount((prev) => validateValue(prev ? prev + step : 1));
     }
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = (event.target.value ? parseInt(event.target.value) : 0);

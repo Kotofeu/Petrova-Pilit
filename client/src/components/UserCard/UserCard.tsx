@@ -20,67 +20,79 @@ interface IUserCard {
     isShortCard?: boolean
 }
 const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false }) => {
-
-    const [action, setAction] = useState<'delete' | 'admin' | undefined>()
-    const [newUserName, setNewUserName] = useState<string>('')
-    const [visits, setVisits] = useState<number>(-1)
-    const debounceVisit = useDebounce(visits, 300)
-    const [isNewName, setIsNewName] = useState<boolean>(false)
+    const [action, setAction] = useState<'delete' | 'admin' | 'user' | undefined>();
+    const [newUserName, setNewUserName] = useState<string>('');
+    const [visits, setVisits] = useState<number | undefined | null>();
+    const debounceVisit = useDebounce(visits, 300);
+    const [isNewName, setIsNewName] = useState<boolean>(false);
 
     const { addMessage } = useMessage();
 
-    const userAction = useCallback(() => {
+    const userAction = useCallback(async (customActioin?: string) => {
         if (user) {
-            if (action === 'delete') {
-                userStore.deleteUserById(user.id)
+            switch (action) {
+                case 'delete':
+                    await userStore.deleteUserById(user.id);
+                    break;
+                case 'admin':
+                    await userStore.giveRole(user.id, "ADMIN");
+                    break;
+                case 'user':
+                    await userStore.giveRole(user.id, "USER");
+                    break;
+                default:
+                    break;
             }
-            else if (action === 'admin') {
-                userStore.giveRoleForUser(user.id, "ADMIN")
+            switch (customActioin) {
+                case 'name':
+                    await userStore.changeUserById(user.id, { ...user, name: newUserName });
+                    break;
+                case 'visits':
+                    await userStore.changeUserById(user.id, { ...user, visitsNumber: debounceVisit });
+                    break;
+                default:
+                    break;
             }
-        }
-    }, [user, action])
-    const newNameHandler = useCallback(() => {
-        if (!user) {
-            addMessage('Пользователь не найден', 'error')
-            return
-        }
-        if (isNewName) {
-            if (newUserName !== user.name) {
-                userStore.changeUserById({
-                    ...user, name: newUserName
-                })
-                addMessage('Вы изменили имя клиенту', 'message')
+            if (!userStore.error) {
+                addMessage('Изменения внесены', 'message');
             }
-            setIsNewName(false)
-
+            else {
+                addMessage(userStore.error, 'error');
+            }
         }
         else {
-            setIsNewName(true)
+            addMessage('Пользователь не найден', 'error');
         }
-    }, [isNewName, newUserName, user, setIsNewName])
-    useEffect(() => {
-        if (!user) {
-            addMessage('Пользователь не найден', 'error')
-            return
-        }
-        if (debounceVisit !== user.visitsNumber && debounceVisit >= 0) {
-            userStore.changeUserById({
-                ...user, visitsNumber: debounceVisit
-            })
-            addMessage(`Вы изменили количество визитов клиента`, 'message')
-        }
+        setAction(undefined)
+    }, [user, action, newUserName, userStore.error, debounceVisit]);
 
-    }, [debounceVisit, user])
+    const newNameHandler = useCallback(async () => {
+        if (isNewName) {
+            if (newUserName !== user?.name) {
+                userAction('name')
+            }
+            setIsNewName(false);
+        } else {
+            setIsNewName(true);
+        }
+    }, [isNewName, newUserName, user, addMessage]);
+    useEffect(() => {
+        if (debounceVisit && debounceVisit !== user?.visitsNumber && debounceVisit >= 0) {
+            userAction('visits')
+        }
+    }, [debounceVisit, user]);
 
     useEffect(() => {
         if (user) {
-            setNewUserName(user.name || '')
-            setVisits(user.visitsNumber || 0)
+            setNewUserName(user.name || '');
+            setVisits(user.visitsNumber || 0);
         }
-    }, [user])
+    }, [user]);
+
     const onLinkClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
-        event.stopPropagation()
-    }, [])
+        event.stopPropagation();
+    }, []);
+
     return (
         <>
             <article className={classConnection(
@@ -191,7 +203,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
 
                                 <Counter
                                     className={classes.userCard__counter}
-                                    count={visits}
+                                    count={visits || 0}
                                     setCount={setVisits}
                                     step={1}
                                     minCount={0}
@@ -214,7 +226,7 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
                                                 user?.role === 'ADMIN' ? classes.userCard__button_active : '',
                                                 classes.userCard__button)
                                         }
-                                        onClick={() => setAction('admin')}
+                                        onClick={() => setAction(user?.role === 'ADMIN' ? 'user' : 'admin')}
                                         title='Назначить админом'
                                     >
                                         Админ

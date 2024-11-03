@@ -1,17 +1,16 @@
 import { memo, FC, useCallback } from 'react'
 import { QRCodeSVG } from 'qrcode.react';
-import { motion, AnimatePresence } from 'framer-motion'
 import defaultImage from '../../../../assets/icons/User-icon.svg'
-import { IUser, userStore } from '../../../../store';
+import { IUser, registrationStore, userStore } from '../../../../store';
 import classes from './HeaderUserModal.module.scss'
 import { userLevel } from '../../../../utils/function';
-import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
-import { NavLink } from 'react-router-dom';
-import { ID_PARAM, IS_WRITING_PARAM, REVIEWS_ROUTE, SETTINGS_ROUTE, USER_ROUTE } from '../../../../utils/const/routes';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { HOME_ROUTE, ID_PARAM, IS_WRITING_PARAM, REVIEWS_ROUTE, SETTINGS_ROUTE, USER_ROUTE } from '../../../../utils/const/routes';
 import Button from '../../../../UI/Button/Button';
-import { WEBSITE_ADDRESS } from '../../../../utils/const/main';
 import { useMessage } from '../../../MessageContext';
 import { HeaderAsideModal } from '../HeaderAsideModal/HeaderAsideModal';
+import Loader from '../../../../UI/Loader/Loader';
+import { observer } from 'mobx-react-lite';
 
 interface IHeaderUser {
     user: IUser | null;
@@ -19,18 +18,25 @@ interface IHeaderUser {
     closeModal: (isOpen: boolean) => void;
 }
 
-export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal }) => {
+export const HeaderUserModal: FC<IHeaderUser> = observer(({ user, isOpen, closeModal }) => {
     const { addMessage } = useMessage();
+    const router = useNavigate();
     const onLinkClick = useCallback(() => {
         closeModal(false)
         window.scrollTo(0, 0);
     }, [])
-    const onExitClick = useCallback(() => {
-        addMessage('Ждём вашего возвращения!', 'complete')
-        closeModal(false)
-        userStore.setUser(null)
-        window.scrollTo(0, 0);
-    }, [])
+    const onExitClick = useCallback(async () => {
+        await userStore.logout()
+        if (!userStore.error) {
+            addMessage('Ждём вашего возвращения!', 'complete')
+            closeModal(false)
+            router(`${HOME_ROUTE}`);
+            window.scrollTo(0, 0);
+        }
+        else {
+            addMessage(userStore.error, 'error')
+        }
+    }, [userStore.logout, userStore.error, closeModal])
     return (
         <HeaderAsideModal isOpen={isOpen} closeModal={closeModal}>
             <div className={classes.headerUserModal__imageBox}>
@@ -76,14 +82,16 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
                             Написать отзыв
                         </NavLink>
                 }
-
                 <Button
                     className={classes.headerUserModal__navButton}
                     onClick={onExitClick}
                 >
-                    Выйти
+                    {
+                        userStore.isLoading
+                            ? <Loader isLoading />
+                            : <>Выйти</>
+                    }
                 </Button>
-
             </nav>
             <div
                 className={classes.headerUserModal__qrBox}
@@ -92,7 +100,7 @@ export const HeaderUserModal: FC<IHeaderUser> = memo(({ user, isOpen, closeModal
                     Покажите QR-код мастеру
                 </p>
                 <QRCodeSVG
-                    value={`${WEBSITE_ADDRESS}${USER_ROUTE}/${user?.id}`}
+                    value={`${process.env.REACT_APP_CLIENT_URL}${USER_ROUTE}/${user?.id}`}
                     title={"Ваш QR Code"}
                     size={260}
                     fgColor={"#000000"}

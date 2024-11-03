@@ -67,6 +67,7 @@ export class EmailConfirmStore {
         if (email !== this._email) {
             this.reset()
             this._email = email;
+            this.startCounting()
         }
     }
     startCounting() {
@@ -110,10 +111,10 @@ export class EmailConfirmStore {
             this.isLoading = false;
         }
     }
-    async changeSendCode() {
+    async changeSendCode(newEmail: string) {
         this.isCanSend()
         try {
-            await userApi.changeEmailSendCode(this._email);
+            await userApi.changeEmailSendCode(newEmail);
         }
         catch (err) {
             if (err instanceof AxiosError) {

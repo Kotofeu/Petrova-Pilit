@@ -12,7 +12,7 @@ function App() {
 
   const [
     user,
-  ] = useRequest<AuthResponse>(userApi.getUser);
+  ] = useRequest<AuthResponse>(userApi.refresh);
 
   const [
     workSchedule,

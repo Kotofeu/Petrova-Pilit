@@ -28,6 +28,7 @@ class UserController {
     }
     async recoverUser(req, res, next) {
         try {
+
             if (!req.cookies || !req.cookies.confirmToken) {
                 return next(ApiError.Forbidden('Вы не подтвердили адрес электронной почты'))
             }
@@ -53,7 +54,6 @@ class UserController {
                 return next(ApiError.Forbidden('Вы не подтвердили адрес электронной почты'))
             }
             const { confirmToken } = req.cookies;
-
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Ошибка при валидации почты'))
@@ -97,8 +97,9 @@ class UserController {
             if (!req.user) {
                 return next(ApiError.UnauthorizedError())
             }
+
             const { newEmail } = req.body;
-            const { id, role, email } = req.user
+            const { email } = req.user
             const userData = await userService.changeEmailSendCode(email, newEmail);
             res.clearCookie('confirmToken');
             return res.json(userData);
@@ -189,30 +190,6 @@ class UserController {
             next(e);
         }
     }
-    async getUser(req, res, next) {
-        try {
-            if (!req.cookies || !req.cookies.refreshToken) {
-                return next(ApiError.UnauthorizedError());
-            }
-            if (!req.user) {
-                return next(ApiError.UnauthorizedError())
-            }
-            const { refreshToken } = req.cookies;
-            const { id } = req.user
-            const userData = await userService.getUser(id, refreshToken);
-            if (userData.user.review) {
-                res.cookie('reviewId', userData.user.review.id, { httpOnly: true, secure: true, sameSite: 'None' })
-            }
-            else {
-                res.clearCookie('reviewId');
-            }
-            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
-            return res.json(userData);
-        } catch (e) {
-            next(e);
-        }
-    }
-
 
     async giveRole(req, res, next) {
         try {
@@ -281,7 +258,20 @@ class UserController {
             next(e);
         }
     }
-
+    async changePassword(req, res, next) {
+        try {
+            if (!req.cookies || !req.cookies.refreshToken) {
+                return next(ApiError.UnauthorizedError());
+            }
+            const { refreshToken } = req.cookies;
+            const { password } = req.body;
+            const userData = await userService.changePassword(refreshToken, password);
+            res.cookie('refreshToken', userData.refreshToken, { maxAge: 60 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' })
+            return res.json(userData);
+        } catch (e) {
+            next(e);
+        }
+    }
     async getAllUsers(req, res, next) {
         try {
             const users = await userService.getAllUsers();

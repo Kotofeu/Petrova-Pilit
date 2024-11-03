@@ -1,4 +1,4 @@
-import { memo, FC, ReactNode, useCallback } from 'react'
+import { memo, FC, ReactNode, useCallback, FormEvent } from 'react'
 import Modal from './Modal';
 import Button from '../../UI/Button/Button';
 
@@ -23,7 +23,8 @@ const ModalSend: FC<IModalSend> = memo(({
     closeModal,
     send
 }) => {
-    const onSendClick = useCallback(() => {
+    const onSendClick = useCallback((event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         if (!isButtonDisabled && send) send()
     }, [isButtonDisabled, send])
     if (!children) return null
@@ -33,19 +34,21 @@ const ModalSend: FC<IModalSend> = memo(({
             closeModal={closeModal}
         >
             <div className={classConnection(classes.modalBlock, className)}>
-                {children}
-                {
-                    send
-                        ? <Button
-                            className={classes.modalBlock__confirm}
-                            onClick={onSendClick}
-                            disabled={isButtonDisabled}
-                        >
-                            {buttonText}
-                        </Button>
-                        : null
-                }
+                <form onSubmit={onSendClick}>
+                    {children}
+                    {
+                        send
+                            ? <Button
+                                className={classes.modalBlock__confirm}
+                                type='submit'
+                                disabled={isButtonDisabled}
+                            >
+                                {buttonText}
+                            </Button>
+                            : null
+                    }
 
+                </form>
             </div>
         </Modal>)
 })

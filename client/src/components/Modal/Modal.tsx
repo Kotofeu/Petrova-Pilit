@@ -11,12 +11,7 @@ interface IModal {
 const Modal: FC<IModal> = (props) => {
     const { className, isOpen, children, closeModal } = props
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflowY = 'hidden';
-        }
-        else {
-            document.body.style.overflowY = 'auto';
-        }
+        document.body.style.overflowY = isOpen ? 'hidden' : 'auto';
     }, [isOpen])
     return (
         <AnimatePresence>

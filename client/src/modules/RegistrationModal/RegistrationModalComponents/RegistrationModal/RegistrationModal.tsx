@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, FormEvent, useCallback, useEffect, useState } from 'react'
 
 import { observer } from 'mobx-react-lite'
 import ModalSend from '../../../../components/Modal/ModalSend'
@@ -36,7 +36,7 @@ export const RegistrationModal: FC = observer(() => {
     const isRecY = registrationStore.actionType === PASSWORD_RECOVERY
 
     useEffect(() => {
-        if (registrationStore.isOpen){
+        if (registrationStore.isOpen) {
             registrationStore.setActionType(AUTHORIZATION)
         }
     }, [registrationStore.isOpen])
@@ -65,18 +65,17 @@ export const RegistrationModal: FC = observer(() => {
         else {
             addMessage('Возникла непредвиденная ошибка открытия окна регистрации', 'error')
         }
-    }, [isRecY, isRegN, isAuth])
+        if (emailConfirmStore.error) {
+            addMessage(emailConfirmStore.error, 'error')
+            setEmail('')
+        }
+    }, [isRecY, isRegN, isAuth, emailConfirmStore.error, setEmail])
 
     const changeEmail = useCallback(async (email?: string) => {
         if (email) {
             emailConfirmStore.setEmail(email)
             await sendCode()
-            if (emailConfirmStore.error) {
-                addMessage(emailConfirmStore.error, 'error')
-                emailConfirmStore.setEmail('')
-                setEmail('')
-            }
-            else {
+            if (!emailConfirmStore.error) {
                 setEmail(email)
             }
         }
@@ -117,67 +116,66 @@ export const RegistrationModal: FC = observer(() => {
                 ? postRequest
                 : undefined
             }
-            isButtonDisabled={!password || !email}
+            isButtonDisabled={!password || !email || emailConfirmStore.isLoading || registrationStore.isLoading}
             buttonText='Завершить'
         >
-            <form>
-                <Loader
-                    className={classes.registrationModal__loader}
-                    isLoading={emailConfirmStore.isLoading || registrationStore.isLoading}
-                />
-                <RegistrationHeader
+
+            <Loader
+                className={classes.registrationModal__loader}
+                isLoading={emailConfirmStore.isLoading || registrationStore.isLoading}
+            />
+            <RegistrationHeader
+                email={email}
+                isEmailConfirm={isEmailConfirm}
+                password={password}
+                setEmail={setEmail}
+                setIsEmailConfirm={setIsEmailConfirm}
+                setPassword={setPassword}
+                closeModal={closeModal}
+            />
+            <RegistrationBlock
+                isShowing={isAuth}
+                title='Укажите данные для входа'
+            >
+                <AuthBlock
                     email={email}
-                    isEmailConfirm={isEmailConfirm}
                     password={password}
                     setEmail={setEmail}
-                    setIsEmailConfirm={setIsEmailConfirm}
                     setPassword={setPassword}
-                    closeModal={closeModal}
                 />
-                <RegistrationBlock
-                    isShowing={isAuth}
-                    title='Укажите данные для входа'
-                >
-                    <AuthBlock
-                        email={email}
-                        password={password}
-                        setEmail={setEmail}
-                        setPassword={setPassword}
-                    />
-                </RegistrationBlock>
+            </RegistrationBlock>
 
-                <RegistrationBlock
-                    isShowing={!email && !isAuth}
-                    title='Укажите адрес электронной почты'
-                >
-                    <EmailField
-                        className={classes.registrationModal__emailField}
-                        inputClassName={classes.registrationModal__emailInput}
-                        onConfirm={changeEmail}
-                    />
-                </RegistrationBlock>
+            <RegistrationBlock
+                isShowing={!email && !isAuth}
+                title='Укажите адрес электронной почты'
+            >
+                <EmailField
+                    className={classes.registrationModal__emailField}
+                    inputClassName={classes.registrationModal__emailInput}
+                    onConfirm={changeEmail}
+                />
+            </RegistrationBlock>
 
-                <RegistrationBlock
-                    isShowing={!isEmailConfirm && !!email && !isAuth}
-                    title={`Подтвердите адрес электронной почты: ${email}`}
-                >
-                    <CodeConfirm
-                        onConfirm={setIsEmailConfirm}
-                        sendCode={sendCode}
-                    />
-                </RegistrationBlock>
+            <RegistrationBlock
+                isShowing={!isEmailConfirm && !!email && !isAuth}
+                title={`Подтвердите адрес электронной почты: ${email}`}
+            >
+                <CodeConfirm
+                    onConfirm={setIsEmailConfirm}
+                    sendCode={sendCode}
+                />
+            </RegistrationBlock>
 
-                <RegistrationBlock
-                    isShowing={!!email && isEmailConfirm && !isAuth}
-                    title='Придумайте новый пароль'
-                >
-                    <NewPassword
-                        setNewPassword={(password) => setPassword(password)}
-                    />
-                </RegistrationBlock>
+            <RegistrationBlock
+                isShowing={!!email && isEmailConfirm && !isAuth}
+                title='Придумайте новый пароль'
+            >
+                <NewPassword
+                    setNewPassword={(password) => setPassword(password)}
+                />
+            </RegistrationBlock>
 
-                <RegistrationFooter />
-            </form>
+            <RegistrationFooter />
         </ModalSend>
 
     )

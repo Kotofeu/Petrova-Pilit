@@ -6,9 +6,6 @@ const authMiddleware = require('../middleware/AuthMiddleware')
 const checkRole = require('../middleware/CheckRoleMiddleware')
 
 
-
-
-
 router.post('/registration', userController.createUserWithToken)
 router.post('/recover', userController.recoverUser)
 router.post('/change-email', body('newEmail').isEmail(), authMiddleware, userController.changeEmail)
@@ -28,9 +25,8 @@ router.post('/change/:id', checkRole('ADMIN'), userController.changeById)
 router.post('/change-image', authMiddleware, userController.changeImage)
 router.post('/change-name', authMiddleware, userController.changeName)
 router.post('/change-phone', authMiddleware, userController.changePhone)
+router.post('/change-password', authMiddleware, userController.changePassword)
 
-
-router.get('/', authMiddleware, userController.getUser)
 router.get('/all', checkRole('ADMIN'), userController.getAllUsers)
 router.get('/:id', checkRole('ADMIN'), userController.getUserById);
 

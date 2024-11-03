@@ -1,47 +1,39 @@
 import classes from './SettingsSection.module.scss'
 import Section from '../../../../components/Section/Section'
 import { observer } from 'mobx-react-lite'
-import { userStore } from '../../../../store'
+import { emailConfirmStore, registrationStore, userStore } from '../../../../store'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { UserCropper } from '../UserCropper/UserCropper'
 import { useMessage } from '../../../MessageContext'
-import ModalOk from '../../../../components/Modal/ModalOk'
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input/input';
 import Input from '../../../../UI/Input/Input'
 import { SettingsFooter } from '../SettingsFooter/SettingsFooter'
 import { SettingsRow } from '../SettingsRow/SettingsRow'
 import { SettingsEmailInput } from '../SettingsEmailInput/SettingsEmailInput'
-import { useNavigate } from 'react-router-dom'
-import { HOME_ROUTE } from '../../../../utils/const/routes'
 import useDebounce from '../../../../utils/hooks/useDebounce'
 import { MAX_NAME_LENGTH } from '../../../Reviews/ReviewsComponents/ReviewModal/const'
-import ModalSend from '../../../../components/Modal/ModalSend'
-import NewPassword from '../../../../components/NewPassword/NewPassword'
 import { classConnection } from '../../../../utils/function'
+import Loader from '../../../../UI/Loader/Loader'
 export const SettingsSection = observer(() => {
     const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
     const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name || ''
 
-    const router = useNavigate();
     const { addMessage } = useMessage();
 
     const [userImage, setUserImage] = useState<File | null>()
     const [userName, setUserName] = useState<string>(startName || '')
     const [userPhone, setUserPhone] = useState<string>(userStore.user?.phone || '')
 
-    const [areUShure, setAreUShure] = useState<boolean>(false)
-    const [isPasswordChange, setIsPasswordChange] = useState<boolean>(false)
 
     const debouncePhone = useDebounce<string>(userPhone, 800)
     const debounceName = useDebounce<string>(userName, 1500)
-
-    const [password, setPassword] = useState<string>('')
 
     useEffect(() => {
         if (userImage !== undefined) {
             userStore.setUserImage(userImage)
         }
     }, [userImage])
+
     useEffect(() => {
         if (debounceName) {
             if (userStore.user?.name !== debounceName) {
@@ -56,7 +48,6 @@ export const SettingsSection = observer(() => {
                 userStore.setUserName(userStore.user?.email || '')
                 addMessage(`Ваше имя заменено на электронную почту`, 'complete')
             }
-
         }
     }, [debounceName])
     useEffect(() => {
@@ -83,40 +74,16 @@ export const SettingsSection = observer(() => {
     const userPhoneHandler = useCallback((value: any) => {
         setUserPhone(value)
     }, [])
-    const userEmailHandler = useCallback((email: string) => {
-        userStore.setUserEmail(email)
-
-    }, [])
-
-    const onExitClick = useCallback(() => {
-        router(`${HOME_ROUTE}`);
-        userStore.setUser(null)
-        addMessage('Ждём вашего возвращения!', 'complete')
-        // Удаление токенов
-    }, [])
-    const onChangePasswordConfirm = useCallback(() => {
-        if (password.length) {
-            // Запрос на смену пароля
-            setIsPasswordChange(false)
-        }
-
-
-    }, [password])
-
-    console.log(userStore.user?.email)
-    const deleteAccount = useCallback(() => {
-        userStore.setUser(null)
-        addMessage('Ваш аккаунт удалён(', 'complete')
-
-        router(`${HOME_ROUTE}`);
-        // Запрос на удаление аккаунта
-    }, [])
 
     const isNameError = !(debounceName.length >= 2 && debounceName.length <= MAX_NAME_LENGTH) && debounceName
     const isPhoneError = !isValidPhoneNumber(userPhone ? userPhone : '+7') && userStore.user?.phone !== debouncePhone && userPhone
     return (
         <Section >
             <div className={classes.settings}>
+                <Loader
+                    className={classes.settings__loader}
+                    isLoading={userStore.isLoading || emailConfirmStore.isLoading || registrationStore.isLoading}
+                />
                 <div className={classes.settings__inner}>
                     <div className={classes.settings__content}>
                         <UserCropper
@@ -163,34 +130,13 @@ export const SettingsSection = observer(() => {
                                 inputClassName={classes.settings__input}
                                 emailFieldClassName={classes.settings__inputRow}
                                 email={userStore.user?.email || ''}
-                                setEmail={userEmailHandler}
                             />
                         </div>
                     </div>
-                    <SettingsFooter
-                        onChangePasswordClick={() => setIsPasswordChange(true)}
-                        onDeleteClick={() => setAreUShure(true)}
-                        onExitClick={onExitClick}
-                    />
+                    <SettingsFooter />
                 </div>
             </div>
-            <ModalOk
-                isOpen={areUShure}
-                closeModal={() => setAreUShure(false)}
-                onOkClick={deleteAccount}
-            />
-            <ModalSend
-                isOpen={isPasswordChange}
-                closeModal={() => setIsPasswordChange(false)}
-                send={onChangePasswordConfirm}
-                isButtonDisabled={password.length === 0}
-                buttonText='Отправить'
-            >
-                <h4 className={classes.settings__modalTitle}>Придумайте пароль</h4>
-                <NewPassword
-                    setNewPassword={setPassword}
-                />
-            </ModalSend>
+
         </Section>
     )
 })
