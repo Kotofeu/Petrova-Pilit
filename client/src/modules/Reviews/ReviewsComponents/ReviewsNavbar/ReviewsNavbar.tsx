@@ -30,7 +30,7 @@ export const ReviewsNavbar: FC<IReviewsNavbar> = observer(({ className }) => {
         setIsOpen(false)
     }
     const deleteReview = useCallback(async () => {
-        await reviewsStore.deleteReview()
+        await reviewsStore.deleteReview(undefined, userReview?.user?.id)
         if (!reviewsStore.error) {
             addMessage('Отзыв удалён', 'message')
             closeModal()
@@ -115,7 +115,7 @@ export const ReviewsNavbar: FC<IReviewsNavbar> = observer(({ className }) => {
             <ReviewModal
                 userReview={userReview}
                 isOpen={isOpen}
-                deleteReview={deleteReview}
+                deleteReview={userReview ? deleteReview : undefined}
                 closeModal={closeModal}
                 action={reviewHandler}
             />

@@ -107,10 +107,6 @@
         }
     }
 
-    &__rating {}
-
-    &__commentContainer {}
-
     &__textArea {
         min-height: 8em !important;
         max-height: 14em !important;
@@ -132,24 +128,34 @@
         }
     }
 
-    &__actionButtons{
+    &__actionButtons {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         gap: 40px;
+
+        &_del {
+            justify-content: space-between;
+
+        }
     }
+
     &__actionButton {
         display: block;
         font-size: 18px;
         padding: 7px 0;
         border: none;
 
+        &:disabled {
+            color: $text-color !important;
+        }
     }
 
 }
 
 .reviewImages {
     padding: 0 0 6px;
+
     &__filesInfo {
         display: flex;
         align-items: center;
@@ -255,6 +261,7 @@
 
 
     }
+
     .imagesContainer {
         padding: 10px 0;
     }

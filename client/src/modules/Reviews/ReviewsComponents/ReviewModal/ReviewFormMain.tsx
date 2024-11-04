@@ -10,6 +10,7 @@ import { classConnection } from '../../../../utils/function';
 import { observer } from 'mobx-react-lite';
 import { useMessage } from '../../../MessageContext';
 import TextArea from '../../../../UI/TextArea/TextArea';
+import { reviewsStore, userStore } from '../../../../store';
 
 
 export const ReviewFormMain: FC<IReviewForm> = observer(({
@@ -140,16 +141,25 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({
                         </span>
                     </div>
                 </div>
-                <div className={classes.modalContent__actionButtons}>
-                    <Button
-                        className={classes.modalContent__actionButton}
-                        onClick={onDeleteClick}
-                    >
-                        Удалить
-                    </Button>
+                <div className={classConnection(
+                    classes.modalContent__actionButtons,
+                    onDeleteClick ? classes.modalContent__actionButtons_del : ''
+                )}>
+                    {
+                        onDeleteClick
+                            ? <Button
+                                className={classes.modalContent__actionButton}
+                                onClick={onDeleteClick}
+                                disabled={userStore.isLoading || reviewsStore.isLoading}
+                            >
+                                Удалить
+                            </Button>
+                            : null
+                    }
                     <Button
                         className={classes.modalContent__actionButton}
                         onClick={onContinueClick}
+                        disabled={userStore.isLoading || reviewsStore.isLoading}
                     >
                         Далее
                     </Button>

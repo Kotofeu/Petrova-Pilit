@@ -12,7 +12,7 @@ interface IReviewModal {
     isOpen: boolean;
     userReview?: IReview;
     closeModal: () => void;
-    deleteReview: () => Promise<void>;
+    deleteReview?: () => Promise<void>;
     action: (review: IValues) => Promise<void>
 }
 

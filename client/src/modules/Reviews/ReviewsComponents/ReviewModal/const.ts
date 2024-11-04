@@ -24,7 +24,7 @@ export interface IReviewForm {
     isUserAdmin?: boolean;
     isOpen: boolean;
     formValues: IValues;
-    onDeleteClick: () => Promise<void>;
+    onDeleteClick?: () => Promise<void>;
     fromAction: () => void | Promise<void>;
     setFormValues: React.Dispatch<React.SetStateAction<IValues>>
     startAuth?: () => void;

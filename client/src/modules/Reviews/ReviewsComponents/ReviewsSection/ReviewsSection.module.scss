@@ -30,7 +30,13 @@
         flex-direction: column;
         gap: 20px;
     }
-
+    &__reviewDelete{
+        border: none;
+        margin-left: auto;
+        padding: 10px 0;
+        display: block;
+        font-size: 17px;
+    }
     &__review {
         background-color: #FFF;
         border: 2px solid #FFF;

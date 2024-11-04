@@ -111,12 +111,18 @@ export class ReviewsStore {
         return await this.handleReviewAction(() => reviewApi.deleteImageByIdAdmin(deletedIds))
     }
 
-    async deleteReview(id?: number) {
+    async deleteReview(id?: number, userId?: number) {
         if (id) {
-            return await this.handleReviewAction(() => reviewApi.deleteById(id))
+            await this.handleReviewAction(() => reviewApi.deleteById(id))
+            if (!this._error) {
+                this._reviews = this._reviews.filter((review) => review.id !== id)
+            }
         }
         else {
-            return await this.handleReviewAction(() => reviewApi.delete())
+            await this.handleReviewAction(() => reviewApi.delete())
+            if (!this._error && userId) {
+                this._reviews = this._reviews.filter((review) => review.user?.id !== userId)
+            }
         }
     }
 

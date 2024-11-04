@@ -1,6 +1,7 @@
 import { memo, FC } from 'react'
 import classes from './ContactLink.module.scss'
 import { classConnection } from '../../utils/function';
+import ServerImage from '../ServerImage/ServerImage';
 
 interface IContactLink {
     className?: string;
@@ -39,10 +40,10 @@ const ContactLink: FC<IContactLink> = memo((props) => {
                 aria-label={ariaLabel}
                 rel="noopener noreferrer"
             >
-                <img
+                <ServerImage
                     className={classes.contact_socialImage}
-                    src={imageSrc}
-                    alt={title}
+                    src={imageSrc || ''}
+                    alt={title || ''}
                     aria-hidden
                 />
                 <span>{children}</span>

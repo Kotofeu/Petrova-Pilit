@@ -7,12 +7,13 @@ import PolicyAgree from '../../../../UI/PolicyAgree/PolicyAgree';
 import MultipleFileInput from '../../../../components/MultipleFileInput/MultipleFileInput';
 import { classConnection } from '../../../../utils/function';
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
-import { IImages } from '../../../../store';
+import { IImages, reviewsStore, userStore } from '../../../../store';
 import ServerImage from '../../../../UI/ServerImage/ServerImage';
+import { observer } from 'mobx-react-lite';
 const MAX_IMAGE_COUNT = 6
 const MAX_IMAGES_WEIGHT = 10485760
 
-export const ReviewFormImages: FC<IReviewForm> = memo(({
+export const ReviewFormImages: FC<IReviewForm> = observer(({
     isOpen,
     fromAction,
     formValues,
@@ -160,14 +161,26 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({
                         </AnimatePresence>
                     </div>
                 </div>
-                <div className={classes.modalContent__actionButtons}>
+                <div className={classConnection(
+                    classes.modalContent__actionButtons,
+                    onDeleteClick ? classes.modalContent__actionButtons_del : ''
+                )}>
+                    {
+                        onDeleteClick
+                            ? <Button
+                                className={classes.modalContent__actionButton}
+                                onClick={onDeleteClick}
+                                disabled={userStore.isLoading || reviewsStore.isLoading}
+                            >
+                                Удалить
+                            </Button>
+                            : null
+                    }
                     <Button
                         className={classes.modalContent__actionButton}
-                        onClick={onDeleteClick}
+                        onClick={fromAction}
+                        disabled={userStore.isLoading || reviewsStore.isLoading}
                     >
-                        Удалить
-                    </Button>
-                    <Button className={classes.modalContent__send} onClick={fromAction}>
                         Отправить
                     </Button>
                 </div>
@@ -177,6 +190,6 @@ export const ReviewFormImages: FC<IReviewForm> = memo(({
                     agreeWith={`Нажимая на кнопку "Отправить"`}
                 />
             </div>
-        </motion.div>
+        </motion.div >
     );
 })
