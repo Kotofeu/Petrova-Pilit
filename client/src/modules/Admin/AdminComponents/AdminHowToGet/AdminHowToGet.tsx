@@ -1,12 +1,12 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { applicationStore } from '../../../../store';
 import { observer } from 'mobx-react-lite';
 import classes from './AdminHowToGet.module.scss';
 import FileInput from '../../../../components/FileInput/FileInput';
-import Button from '../../../../UI/Button/Button';
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
 import { useMessage } from '../../../MessageContext';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 export const AdminHowToGet: FC = observer(() => {
     const [video, setVideo] = useState<File | null>(null);
@@ -41,7 +41,7 @@ export const AdminHowToGet: FC = observer(() => {
                                     width='100%'
                                     height='100%'
                                     style={{ pointerEvents: 'all', aspectRatio: '3/4' }}
-                                    url={video ? URL.createObjectURL(video) : applicationStore.howToGetVideo || ''}
+                                    url={video ? URL.createObjectURL(video) : `${process.env.REACT_APP_API_URL}/${applicationStore.howToGetVideo}`}
                                     controls
                                 />
                                 : null
@@ -78,7 +78,7 @@ export const AdminHowToGet: FC = observer(() => {
                     <div className={classes.adminHowToGet__previewBox}>
                         {
                             preview || applicationStore.howToGetPreview
-                                ? <img
+                                ? <ServerImage
                                     className={classes.adminHowToGet__previewImage}
                                     src={preview ? URL.createObjectURL(preview) : applicationStore.howToGetPreview || ''}
                                     alt='Превью как добраться'

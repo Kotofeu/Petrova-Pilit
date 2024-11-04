@@ -1,11 +1,10 @@
-import { memo, FC, useEffect } from 'react'
-import defaultImage from '../../../../assets/icons/User-icon.svg'
+import { memo, FC } from 'react'
 import classes from './HeaderUser.module.scss'
 import { classConnection } from '../../../../utils/function';
 interface IHeaderUser {
     className?: string;
     name?: string;
-    imageSrc?: string;
+    imageSrc: string;
     isAdmin: boolean;
     isAuth: boolean;
     openModal: (isOpen: boolean) => void;
@@ -26,7 +25,7 @@ export const HeaderUser: FC<IHeaderUser> = memo(({
             >
                 <img
                     className={classes.headerUser__image}
-                    src={imageSrc || defaultImage}
+                    src={imageSrc}
                     alt={name || 'Ваш аккаунт'}
                 />
             </div>

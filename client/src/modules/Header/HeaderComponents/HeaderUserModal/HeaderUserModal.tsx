@@ -11,6 +11,7 @@ import { useMessage } from '../../../MessageContext';
 import { HeaderAsideModal } from '../HeaderAsideModal/HeaderAsideModal';
 import Loader from '../../../../UI/Loader/Loader';
 import { observer } from 'mobx-react-lite';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IHeaderUser {
     user: IUser | null;
@@ -40,7 +41,7 @@ export const HeaderUserModal: FC<IHeaderUser> = observer(({ user, isOpen, closeM
     return (
         <HeaderAsideModal isOpen={isOpen} closeModal={closeModal}>
             <div className={classes.headerUserModal__imageBox}>
-                <img
+                <ServerImage
                     className={classes.headerUserModal__image}
                     src={user?.imageSrc || defaultImage}
                     alt={user?.name || user?.email || 'Ваш аккаунт'}

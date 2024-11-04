@@ -1,61 +1,64 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect, useCallback } from 'react'
 import Modal from '../../../../components/Modal/Modal';
 import { ReviewFormMain } from './ReviewFormMain';
 import { ReviewFormImages } from './ReviewFormImages';
-import { COMMENT, IMAGES, IValues, NAME, RATING } from './const';
+import { COMMENT, DELETED_IDS, IMAGES, INITIAL_IMAGES, IValues, NAME, RATING } from './const';
 
 import classes from './ReviewModal.module.scss'
 import { AnimatePresence } from 'framer-motion';
 import { observer } from 'mobx-react-lite';
-import { registrationStore, reviewsStore, userStore } from '../../../../store';
-
+import { IReview, registrationStore, userStore } from '../../../../store';
 interface IReviewModal {
-    isUserAuth?: boolean;
     isOpen: boolean;
+    userReview?: IReview;
     closeModal: () => void;
+    deleteReview: () => Promise<void>;
+    action: (review: IValues) => Promise<void>
 }
 
 const initialValues: IValues = {
     [NAME]: "",
     [RATING]: 0,
     [COMMENT]: "",
-    [IMAGES]: null,
+    [IMAGES]: [],
+    [INITIAL_IMAGES]: [],
+    [DELETED_IDS]: []
 };
 
-export const ReviewModal: FC<IReviewModal> = observer(({ isOpen, closeModal }) => {
+export const ReviewModal: FC<IReviewModal> = observer(({
+    isOpen,
+    userReview,
+    closeModal,
+    deleteReview,
+    action
+}) => {
     const [formValues, setFormValues] = useState(initialValues);
     const [isMainOpen, setIsMainOpen] = useState<boolean>(true)
+
     useEffect(() => {
-        if (!isOpen) {
-            if (userStore.user?.name) {
-                setFormValues({...initialValues, [NAME]: userStore.user?.name});
+        if (!isOpen && !userReview) {
+            if (userStore.user?.name && !userStore.isAdmin) {
+                setFormValues({ ...initialValues, [NAME]: userStore.user?.name });
             }
             else {
                 setFormValues(initialValues);
             }
-            setIsMainOpen(true);
         }
-    }, [isOpen, closeModal, userStore]);
-    const createReview = () => {
-        reviewsStore.createReview({
-            id: Date.now(),
-            user: {
-                id: userStore.user?.id || Date.now(),
-                name: userStore.user?.name || formValues[NAME],
-                imageSrc: userStore.user?.imageSrc,
-                visitsNumber: userStore.user?.visitsNumber
-            },
-            comment: formValues[COMMENT],
-            updatedAt: Date.now(),
-            rating: formValues[RATING],
-            reviews_images: Array.from(formValues[IMAGES] || []).map((image, index) => {
-                return {
-                    id: index,
-                    imageSrc: URL.createObjectURL(image)
-                }
+        else if (userReview) {
+            setFormValues({
+                name: userReview.user?.name || '',
+                rating: userReview.rating || 0,
+                comment: userReview.comment || '',
+                images: [],
+                initial_images: userReview.reviews_images || [],
+                deleted_ids: []
             })
-        })
-        closeModal()
+        }
+        if (!isOpen) setIsMainOpen(true);
+    }, [isOpen]);
+
+    const completeAction = async () => {
+        await action(formValues)
     }
     const startAuth = () => {
         registrationStore.setIsOpen(true)
@@ -68,19 +71,22 @@ export const ReviewModal: FC<IReviewModal> = observer(({ isOpen, closeModal }) =
                     key={'ReviewFormMain'}
                     isOpen={isMainOpen}
                     formValues={formValues}
+                    onDeleteClick={deleteReview}
                     setFormValues={setFormValues}
-                    closeModal={() => setIsMainOpen(false)}
-                    isUserAuth={userStore.isAuth}
+                    fromAction={() => setIsMainOpen(false)}
+                    isUserAuth={userStore.isAuth || !!userReview?.user}
+                    isUserAdmin={userStore.isAdmin}
                     startAuth={startAuth}
                 />
                 <ReviewFormImages
                     key={'ReviewFormImages'}
                     isOpen={!isMainOpen}
                     formValues={formValues}
+                    onDeleteClick={deleteReview}
                     setFormValues={setFormValues}
-                    closeModal={createReview}
+                    fromAction={completeAction}
                 />
             </AnimatePresence>
         </Modal>
     );
-})
+}) 

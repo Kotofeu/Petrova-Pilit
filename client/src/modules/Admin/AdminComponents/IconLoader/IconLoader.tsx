@@ -3,6 +3,7 @@ import FileInput from '../../../../components/FileInput/FileInput';
 import { classConnection } from '../../../../utils/function';
 
 import classes from './IconLoader.module.scss';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IIconLoader {
     className?: string;
@@ -18,7 +19,7 @@ export const IconLoader: FC<IIconLoader> = memo(({ className, image, setImage, t
         <div className={classConnection(classes.icon, className)}>
             {image && (
                 <div className={classes.icon__iconBox}>
-                    <img
+                    <ServerImage
                         className={classes.icon__iconImage}
                         src={image}
                         alt={title || 'Icon'}

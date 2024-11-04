@@ -5,7 +5,16 @@
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
-    &__404{
+
+    &__loader {
+        position: fixed !important;
+        top: 15px;
+        right: 15px;
+        font-size: 50px;
+        z-index: 99999;
+    }
+
+    &__404 {
         font-size: 100px;
         text-align: center;
         line-height: 1em;
@@ -28,7 +37,7 @@
 }
 
 @media (min-width: 1023.98px) {
-    .userById{
+    .userById {
         padding: 120px 0 30px;
 
     }

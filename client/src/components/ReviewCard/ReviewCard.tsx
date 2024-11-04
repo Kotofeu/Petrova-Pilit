@@ -35,14 +35,17 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
         >
             <header className={classes.reviewCard__header}>
                 <div className={classes.reviewCard__userIcon}>
-                    <img src={user?.imageSrc || defaultUSerIcon} alt={user?.name || user?.email} />
+                    <img src={user?.imageSrc ? `${process.env.REACT_APP_API_URL}/${user.imageSrc}` : defaultUSerIcon} alt={user?.name || user?.email} />
                 </div>
                 <div className={classes.reviewCard__reviewUser}>
                     <h6 className={classes.reviewCard__userName} title={user?.name || user?.email}>{user?.name || user?.email}</h6>
                     <StarRating className={classes.reviewCard__rating} rating={rating} />
-
                 </div>
             </header>
+            <div className={classes.reviewCard__level}>
+                <span>{`(${userLevel(user?.visitsNumber || null)})`}</span>
+                <DateTime className={classes.reviewCard__date} date={updatedAt} />
+            </div>
             {
                 isShortCard || comment
                     ? <div className={classes.reviewCard__text}>
@@ -51,10 +54,7 @@ const ReviewCard: FC<IReviewCard> = memo((props) => {
                     : null
             }
             <footer className={classes.reviewCard__footer}>
-                <div className={classes.reviewCard__level}>
-                    <span>{`(${userLevel(user?.visitsNumber || null)})`}</span>
-                    <DateTime className={classes.reviewCard__date} date={updatedAt} />
-                </div>
+
                 {
                     memoizedChildren
                 }

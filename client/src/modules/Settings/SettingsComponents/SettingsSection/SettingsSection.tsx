@@ -15,13 +15,11 @@ import { MAX_NAME_LENGTH } from '../../../Reviews/ReviewsComponents/ReviewModal/
 import { classConnection } from '../../../../utils/function'
 import Loader from '../../../../UI/Loader/Loader'
 export const SettingsSection = observer(() => {
-    const nameIsEmail: boolean = !!(userStore.user?.email && userStore.user.email.length > 0 && userStore.user?.name === userStore.user?.email)
-    const startName: string | undefined = nameIsEmail ? '' : userStore.user?.name || ''
 
     const { addMessage } = useMessage();
 
     const [userImage, setUserImage] = useState<File | null>()
-    const [userName, setUserName] = useState<string>(startName || '')
+    const [userName, setUserName] = useState<string>(userStore.user?.name || '')
     const [userPhone, setUserPhone] = useState<string>(userStore.user?.phone || '')
 
 
@@ -29,37 +27,80 @@ export const SettingsSection = observer(() => {
     const debounceName = useDebounce<string>(userName, 1500)
 
     useEffect(() => {
+        if (userStore.user?.phone) {
+            setUserPhone(userStore.user.phone)
+        }
+    }, [userStore.user?.phone])
+
+    useEffect(() => {
+        if (userStore.user?.name) {
+            setUserName(userStore.user.name)
+        }
+    }, [userStore.user?.name])
+
+    useEffect(() => {
         if (userImage !== undefined) {
-            userStore.setUserImage(userImage)
+            userAction('image',
+                userImage
+                    ? 'Новое фото загружено'
+                    : 'Фото удалено'
+            )
         }
     }, [userImage])
+
+
+    const userAction = useCallback(async (action: 'name' | 'phone' | 'phoneDel' | 'image', message: string) => {
+        if (userStore.user) {
+            switch (action) {
+                case 'name':
+                    await userStore.setUserName(debounceName);
+                    break;
+                case 'phone':
+                    await userStore.setUserPhone(debouncePhone);
+                    break;
+                case 'phoneDel':
+                    await userStore.setUserPhone('');
+                    break;
+                case 'image':
+                    await userStore.setUserImage(userImage || null)
+                    break;
+                default:
+                    break;
+            }
+            if (!userStore.error) {
+                addMessage(message, 'complete');
+            }
+            else {
+                addMessage(userStore.error, 'error');
+            }
+        }
+    }, [userStore.user, addMessage, userStore.error, debounceName, debouncePhone, debouncePhone, userImage])
 
     useEffect(() => {
         if (debounceName) {
             if (userStore.user?.name !== debounceName) {
                 if (debounceName.length >= 2 && debounceName.length <= MAX_NAME_LENGTH) {
-                    userStore.setUserName(debounceName)
-                    addMessage(`Ваше имя обновлено, ${debounceName}`, 'complete')
+                    userAction('name', `Ваше имя обновлено, ${debounceName}`)
                 }
             }
         }
         else {
-            if (userStore.user?.name !== userStore.user?.email) {
-                userStore.setUserName(userStore.user?.email || '')
-                addMessage(`Ваше имя заменено на электронную почту`, 'complete')
+            if (userStore.user?.name) {
+                userAction('name', `Ваше имя заменено на электронную почту`)
             }
         }
     }, [debounceName])
     useEffect(() => {
         if (debouncePhone && isValidPhoneNumber(debouncePhone) && userStore.user?.phone !== debouncePhone) {
-            userStore.setUserPhone(debouncePhone)
-            addMessage('Номер телефона обновлён', 'complete')
+            userAction('phone', `Номер телефона обновлён`)
+        }
+        else if (!debouncePhone && userStore.user?.phone) {
+            userAction('phoneDel', `Номер телефона удалён`)
+
         }
     }, [debouncePhone])
+
     const userImageHandler = useCallback((image: File | null) => {
-        image
-            ? addMessage('Новое фото загружено', 'complete')
-            : addMessage('Фото удалено', 'complete')
         setUserImage(image)
     }, [])
 

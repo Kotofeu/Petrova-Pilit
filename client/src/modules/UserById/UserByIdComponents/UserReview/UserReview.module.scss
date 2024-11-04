@@ -4,7 +4,6 @@
     margin-top: 30px;
     padding-bottom: 10px;
 
-
     &__review {
         box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
         border-radius: 0;
@@ -80,6 +79,7 @@
         &__review {
             padding: 20px;
         }
+
         &__images {
             display: grid;
             grid-template-columns: repeat(2, 1fr);

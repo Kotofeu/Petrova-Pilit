@@ -1,14 +1,10 @@
 import Section from '../../../../components/Section/Section'
 import Avatar from '../../../../components/Avatar/Avatar'
 import classes from './AboutMainSection.module.scss'
-import { applicationStore, IContactLink, IGetAllJSON } from '../../../../store'
+import { applicationStore } from '../../../../store'
 import ContactList from '../../../../components/ContactList/ContactList'
 import { observer } from 'mobx-react-lite'
 import { classConnection } from '../../../../utils/function'
-import useRequest from '../../../../utils/hooks/useRequest'
-import { contactApi, IMainInfoValue, mainInfoApi } from '../../../../http'
-import { useMessage } from '../../../MessageContext'
-import { useEffect } from 'react'
 
 export const AboutMainSection = observer(() => {
 

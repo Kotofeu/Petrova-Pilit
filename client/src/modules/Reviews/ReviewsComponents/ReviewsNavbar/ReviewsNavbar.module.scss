@@ -1,7 +1,17 @@
 @import '../../../../styles/settings.scss';
 
 .reviewsNavbar {
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &__loader{
+        position: fixed !important;
+        top: 15px;
+        right: 15px;
+        font-size:  50px;
+        z-index: 99999;
+    }
     &__inner {
         padding: 10px 10px 25px;
 
@@ -23,6 +33,7 @@
         font-size: 20px;
         border-width: 2px;
     }
+
 }
 
 @media (min-width: 479.98px) {

@@ -33,10 +33,19 @@ export class ReviewApi {
 
     addReview = async (
         review: IReviewValue,
+        name?: string,
         images?: File[] | null
     ) => {
         const formData = new FormData();
-        formData.append('review', JSON.stringify(review));
+        if (review.comment) {
+            formData.append('comment', review.comment);
+        }
+        if (review.rating) {
+            formData.append('rating', `${review.rating}`);
+        }
+        if (name) {
+            formData.append('name', name)
+        }
         if (images?.length) {
             images.map(image => {
                 formData.append('images', image, image.name)
@@ -48,11 +57,20 @@ export class ReviewApi {
 
     addAvitoReview = async (
         review: IReviewValue,
+        name: string,
         images?: File[] | null,
         userIcon?: File | null,
     ) => {
         const formData = new FormData();
-        formData.append('review', JSON.stringify(review));
+        if (review.comment) {
+            formData.append('comment', review.comment);
+        }
+        if (review.rating) {
+            formData.append('rating', `${review.rating}`);
+        }
+        if (name) {
+            formData.append('name', name)
+        }
         if (userIcon) {
             formData.append('userIcon', userIcon)
         }
@@ -72,15 +90,23 @@ export class ReviewApi {
         images?: File[] | null
     ) => {
         const formData = new FormData();
-        formData.append('review', JSON.stringify(review));
+        if (review.comment) {
+            formData.append('comment', review.comment);
+        }
+        if (review.rating) {
+            formData.append('rating', `${review.rating}`);
+        }
         if (images) {
             images.map(image => {
                 formData.append('images', image, image.name)
             })
         }
         if (deletedIds && deletedIds.length) {
-            formData.append('deletedIds', JSON.stringify(deletedIds));
+            deletedIds.map(id => {
+                formData.append('deletedIds', `${id}`);
+            });
         }
+
         const { data } = await $api.post(`${baseReview}update`, formData)
         return data
     }

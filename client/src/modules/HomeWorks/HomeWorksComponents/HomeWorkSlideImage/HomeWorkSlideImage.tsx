@@ -1,6 +1,7 @@
 import { FC, memo } from 'react'
 import classes from './HomeWorkSlideImage.module.scss'
 import { classConnection } from '../../../../utils/function';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IHomeWorkSlideImage {
     className?: string
@@ -18,10 +19,10 @@ export const HomeWorkSlideImage: FC<IHomeWorkSlideImage> = memo((props) => {
                 props.type ? classes[`slideImageBox_${props.type}`] : '',
                 props.className
             )}>
-            <img
+            <ServerImage
                 className={classes.slideImageBox__image}
                 src={props.imageSrc}
-                alt={props.alt} />
+                alt={props.alt || props.type || props.imageSrc} />
         </div>
     )
 })

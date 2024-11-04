@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import { IGetAllJSON } from '.';
-import { IReviewValue } from '../http';
+import { IReviewValue, reviewApi } from '../http';
 
 
 export interface IReview extends IReviewValue {
@@ -20,6 +20,10 @@ export class ReviewsStore {
     private _reviews: IReview[] = []
     private _mainReviews: IReview[] = []
     private _activeReview: number | null = null;
+
+    private _isLoading: boolean = false;
+    private _error: string | null = null;
+
     get activeReview() {
         return this._activeReview;
     }
@@ -30,6 +34,31 @@ export class ReviewsStore {
 
     get mainReviews() {
         return this._mainReviews
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    get error() {
+        return this._error;
+    }
+
+    async handleReviewAction(action: () => Promise<IReview>): Promise<IReview | undefined> {
+        this._error = '';
+        this._isLoading = true;
+
+        try {
+            return await action();
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        } finally {
+            this._isLoading = false;
+        }
     }
 
     setReviews(reviews: IReview[]) {
@@ -44,24 +73,51 @@ export class ReviewsStore {
         }
         this._mainReviews = mainReviews
     }
-    createReview(review: IReview) {
-        //  this._reviews.rows.push(review)
+
+    async getReview(id?: number) {
+        if (id) {
+            return await this.handleReviewAction(() => reviewApi.getReviewById(id));
+        }
+        else {
+            return await this.handleReviewAction(() => reviewApi.getReview());
+        }
     }
-    getReviewById(id: number | undefined): IReview | null {
-        return null
-        // Логика загрузки
-        //   return this._reviews.rows.find(review => review.id === id)
-
+    async addReview(review: IReviewValue, name?: string, images?: File[]) {
+        const createdReview = await this.handleReviewAction(() => reviewApi.addReview(review, name, images));
+        if (!this._error && createdReview) {
+            this._reviews.unshift(createdReview)
+        }
     }
 
-    deleteReviewById(id: number) {
-        alert(`Удален отзыв: ${id}`)
-
+    async addAvitoReview(review: IReviewValue, name: string, images?: File[], userIcon?: File) {
+        const createdReview = await this.handleReviewAction(() => reviewApi.addAvitoReview(review, name, images, userIcon));
+        if (!this._error && createdReview) {
+            this._reviews.unshift(createdReview)
+        }
     }
 
+    async updateReview(review: IReviewValue, deletedIds?: number[], images?: File[]) {
+        const updatedReview = await this.handleReviewAction(() => reviewApi.changeById(review, deletedIds, images));
+        if (!this._error && updatedReview) {
+            this._reviews = this._reviews.map((review) => review.id === updatedReview.id ? updatedReview : review)
+        }
+    }
 
-    deleteReviewImageById(id: number) {
-        alert(`Удалено изображение: ${id}`)
+    async deleteImagesById(deletedIds: number[]) {
+        return await this.handleReviewAction(() => reviewApi.deleteImageById(deletedIds))
+    }
+
+    async deleteImagesByIdAdmin(deletedIds: number[]) {
+        return await this.handleReviewAction(() => reviewApi.deleteImageByIdAdmin(deletedIds))
+    }
+
+    async deleteReview(id?: number) {
+        if (id) {
+            return await this.handleReviewAction(() => reviewApi.deleteById(id))
+        }
+        else {
+            return await this.handleReviewAction(() => reviewApi.delete())
+        }
     }
 
 }

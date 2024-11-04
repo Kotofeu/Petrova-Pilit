@@ -25,7 +25,7 @@ class StaticManagement {
             for (const image of images) {
                 if (image.name) {
                     const fileName = `${uuidv4()}.${image.name.split('.').pop()}`;
-                    imagesNames.push(`${process.env.API_URL}/${fileName}`);
+                    imagesNames.push(fileName);
                     const filePath = path.resolve(__dirname, '..', 'static', fileName)
                     try {
                         await this.compressFile(image, filePath, image.name);
@@ -59,7 +59,7 @@ class StaticManagement {
             const filePath = path.resolve(__dirname, '..', 'static', imageName);
             await this.compressFile(image, filePath, image.name);
         }
-        return `${process.env.API_URL}/${imageName}`;
+        return imageName;
     }
     
     async compressFile(image, filePath, fileName) {

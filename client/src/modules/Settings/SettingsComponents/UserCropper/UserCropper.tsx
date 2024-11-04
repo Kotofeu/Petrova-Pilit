@@ -57,7 +57,7 @@ export const UserCropper: FC<IUserCropper> = memo(({
                                 }
                                 <img
                                     className={classes.userCropper__image}
-                                    src={userIcon || defaultUser}
+                                    src={userIcon ? `${process.env.REACT_APP_API_URL}/${userIcon}` : defaultUser}
                                     alt="User icon"
                                 />
                             </>

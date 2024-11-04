@@ -1,10 +1,10 @@
 import { FC, memo, useMemo, useState } from 'react'
-import { motion } from 'framer-motion'
 import { IReview } from '../../../../store';
 import ReviewCard from '../../../../components/ReviewCard/ReviewCard';
 import { ModalSlider } from '../../../../components/Slider';
 import classes from './ReviewCardImages.module.scss'
 import { classConnection } from '../../../../utils/function';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 interface IReviewCard {
     className?: string;
     review: IReview;
@@ -46,7 +46,7 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                                         key={image.id}
                                         onClick={() => openModal(index)}
                                     >
-                                        <img
+                                        <ServerImage
                                             className={classes.reviewCard__image}
                                             src={image.imageSrc}
                                             alt={`Фотография к отзыву пользователя ${review.user?.name} №${index + 1}`}
@@ -64,7 +64,7 @@ export const ReviewCardImages: FC<IReviewCard> = memo((props) => {
                             renderItem={(image, index) => {
                                 if (!image.imageSrc || !image.id) return null
                                 return (
-                                    <motion.img
+                                    <ServerImage
                                         className={classes.reviewCard__modalImage}
                                         key={image.id}
                                         src={image.imageSrc}

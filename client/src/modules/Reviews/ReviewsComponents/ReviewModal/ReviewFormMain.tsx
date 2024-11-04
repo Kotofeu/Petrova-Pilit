@@ -12,7 +12,16 @@ import { useMessage } from '../../../MessageContext';
 import TextArea from '../../../../UI/TextArea/TextArea';
 
 
-export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, closeModal, formValues, setFormValues, startAuth }) => {
+export const ReviewFormMain: FC<IReviewForm> = observer(({
+    isUserAuth,
+    isOpen,
+    fromAction,
+    formValues,
+    setFormValues,
+    onDeleteClick,
+    startAuth,
+    isUserAdmin
+}) => {
     const [commentError, setCommentError] = useState(false);
     const [nameError, setNameError] = useState(false);
     const { addMessage } = useMessage();
@@ -39,7 +48,7 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
         setFormValues(prev => ({ ...prev, [RATING]: rating }));
     }, []);
     const onContinueClick = useCallback(() => {
-        if (!isUserAuth) {
+        if (!isUserAuth || isUserAdmin) {
             if (formValues[NAME].length < 2) {
                 setNameError(true)
                 addMessage('Имя должно быть больше 2 символов', 'error')
@@ -55,8 +64,8 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
             addMessage(`Укажите вашу оценку`, 'error')
             return
         }
-        closeModal()
-    }, [isUserAuth, formValues])
+        fromAction()
+    }, [isUserAuth, formValues, isUserAdmin])
     if (!isOpen) return null
     return (
 
@@ -68,10 +77,10 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
         >
             <h3 className={classes.modalContent__title}>Ваше честное мнение</h3>
             <div className={classes.modalContent__inner}>
-                {!isUserAuth && (
+                {!isUserAuth || isUserAdmin ? (
                     <div className={classes.modalContent__inputRow}>
                         <h6 className={classes.modalContent__label} style={{ alignSelf: 'center' }}>
-                            Как Вас зовут
+                            {isUserAdmin ? 'Напишите имя клиента' : 'Как Вас зовут'}
                         </h6>
                         <div className={classes.modalContent__nameInputContainer}>
                             <Input
@@ -84,18 +93,22 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
                                 value={formValues.name}
                                 onChange={handleInputChange}
                             />
-                            <div className={classes.modalContent__registerBox}>
-                                <span>или</span>
-                                <Button
-                                    className={classes.modalContent__registerButton}
-                                    onClick={startAuth}
-                                >
-                                    Зарегистрируйтесь
-                                </Button>
-                            </div>
+                            {
+                                !isUserAdmin
+                                && <div className={classes.modalContent__registerBox}>
+                                    <span>или</span>
+                                    <Button
+                                        className={classes.modalContent__registerButton}
+                                        onClick={startAuth}
+                                    >
+                                        Зарегистрируйтесь
+                                    </Button>
+                                </div>
+                            }
+
                         </div>
                     </div>
-                )}
+                ) : null}
 
                 <div className={classes.modalContent__inputRow}>
                     <h6 className={classes.modalContent__label} style={{ alignSelf: 'center' }}>
@@ -127,13 +140,21 @@ export const ReviewFormMain: FC<IReviewForm> = observer(({ isUserAuth, isOpen, c
                         </span>
                     </div>
                 </div>
+                <div className={classes.modalContent__actionButtons}>
+                    <Button
+                        className={classes.modalContent__actionButton}
+                        onClick={onDeleteClick}
+                    >
+                        Удалить
+                    </Button>
+                    <Button
+                        className={classes.modalContent__actionButton}
+                        onClick={onContinueClick}
+                    >
+                        Далее
+                    </Button>
+                </div>
 
-                <Button
-                    className={classes.modalContent__send}
-                    onClick={onContinueClick}
-                >
-                    Далее
-                </Button>
             </div>
         </motion.div>
     );

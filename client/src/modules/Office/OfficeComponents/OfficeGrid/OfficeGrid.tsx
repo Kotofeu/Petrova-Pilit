@@ -2,6 +2,7 @@ import { FC, memo } from 'react';
 import Grid from '../../../../components/Grid/Grid';
 import { IImages } from '../../../../store';
 import classes from './OfficeGrid.module.scss';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 export interface IOfficeGrid {
     openModal: (index: number) => void;
@@ -16,7 +17,7 @@ export const OfficeGrid: FC<IOfficeGrid> = memo(({ openModal, images}) => {
             renderItem={(image, index) => {
                 if (!image.imageSrc || !image.id) return null
                 return (
-                    <img
+                    <ServerImage
                         className={classes.officeGrid__image}
                         key={image.id}
                         src={image.imageSrc}

@@ -6,6 +6,7 @@ import { classConnection } from '../../../../utils/function';
 
 import classes from './WorkModalImages.module.scss';
 import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IWorkModalImages {
     className?: string;
@@ -57,7 +58,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                     title='Фото до'
                     name='beforeImage'
                     setImage={(file) => setBefore(file)}
-                    initialImage={initialBefore || ''}
+                    initialImage={initialBefore ? `${process.env.REACT_APP_API_URL}/${initialBefore}` : ''}
                     aspect={4 / 3}
                 />
                 <ImageCropperWithResult
@@ -65,7 +66,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                     title='Фото после'
                     name='afterImage'
                     setImage={(file) => setAfter(file)}
-                    initialImage={initialAfter || ''}
+                    initialImage={initialAfter ? `${process.env.REACT_APP_API_URL}/${initialAfter}` : ''}
                     aspect={4 / 3}
                 />
             </div>
@@ -85,7 +86,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                                     className={classes.workModalImages__photosItem}
                                     key={image.id}
                                 >
-                                    <img
+                                    <ServerImage
                                         src={image.imageSrc || ''}
                                         alt={`Изображение ${image.id} к посту ${title}`}
                                     />

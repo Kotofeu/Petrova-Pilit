@@ -77,10 +77,10 @@ export class UserStore {
     }
 
     async setUserImage(image: File | null) {
-        await this.handleUserAction(() => userApi.changeUserImage(image));
+        const user = await this.handleUserAction(() => userApi.changeUserImage(image));
 
         if (this._user) {
-            this._user.imageSrc = image ? URL.createObjectURL(image) : undefined
+            this._user.imageSrc = image ? user?.imageSrc : undefined
         }
     }
 

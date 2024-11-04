@@ -19,7 +19,7 @@ export const HomeWorksSection = observer(() => {
         works,
         worksIsLoading,
         worksError
-    ] = useRequest<IGetAllJSON<IWork>>(workApi.getWorks);
+    ] = useRequest<IGetAllJSON<IWork>>(workApi.getWorks, { limit: 6 });
     const { addMessage } = useMessage()
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export const HomeWorksSection = observer(() => {
                     <span className={classes.homeWorks__buttonDecoration}>Смотреть больше работ</span>
                 </NavLink>
             </div>
-            <HomeWorksSlider className={classes.homeWorks__slider} isLoading = {worksIsLoading}/>
+            <HomeWorksSlider className={classes.homeWorks__slider} isLoading={worksIsLoading} />
         </Section>
     )
 })

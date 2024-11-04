@@ -6,6 +6,7 @@ import { WORKS_ROUTE } from '../../../../utils/const/routes';
 import Button from '../../../../UI/Button/Button';
 import DateTime from '../../../../UI/DateTime/DateTime';
 import { classConnection } from '../../../../utils/function';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IWorkCard {
     id: number;
@@ -21,7 +22,7 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => 
 
     const onCardClick = useCallback(() => {
         router(`${WORKS_ROUTE}/${id}`);
-    }, [id]);
+    }, [id, router]);
 
     if (!image || !title) return null;
 
@@ -29,10 +30,10 @@ const WorkCard: FC<IWorkCard> = memo(({ id, className, title, image, date }) => 
         <motion.article
             className={classConnection(classes.workCard, isShowMore ? classes.workCard_active : '', className)}
             layout
-            initial={{ opacity: 0}}
-            animate={{ opacity: 1}}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
         >
-            <img className={classes.workCard__image} src={image} alt={title} />
+            <ServerImage className={classes.workCard__image} src={image} alt={title} />
             <h4 className={classes.workCard__title}>{title}</h4>
             {
                 date

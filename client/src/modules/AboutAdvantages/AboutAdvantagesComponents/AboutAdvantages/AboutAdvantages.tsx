@@ -7,6 +7,7 @@ import { applicationStore } from '../../../../store'
 import Section from '../../../../components/Section/Section'
 import ActiveLine from '../../../../UI/ActiveLine/ActiveLine'
 import { classConnection } from '../../../../utils/function'
+import ServerImage from '../../../../UI/ServerImage/ServerImage'
 export const AboutAdvantages: FC = observer(() => {
     const [selectedAdvantage, setSelectedAdvantage] = useState<number>(0)
     return (
@@ -22,7 +23,7 @@ export const AboutAdvantages: FC = observer(() => {
                             className={classes.aboutAdvantages__imageBox}
                             key={advantages.id}
                         >
-                            <img
+                            <ServerImage
                                 className={classes.aboutAdvantages__image}
                                 src={advantages.imageSrc || ''}
                                 alt={advantages.name || ''}

@@ -132,9 +132,13 @@
         }
     }
 
-
-    &__send {
-        margin-left: auto;
+    &__actionButtons{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+    }
+    &__actionButton {
         display: block;
         font-size: 18px;
         padding: 7px 0;

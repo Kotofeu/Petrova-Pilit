@@ -31,7 +31,6 @@ router.post('/update', reviewController.changeById)
 // Удалить фотографии deletedIds отзыва reviewId из cookies
 router.delete('/images',
     [
-        body('deletedIds').isArray(),
         body('deletedIds.*').isInt()
     ],
     reviewController.deleteImageById

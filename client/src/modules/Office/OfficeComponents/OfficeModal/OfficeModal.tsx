@@ -1,9 +1,8 @@
 import { FC, memo } from 'react'
-import { motion } from 'framer-motion'
-import { observer } from 'mobx-react-lite';
 import { ModalSlider } from '../../../../components/Slider';
 import { IImages } from '../../../../store';
 import classes from './OfficeModal.module.scss'
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IOfficeModal {
   isOpen: boolean;
@@ -20,7 +19,7 @@ export const OfficeModal: FC<IOfficeModal> = memo(({ isOpen, closeModal, activeI
     renderItem={(image, index) => {
       if (!image.imageSrc || !image.id) return null
       return (
-        <motion.img
+        <ServerImage
           className={classes.officeModal__image}
           key={image.id}
           src={image.imageSrc}

@@ -12,7 +12,7 @@ import { HeaderUser } from '../HeaderUser/HeaderUser';
 import { classConnection } from '../../../../utils/function';
 import { HeaderUserModal } from '../HeaderUserModal/HeaderUserModal';
 import { HeaderAsideModal } from '../HeaderAsideModal/HeaderAsideModal';
-
+import defaultImage from '../../../../assets/icons/User-icon.svg'
 const bannerForAuth = 'Приходите, с удовольствием приму вас ещё'
 export const Header: FC = observer(() => {
   const [scrollingDown, setScrollingDown] = useState(false);
@@ -100,7 +100,7 @@ export const Header: FC = observer(() => {
             <HeaderUser
               className={classes.header__user}
               name={userStore.user?.name || ''}
-              imageSrc={userStore.user?.imageSrc || ''}
+              imageSrc={userStore.user?.imageSrc ? `${process.env.REACT_APP_API_URL}/${userStore.user?.imageSrc}` : defaultImage }
               isAdmin={userStore.isAdmin}
               isAuth={userStore.isAuth}
               openModal={userModalHandler}

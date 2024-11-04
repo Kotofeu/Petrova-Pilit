@@ -242,12 +242,12 @@ class ReviewsService {
 
     async changeById(reviewId, rating, comment, images, deletedIds, res) {
         let validRating = null;
-
+        let deletedIdsToArray = deletedIds
         if (!reviewId) {
             throw ApiError.BadRequest('Не указан id отзыва');
         }
         if (deletedIds && !Array.isArray(deletedIds)) {
-            throw ApiError.BadRequest('Удаляемые изображения должны быть массивом');
+            deletedIdsToArray = [deletedIds]
         }
         if (images && (images.length > 6)) {
             throw ApiError.BadRequest("Вы превысили доспуск в 6 изображений");
@@ -273,11 +273,11 @@ class ReviewsService {
             validRating = Math.max(1, Math.min(5, Number(rating)));
         }
         let deletedImages = []
-        if (deletedIds) {
+        if (deletedIdsToArray?.length) {
             deletedImages = await ReviewsImages.findAll({
                 where: {
                     [Op.and]: [
-                        { id: deletedIds },
+                        { id: deletedIdsToArray },
                         { reviewId: reviewId }
                     ]
                 }
@@ -332,6 +332,37 @@ class ReviewsService {
         return new ReviewDto(newReview);
     }
 
+    async delete(reviewId) {
+        if (!reviewId) {
+            return 0
+        }
+        const review = await Reviews.findOne({
+            where: { id: reviewId },
+            include: [
+                {
+                    model: ReviewsImages,
+                    attributes: ['id', 'name', 'imageSrc']
+                },
+                {
+                    model: Users,
+                    attributes: ['id', 'name', 'email', 'imageSrc', 'visitsNumber']
+                }
+            ]
+
+        })
+        if (!review) {
+            return 0
+        }
+        if (review.reviews_images) {
+            console.log(review.reviews_images)
+            await staticManagement.manyStaticDelete(review.reviews_images);
+            await Promise.all(review.reviews_images.map(async image =>
+                await ReviewsImages.destroy({ where: { id: image.id } })
+            ));
+        }
+
+        return await Reviews.destroy({ where: { id: reviewId } });
+    }
 
     async deleteById(id) {
         if (!id) {
@@ -365,17 +396,18 @@ class ReviewsService {
     }
 
     async deleteImageById(deletedIds, reviewId) {
+        let deletedIdsToArray = deletedIds;
         if (!reviewId) {
             throw ApiError.BadRequest('Вы ещё не написали свой отзыв');
         }
         if (!Array.isArray(deletedIds)) {
-            throw ApiError.BadRequest('Удаляемые изображения должны быть массивом');
+            deletedIdsToArray = [deletedIds];
         }
-        if (deletedIds) {
+        if (deletedIdsToArray?.length) {
             const deletedImages = await ReviewsImages.findAll({
                 where: {
                     [Op.and]: [
-                        { id: deletedIds },
+                        { id: deletedIdsToArray },
                         { reviewId: reviewId }
                     ]
                 }
@@ -396,11 +428,14 @@ class ReviewsService {
     }
 
     async deleteImageByIdAdmin(deletedIds) {
+        let deletedIdsToArray = deletedIds;
+
         if (!Array.isArray(deletedIds)) {
-            throw ApiError.BadRequest('Удаляемые изображения должны быть массивом');
+            deletedIdsToArray = [deletedIds];
         }
-        if (deletedIds) {
-            const deletedImages = await ReviewsImages.findAll({ where: { id: deletedIds } })
+
+        if (deletedIdsToArray?.length) {
+            const deletedImages = await ReviewsImages.findAll({ where: { id: deletedIdsToArray } })
             await staticManagement.manyStaticDelete(deletedImages);
             return await Promise.all(deletedImages.map(async image =>
                 await ReviewsImages.destroy({ where: { id: image.id } })

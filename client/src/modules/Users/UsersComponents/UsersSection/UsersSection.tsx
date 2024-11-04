@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import Section from '../../../../components/Section/Section'
 import { observer } from 'mobx-react-lite'
-import { IGetAllJSON, IUser, userStore } from '../../../../store'
+import { IGetAllJSON, IUser } from '../../../../store'
 import useDebounce from '../../../../utils/hooks/useDebounce'
 import Fuse from 'fuse.js';
 import Input from '../../../../UI/Input/Input'

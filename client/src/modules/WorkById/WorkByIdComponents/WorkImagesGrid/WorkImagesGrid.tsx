@@ -6,6 +6,7 @@ import classes from './WorkImagesGrid.module.scss';
 import { ModalSlider } from '../../../../components/Slider';
 import Section from '../../../../components/Section/Section';
 import Background from '../../../../assets/images/heart.png';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 export interface IWorkImagesGrid {
     images: IImages[];
 }
@@ -38,7 +39,7 @@ export const WorkImagesGrid: FC<IWorkImagesGrid> = memo(({
                 renderItem={(image, index) => {
                     if (!image.imageSrc || !image.id) return null
                     return (
-                        <img
+                        <ServerImage
                             className={classes.workImages__image}
                             key={image.id}
                             src={image.imageSrc}
@@ -55,7 +56,7 @@ export const WorkImagesGrid: FC<IWorkImagesGrid> = memo(({
                 renderItem={(image, index) => {
                     if (!image.imageSrc || !image.id) return null
                     return (
-                        <motion.img
+                        <ServerImage
                             className={classes.workImages__modalImg}
                             key={image.id}
                             src={image.imageSrc}

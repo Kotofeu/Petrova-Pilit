@@ -15,7 +15,7 @@ export const HomeReviewsSection = memo(() => {
         reviews,
         reviewsIsLoading,
         reviewsError
-    ] = useRequest<IReviewAllJSON>(reviewApi.getReviews);
+    ] = useRequest<IReviewAllJSON>(reviewApi.getReviews, {limit: 6});
     const { addMessage } = useMessage()
 
     useEffect(() => {

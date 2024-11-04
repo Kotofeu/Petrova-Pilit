@@ -1,4 +1,4 @@
-import { FC, FormEvent, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 
 import { observer } from 'mobx-react-lite'
 import ModalSend from '../../../../components/Modal/ModalSend'

@@ -8,6 +8,8 @@ import ModalOk from '../../../../components/Modal/ModalOk';
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
 import Button from '../../../../UI/Button/Button';
 import { useMessage } from '../../../MessageContext';
+import Loader from '../../../../UI/Loader/Loader';
+import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IUserReview {
     user: IUser;
@@ -23,20 +25,30 @@ export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {
         if (!userReview.reviews_images?.length) return null
         return userReview.reviews_images
     }, [userReview])
-    const userAction = useCallback(() => {
-        if (action === 'deleteReview') {
-            reviewsStore.deleteReviewById(userReview.id)
-            addMessage('Вы удалили отзыв', 'message')
+    const userAction = useCallback(async () => {
+        if (action) {
+            let message;
+            switch (action) {
+                case 'deleteReview':
+                    message = 'Вы удалили отзыв'
+                    await reviewsStore.deleteReview(userReview.id)
+                    break;
+                case (action && Number(action)):
+                    message = 'Вы удалили фото'
+                    await reviewsStore.deleteImagesByIdAdmin([action])
+                    break;
+            }
+            if (reviewsStore.error) {
+                addMessage(reviewsStore.error, 'error')
+            }
+            else if (message) {
+                addMessage(message, 'message')
+            }
         }
-        else if (action && Number(action)) {
-            reviewsStore.deleteReviewImageById(action)
-            addMessage('Вы удалили фото', 'message')
+    }, [action, reviewsStore, reviewsStore.error])
 
-        }
-    }, [action, reviewsStore])
     return (
         <div className={classes.userReview}>
-
             <ReviewCard
                 className={classes.userReview__review}
                 review={userReview}
@@ -63,14 +75,13 @@ export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {
                                         onClick={() => setAction(image.id)}
                                         title='Удалить изображение'
                                     />
-                                    <img
+                                    <ServerImage
                                         className={classes.userReview__image}
                                         src={image.imageSrc || ''}
                                         alt={`Фотография к отзыву пользователя ${user?.name || user?.email} №${index + 1}`}
-                                        aria-label={`Фотография к отзыву пользователя ${user?.name || user?.email} №${index + 1}`}
                                     />
 
-                                    <img
+                                    <ServerImage
                                         className={classes.userReview__background}
                                         src={image.imageSrc || ''}
                                         alt={`Фотография к отзыву пользователя ${user?.name || user?.email} №${index + 1}`}

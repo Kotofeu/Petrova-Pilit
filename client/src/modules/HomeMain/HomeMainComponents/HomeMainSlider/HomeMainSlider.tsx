@@ -5,6 +5,7 @@ import { applicationStore } from '../../../../store'
 import classes from './HomeMainSlider.module.scss'
 import { FC } from 'react'
 import { classConnection } from '../../../../utils/function'
+import ServerImage from '../../../../UI/ServerImage/ServerImage'
 
 interface IHomeMainSlider {
     isLoading?: boolean
@@ -33,7 +34,7 @@ export const HomeMainSlider: FC<IHomeMainSlider> = observer(({ isLoading }) => {
                     if (!item.imageSrc) return null
                     return (
                         <div className={classes.homeMainSlider__imageBox}>
-                            <img className={classes.homeMainSlider__image} src={item.imageSrc} alt={item.imageSrc} />
+                            <ServerImage className={classes.homeMainSlider__image} src={item.imageSrc} alt={item.name || item.imageSrc} />
                         </div>
                     )
                 }}

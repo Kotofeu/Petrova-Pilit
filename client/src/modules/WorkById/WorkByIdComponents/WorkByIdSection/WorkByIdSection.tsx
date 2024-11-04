@@ -10,6 +10,7 @@ import Error404 from '../../../../components/Error404/Error404'
 import { WORKS_ROUTE } from '../../../../utils/const/routes'
 import { IWork } from '../../../../store'
 import { classConnection } from '../../../../utils/function'
+import ServerImage from '../../../../UI/ServerImage/ServerImage'
 
 interface IWorkByIdSection {
     work?: IWork;
@@ -35,7 +36,7 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                 <Section className={classes.workById}>
                     <div className={classConnection(classes.workById__inner, 'loading')}>
                         <div className={classes.workById__inner_empty}>
-                            
+
                         </div>
                     </div>
                 </Section>
@@ -79,11 +80,11 @@ export const WorkByIdSection: FC<IWorkByIdSection> = memo(({
                         (work.imageAfterSrc && work.imageBeforeSrc)
                             ? <BeforeAfterSlider
                                 className={classes.workById__slider}
-                                before={work.imageBeforeSrc || ''}
-                                after={work.imageAfterSrc || ''}
+                                before={work.imageBeforeSrc ? `${process.env.REACT_APP_API_URL}/${work.imageBeforeSrc}` : ''}
+                                after={work.imageAfterSrc ? `${process.env.REACT_APP_API_URL}/${work.imageAfterSrc}` : ''}
 
                             />
-                            : <img
+                            : <ServerImage
                                 className={classes.workById__preview}
                                 src={work.imageAfterSrc || work.imageBeforeSrc || ''}
                                 alt={work.name}

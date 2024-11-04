@@ -32,7 +32,7 @@ export class RegistrationStore {
         return this._error;
     }
 
-    async handleUserAction(action: () => Promise<AuthResponse>): Promise<AuthResponse | undefined> {
+    async handleRegistrationAction(action: () => Promise<AuthResponse>): Promise<AuthResponse | undefined> {
         this._error = '';
         this._isLoading = true;
     
@@ -50,15 +50,15 @@ export class RegistrationStore {
     }
     
     async registration(password: string): Promise<AuthResponse | undefined> {
-        return this.handleUserAction(() => userApi.registration(password));
+        return this.handleRegistrationAction(() => userApi.registration(password));
     }
     
     async recoverUser(password: string): Promise<AuthResponse | undefined> {
-        return this.handleUserAction(() => userApi.recoverUser(password));
+        return this.handleRegistrationAction(() => userApi.recoverUser(password));
     }
     
     async login(params: ILoginParams): Promise<AuthResponse | undefined> {
-        return this.handleUserAction(() => userApi.login(params));
+        return this.handleRegistrationAction(() => userApi.login(params));
     }
 
     setIsOpen(isOpen: boolean) {

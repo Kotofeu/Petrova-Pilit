@@ -121,12 +121,13 @@ class WorksService {
 
     async changeById(id, workDto, typeId, imageAfter, imageBefore, otherImages, deletedIds) {
         const workValues = new WorkDto(workDto);
+        let deletedIdsToArray = deletedIds
 
         if (!id) {
             throw ApiError.BadRequest('Не указан id работы');
         }
         if (deletedIds && !Array.isArray(deletedIds)) {
-            throw ApiError.BadRequest('Удаляемые изображения должны быть массивом');
+            deletedIdsToArray = [deletedIds]
         }
         if (otherImages && (otherImages.length > 12)) {
             throw ApiError.BadRequest("Вы превысили доспуск в 12 изображений");
@@ -150,11 +151,11 @@ class WorksService {
             throw ApiError.NotFound(`Работа с id ${id} не существует`);
         }
         let deletedImages = []
-        if (deletedIds) {
+        if (deletedIdsToArray?.length) {
             deletedImages = await WorksImages.findAll({
                 where: {
                     [Op.and]: [
-                        { id: deletedIds },
+                        { id: deletedIdsToArray },
                         { workId: work.id }
                     ]
                 }
@@ -258,11 +259,13 @@ class WorksService {
     }
 
     async deleteImageById(deletedIds) {
+        let deletedIdsToArray = deletedIds;
+
         if (!Array.isArray(deletedIds)) {
-            throw ApiError.BadRequest('Удаляемые изображения должны быть массивом');
+            deletedIdsToArray = [deletedIds];
         }
-        if (deletedIds) {
-            const deletedImages = await WorksImages.findAll({ where: { id: deletedIds } })
+        if (deletedIdsToArray?.length) {
+            const deletedImages = await WorksImages.findAll({ where: { id: deletedIdsToArray } })
             await staticManagement.manyStaticDelete(deletedImages);
             return await Promise.all(deletedImages.map(async image =>
                 await WorksImages.destroy({ where: { id: image.id } })
