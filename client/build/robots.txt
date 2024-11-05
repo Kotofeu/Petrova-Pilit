@@ -1,3 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /user
+
+Sitemap: https://petrova-pilit.ru/sitemap.xml
