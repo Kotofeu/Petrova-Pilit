@@ -10,7 +10,7 @@ export interface IWorkValue {
     workType?: IWorksTypeValue | null;
     images?: IImages[] | null;
     createdAt?: number | null;
-    typeId?: string | null;
+    typeId?: number | null;
 }
 export interface IWorkGetParam extends IGetParams {
     typeId?: number
@@ -34,7 +34,15 @@ export class WorkApi {
         otherImages?: File[] | null
     ) => {
         const formData = new FormData();
-        formData.append('work', JSON.stringify(work));
+        if (work.name) {
+            formData.append('name', work.name);
+        }
+        if (work.description) {
+            formData.append('description', work.description);
+        }
+        if (work.typeId) {
+            formData.append('typeId', `${work.typeId}`);
+        }
         if (imageAfter) {
             formData.append('imageAfter', imageAfter)
         }
@@ -58,7 +66,15 @@ export class WorkApi {
         deletedIds?: number[]
     ) => {
         const formData = new FormData();
-        formData.append('work', JSON.stringify(work));
+        if (work.name) {
+            formData.append('name', work.name);
+        }
+        if (work.description) {
+            formData.append('description', work.description);
+        }
+        if (work.typeId) {
+            formData.append('typeId', `${work.typeId}`);
+        }
         if (imageAfter) {
             formData.append('imageAfter', imageAfter)
         }
@@ -71,8 +87,11 @@ export class WorkApi {
             })
         }
         if (deletedIds && deletedIds.length) {
-            formData.append('deletedIds', JSON.stringify(deletedIds));
+            deletedIds.map(id => {
+                formData.append('deletedIds', `${id}`);
+            });
         }
+        console.log(work, imageAfter, imageBefore, otherImages, deletedIds)
         const { data } = await $authHost.post(`${baseWork}${id}`, formData)
         return data
     }

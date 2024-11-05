@@ -9,7 +9,7 @@ export interface IAdvantageValue {
 }
 
 export class AdvantageApi {
-    
+
     getAdvantages = async () => {
         const { data } = await $api.get(`${baseAdvantage}`)
         return data
@@ -17,11 +17,16 @@ export class AdvantageApi {
 
     addAdvantage = async (
         advantage: IAdvantageValue,
-        icon: File,
-        image: File | null
+        icon?: File,
+        image?: File
     ) => {
         const formData = new FormData();
-        formData.append('advantage', JSON.stringify(advantage));
+        if (advantage.name) {
+            formData.append('name', advantage.name);
+        }
+        if (advantage.description) {
+            formData.append('description', advantage.description);
+        }
         if (image) {
             formData.append('image', image)
         }
@@ -35,11 +40,16 @@ export class AdvantageApi {
     changeAdvantageById = async (
         id: number,
         advantage: IAdvantageValue,
-        icon: File | null,
-        image: File | null
+        icon?: File,
+        image?: File
     ) => {
         const formData = new FormData();
-        formData.append('advantage', JSON.stringify(advantage));
+        if (advantage.name) {
+            formData.append('name', advantage.name);
+        }
+        if (advantage.description) {
+            formData.append('description', advantage.description);
+        }
         if (image) {
             formData.append('image', image)
         }

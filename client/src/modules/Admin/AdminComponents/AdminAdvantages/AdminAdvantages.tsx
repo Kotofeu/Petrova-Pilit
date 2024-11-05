@@ -11,12 +11,13 @@ import classes from './AdminAdvantages.module.scss'
 import { IconLoader } from '../IconLoader/IconLoader'
 import { applicationStore, IAdvantages, ICreateAdvantages } from '../../../../store'
 import TextArea from '../../../../UI/TextArea/TextArea'
-//import ImageCropperWithResult from '../../../../components/ImageCropper/ImageCropperWithResult'
 
 interface IAdvantageArray extends IAdvantages, ICreateAdvantages {
     id: number
 }
 export const AdminAdvantages: FC = observer(() => {
+    const { addMessage } = useMessage();
+
     const [advantages, setAdvantages] = useState<IAdvantageArray[]>([]);
     const [newAdvantage, setNewAdvantage] = useState<ICreateAdvantages>({
         name: '',
@@ -24,12 +25,19 @@ export const AdminAdvantages: FC = observer(() => {
         imageFile: undefined,
         iconFile: undefined
     })
+    const advantageAction = useCallback(async (action: () => Promise<void>, message: string) => {
+        await action()
+        if (!applicationStore.error) {
+            addMessage(message, 'complete');
+        }
+        else {
+            addMessage(applicationStore.error, 'error');
+        }
+    }, [applicationStore, applicationStore.error, addMessage])
 
-    const { addMessage } = useMessage();
     const validateAdvantages = (advantage: IAdvantageArray) => {
         if (advantage.name && (advantage.name.length < 2)) return 'Заголовок должен быть длиннее 2 символов';
         if (advantage.description && (advantage.description.length < 2)) return 'Описание отсутствует';
-        //if (!advantage.imageFile && !advantage.imageSrc) return 'Отсутствует картинка описания';
         if (!advantage.iconFile && !advantage.iconSrc) return 'Отсутствует иконка';
         return null;
     };
@@ -54,20 +62,24 @@ export const AdminAdvantages: FC = observer(() => {
             addMessage(errorMessage, 'error');
             return;
         }
-        applicationStore.addAdvantage(newAdvantage)
-        addMessage(`Преимущество ${newAdvantage.name} добавлено`, 'complete')
+        advantageAction(
+            async () => applicationStore.addAdvantage(newAdvantage, newAdvantage.iconFile!),
+            `Преимущество ${newAdvantage.name} добавлено`
+        )
         setNewAdvantage({ name: '', description: '', imageFile: undefined, iconFile: undefined })
     }, [newAdvantage])
 
 
-    const onSaveClick = useCallback((advantage: IAdvantages) => {
+    const onSaveClick = useCallback((advantage: IAdvantageArray) => {
         const errorMessage = validateAdvantages(advantage);
         if (errorMessage) {
             addMessage(errorMessage, 'error');
             return;
         }
-        applicationStore.changeAdvantages(advantage)
-        addMessage(`Преимущество ${advantage.name} обновлено`, 'complete')
+        advantageAction(
+            async () => applicationStore.changeAdvantages(advantage.id, advantage, advantage.iconFile),
+            `Преимущество ${newAdvantage.name} добавлено`
+        )
     }, [])
 
 
@@ -87,7 +99,11 @@ export const AdminAdvantages: FC = observer(() => {
                             className={classes.adminAdvantages__icon}
                             type='light'
                             setImage={(image) => handleImageChange(image, advantage.id, 'iconFile')}
-                            image={advantage.iconFile ? URL.createObjectURL(advantage.iconFile) : advantage.iconSrc || ''}
+                            image={
+                                advantage.iconFile
+                                    ? URL.createObjectURL(advantage.iconFile)
+                                    : `${process.env.REACT_APP_API_URL}/${advantage.iconSrc}`
+                            }
                             title='Иконка'
                         />
                         <div className={classes.adminAdvantages__inputs}>
@@ -110,7 +126,7 @@ export const AdminAdvantages: FC = observer(() => {
                 </div>
             )}
             addItem={onAddAdvantage}
-            deleteItem={(id) => applicationStore.deleteAdvantages(+id)}
+            deleteItem={(id) => advantageAction(async () => applicationStore.deleteAdvantages(id), `Преимущество удалено`)}
             saveItem={(advantage) => onSaveClick(advantage)}
             renderItemToAdd={() => (
                 <div className={classes.adminAdvantages__row}>
@@ -147,21 +163,3 @@ export const AdminAdvantages: FC = observer(() => {
         />
     );
 });
-
-/**
- * 
- *                     <ImageCropperWithResult
-                        className={classes.adminAdvantages__image}
-                        setImage={(image) => handleImageChange(image, advantage.id, 'imageFile')}
-                        initialImage={advantage.imageSrc}
-                        addCloseButton={false}
-                        aspect={4 / 3}
-                    />
-
-                                        <ImageCropperWithResult
-                        className={classes.adminAdvantages__image}
-                        setImage={(image) => setNewAdvantage(prev => ({ ...prev, imageFile: image || undefined }))}
-                        addCloseButton={false}
-                        aspect={4 / 3}
-                    />
- */

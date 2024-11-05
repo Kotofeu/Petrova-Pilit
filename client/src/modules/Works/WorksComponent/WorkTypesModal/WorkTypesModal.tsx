@@ -22,23 +22,32 @@ export const WorkTypesModal: FC<IWorkTypesModal> = observer(({
     tabs
 }) => {
     const [newType, setNewType] = useState<string>('')
-
     const { addMessage } = useMessage()
-    const deleteHandler = useCallback((id: number | string) => {
-        //tore.deleteType(+id)
-        addMessage('Тип удалён', 'complete')
-    }, [worksStore])
+
+    const tabAction = useCallback(async (action: () => Promise<void>, message: string) => {
+        await action()
+        if (!worksStore.error) {
+            addMessage(message, 'complete');
+        }
+        else {
+            addMessage(worksStore.error, 'error');
+        }
+    }, [newType, worksStore, worksStore.error, addMessage])
+
+
+    const deleteHandler = useCallback((id: number) => {
+        tabAction(() => worksStore.deleteWorkType(id), 'Тип удалён')
+    }, [worksStore, tabAction])
 
     const addHandler = useCallback((name: string) => {
         if (name.length > 2) {
-            //worksStore.addType(name)
+            tabAction(() => worksStore.addWorkType(name), 'Тип добавлен')
             setNewType('')
-            addMessage('Тип добавлен', 'complete')
         }
         else {
             addMessage('Введите название больше 2 символов', 'error')
         }
-    }, [setNewType, worksStore])
+    }, [setNewType, worksStore, tabAction])
 
     return (
         <ModalSend
@@ -48,11 +57,15 @@ export const WorkTypesModal: FC<IWorkTypesModal> = observer(({
             <ListItemController
                 className={classes.types}
                 items={tabs || []}
-                renderItem={(tab, index) => (
+                renderItem={(tab) => (
                     <WorkEditType
                         className={classes.type}
                         initialValue={tab.name}
                         id={tab.id}
+                        onTypeEdit={(id, name) => tabAction(
+                            () => worksStore.changeWorkTypeById(id, name),
+                            'Тип изменён'
+                        )}
                     />
                 )}
                 renderItemToAdd={() => (

@@ -29,6 +29,7 @@ const ServerImage: FC<IServerImage> = memo(({ className, src, alt, title = alt, 
       aria-label={title}
       onClick={onClick}
       draggable = {draggable}
+      loading="lazy"
     />
   );
 });

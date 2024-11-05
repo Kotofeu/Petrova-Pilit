@@ -15,13 +15,15 @@ import Grid from '../../../../components/Grid/Grid';
 
 export const OfficeSection = observer(() => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const { addMessage } = useMessage()
+
     const [activeImage, setActiveImage] = useState<number>(0)
     const [
         officeImages,
         officeImagesIsLoading,
         officeImagesError
     ] = useRequest<IGetAllJSON<IImages>>(officeApi.getImages);
-    const { addMessage } = useMessage()
+    
     useEffect(() => {
         if (officeImagesError && officeImagesError !== applicationStore.error) {
             applicationStore.setError(officeImagesError)

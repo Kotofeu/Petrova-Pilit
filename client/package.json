@@ -1,6 +1,6 @@
 {
   "name": "petrova-pilit",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
@@ -35,7 +35,6 @@
     "web-vitals": "^4.2.2"
   },
   "scripts": {
-    "https": "set HTTPS=true&&set SSL_CRT_FILE=C:/Windows/System32/cert.crt&&set SSL_KEY_FILE=C:/Windows/System32/cert.key&&react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

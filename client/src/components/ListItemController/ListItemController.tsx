@@ -12,14 +12,14 @@ interface IListItemController<T> {
     items: T[];
     renderItem: (item: T, index: number) => ReactNode;
     renderItemToAdd?: () => ReactNode
-    deleteItem?: (id: string | number) => void;
+    deleteItem?: (id: number) => void;
     addItem?: () => void;
     saveItem?: (item: T) => void;
     indexPadding?: string
     addIndex?: boolean
 }
 
-const ListItemController = <T extends { id: number | string }>({
+const ListItemController = <T extends { id: number }>({
     className,
     itemClassName,
     items,

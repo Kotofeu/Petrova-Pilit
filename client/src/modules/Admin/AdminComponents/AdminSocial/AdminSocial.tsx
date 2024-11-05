@@ -23,11 +23,21 @@ export const AdminSocial: FC = observer(() => {
     })
 
     const { addMessage } = useMessage();
-    const validateLink = (link: IChooseContactLink) => {
 
+    const contactAction = useCallback(async (action: () => Promise<void>, message: string) => {
+        await action()
+        if (!applicationStore.error) {
+            addMessage(message, 'complete');
+        }
+        else {
+            addMessage(applicationStore.error, 'error');
+        }
+    }, [applicationStore, applicationStore.error, addMessage])
+
+    const validateLink = (link: IChooseContactLink) => {
         if (link.name && (link.name.length < 2)) return 'Заголовок должен быть длиннее 2 символов';
         if (link.link && (link.link.length < 2)) return 'Ссылка отсутствует';
-        if (!link.imageFile && !link.imageSrc) return 'Отсутствует тёмная иконка';
+        if (!link.imageFile && !link.imageSrc) return 'Отсутствует иконка';
         return null;
     };
 
@@ -51,8 +61,7 @@ export const AdminSocial: FC = observer(() => {
             addMessage(errorMessage, 'error');
             return;
         }
-        applicationStore.addContactLink(newSocialLinks)
-        addMessage(`Ссылка на ${newSocialLinks.name} добавлена`, 'complete')
+        contactAction(async () => applicationStore.addContactLink(newSocialLinks, newSocialLinks.imageFile!), `Ссылка на ${newSocialLinks.name} добавлена`)
         setNewSocialLinks({ name: '', link: '', imageFile: undefined })
     }, [newSocialLinks])
 
@@ -63,8 +72,7 @@ export const AdminSocial: FC = observer(() => {
             addMessage(errorMessage, 'error');
             return;
         }
-        applicationStore.changeContactLink(contactLink)
-        addMessage(`Ссылка на ${contactLink.name} обновлена`, 'complete')
+        contactAction(async () => applicationStore.changeContactLink(contactLink.id, contactLink, contactLink.imageFile), `Ссылка на ${contactLink.name} обновлена`)
     }, [])
 
 
@@ -84,7 +92,11 @@ export const AdminSocial: FC = observer(() => {
                             className={classes.adminSocial__icon}
                             type='dark'
                             setImage={(image) => handleImageChange(image, socialLink.id)}
-                            image={socialLink.imageFile ? URL.createObjectURL(socialLink.imageFile) : socialLink.imageSrc || ''}
+                            image={
+                                socialLink.imageFile
+                                    ? URL.createObjectURL(socialLink.imageFile)
+                                    : `${process.env.REACT_APP_API_URL}/${socialLink.imageSrc}`
+                            }
                             title='Иконка'
                         />
                     </div>
@@ -109,7 +121,7 @@ export const AdminSocial: FC = observer(() => {
                 </div>
             )}
             addItem={onAddLink}
-            deleteItem={(id) => applicationStore.deleteContactLink(+id)}
+            deleteItem={(id) => contactAction(async () => applicationStore.deleteContactLink(id), `Ссылка удалена`)}
             saveItem={(socialLink) => onSaveClick(socialLink)}
             renderItemToAdd={() => (
                 <div className={classes.adminSocial__row}>

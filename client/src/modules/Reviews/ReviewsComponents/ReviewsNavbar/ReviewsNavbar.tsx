@@ -67,7 +67,7 @@ export const ReviewsNavbar: FC<IReviewsNavbar> = observer(({ className }) => {
             }
             else {
                 message = 'Отзыв сохранён'
-                await reviewsStore.updateReview(
+                await reviewsStore.changeById(
                     {
                         comment: review[COMMENT],
                         rating: review[RATING],

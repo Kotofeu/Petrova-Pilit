@@ -9,7 +9,7 @@ export interface IServiceValue {
 }
 
 export class ServiceApi {
-    
+
     getServices = async () => {
         const { data } = await $api.get(`${baseService}`)
         return data
@@ -17,14 +17,36 @@ export class ServiceApi {
 
     addService = async (service: IServiceValue) => {
         const formData = new FormData();
-        formData.append('service', JSON.stringify(service));
+        if (service.name) {
+            formData.append('name', service.name);
+        }
+        if (service.description) {
+            formData.append('description', service.description);
+        }
+        if (service.time) {
+            formData.append('time', `${service.time}`);
+        }
+        if (service.price) {
+            formData.append('price', `${service.price}`);
+        }
         const { data } = await $authHost.post(`${baseService}`, formData)
         return data
     }
 
     changeServiceById = async (id: number, service: IServiceValue,) => {
         const formData = new FormData();
-        formData.append('service', JSON.stringify(service));
+        if (service.name) {
+            formData.append('name', service.name);
+        }
+        if (service.description) {
+            formData.append('description', service.description);
+        }
+        if (service.time) {
+            formData.append('time', `${service.time}`);
+        }
+        if (service.price) {
+            formData.append('price', `${service.price}`);
+        }
         const { data } = await $authHost.post(`${baseService}${id}`, formData)
         return data
     }

@@ -15,8 +15,6 @@ export const WorkModalTag: FC<IWorkModalTag> = memo(({ types, typeId, setTypeId 
         setTypeId(Number.isNaN(+value) ? undefined : +value)
     }, [])
 
-
-
     return (
         <div className={classes.workModalTag}>
             <h4 className={classes.workModalTag__title}>Тег публикации:</h4>
@@ -30,9 +28,6 @@ export const WorkModalTag: FC<IWorkModalTag> = memo(({ types, typeId, setTypeId 
                     >
                         <option value={undefined} defaultChecked>
                             Все
-                        </option>
-                        <option value={-1}>
-                            Новый тип
                         </option>
                         {types.map(type =>
                             <option

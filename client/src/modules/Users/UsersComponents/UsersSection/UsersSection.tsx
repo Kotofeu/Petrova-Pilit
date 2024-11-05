@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Section from '../../../../components/Section/Section'
 import { observer } from 'mobx-react-lite'
-import { IGetAllJSON, IUser } from '../../../../store'
+import { applicationStore, IGetAllJSON, IUser } from '../../../../store'
 import useDebounce from '../../../../utils/hooks/useDebounce'
 import Fuse from 'fuse.js';
 import Input from '../../../../UI/Input/Input'
@@ -12,12 +12,14 @@ import { useNavigate } from 'react-router-dom'
 import { USER_ROUTE } from '../../../../utils/const/routes'
 import useRequest from '../../../../utils/hooks/useRequest'
 import { userApi } from '../../../../http'
+import Loader from '../../../../UI/Loader/Loader'
+import { useMessage } from '../../../MessageContext'
 export const UsersSection = observer(() => {
   const [
     users,
     usersIsLoading,
     usersError,
-] = useRequest<IGetAllJSON<IUser>>(userApi.getAllUsers);
+  ] = useRequest<IGetAllJSON<IUser>>(userApi.getAllUsers);
   const options = {
     keys: ['name', 'phone', 'email'],
     threshold: 0.3,
@@ -25,6 +27,14 @@ export const UsersSection = observer(() => {
   const [filter, setFilter] = useState<string>('')
   const debounceFilter = useDebounce(filter, 400)
   const router = useNavigate();
+  const { addMessage } = useMessage();
+
+  useEffect(() => {
+    if (usersError && usersError !== applicationStore.error) {
+        applicationStore.setError(usersError);
+        addMessage(usersError, 'error');
+    }
+}, [usersError]);
 
   const fuse = new Fuse(users?.rows || [], options);
   const filteredUsers: IGetAllJSON<IUser> | null = useMemo(() => {
@@ -38,10 +48,14 @@ export const UsersSection = observer(() => {
   }, [users, debounceFilter])
   return (
     <Section className={classes.users}>
+      <Loader
+        className={classes.users__loader}
+        isLoading={usersIsLoading}
+      />
       <header className={classes.users__header}>
         <h1 className={classes.users__title}>Поиск по имени, почте и телефону</h1>
 
-        <span className={classes.users__usersCount}>{`Всего пользователей: ${users?.count || 0}`}</span>
+        <span className={classes.users__usersCount}>{`Всего пользователей: ${users?.count || '...'}`}</span>
         <Input
           className={classes.users__headerInput}
           value={filter}
@@ -73,12 +87,17 @@ export const UsersSection = observer(() => {
               })
             }
           </div>
-          : <h3 className={classes.users__doesNotExist}>
-            Такого пользователя не существует
-          </h3>
+          : null
       }
 
+      {
+        (!filteredUsers || !filteredUsers.rows.length) && !usersIsLoading
+          ? < h3 className={classes.users__doesNotExist}>
+            Такого пользователя не существует
+          </h3>
+          : null
+      }
 
-    </Section>
+    </Section >
   )
 })

@@ -43,7 +43,7 @@ const ContactLink: FC<IContactLink> = memo((props) => {
                 <ServerImage
                     className={classes.contact_socialImage}
                     src={imageSrc || ''}
-                    alt={title || ''}
+                    alt={''}
                     aria-hidden
                 />
                 <span>{children}</span>

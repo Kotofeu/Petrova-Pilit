@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 import { AuthResponse, contactApi, IMainInfoValue, mainInfoApi, userApi, workScheduleApi } from "./http";
 import { Router } from "./Router";
-import { applicationStore, IContactLink, IGetAllJSON, IUser, IWorkSchedule, userStore } from "./store";
+import { applicationStore, IContactLink, IGetAllJSON, IWorkSchedule, userStore } from "./store";
 import './styles/reset.scss'
 import useRequest from "./utils/hooks/useRequest";
 import { useMessage } from "./modules/MessageContext";
-import { AxiosError } from "axios";
-
 function App() {
   const { addMessage } = useMessage()
 

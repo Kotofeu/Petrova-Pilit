@@ -13,22 +13,28 @@ export const AdminHowToGet: FC = observer(() => {
     const [preview, setPreview] = useState<File | null>(null);
     const { addMessage } = useMessage()
 
-    const saveHowToGet = useCallback((type: 'preview' | 'video') => {
+    const saveHowToGet = useCallback(async (type: 'preview' | 'video') => {
         if (type === 'preview' && preview) {
-            applicationStore.changeHowToGetPreview(preview)
-            addMessage("Превью сохранено", 'complete')
+            await applicationStore.changeHowToGetPreview(preview)
+            if (!applicationStore.error){
+                addMessage("Превью сохранено", 'complete')
+            }
             setPreview(null)
         }
         else if (type === 'video' && video) {
-            applicationStore.changeHowToGetVideo(video)
-            addMessage("Видео сохранено", 'complete')
+            await applicationStore.changeHowToGetVideo(video)
+            if (!applicationStore.error){
+                addMessage("Видео сохранено", 'complete')
+            }
             setVideo(null)
         }
         else {
-            addMessage("Неизвестная ошибка", 'error')
-
+            addMessage("Неизвестная ошибка", 'error')     
         }
-    }, [preview, video])
+        if (applicationStore.error) {
+            addMessage(applicationStore.error, 'error')
+        }
+    }, [preview, video, applicationStore.error])
 
     return (
         <div className={classes.adminHowToGet}>

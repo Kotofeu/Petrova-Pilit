@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { useMessage } from '../../../MessageContext'
@@ -6,7 +6,6 @@ import { applicationStore, IWorkSchedule } from '../../../../store'
 
 import ListItemController from '../../../../components/ListItemController/ListItemController'
 import Input from '../../../../UI/Input/Input'
-import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 
 import classes from './AdminWorkDay.module.scss'
 
@@ -22,10 +21,20 @@ export const AdminWorkDay: FC = observer(() => {
             )
         );
     }, []);
-    const onSaveClick = useCallback((workDay: IWorkSchedule) => {
-        applicationStore.changeWorkSchedule(workDay)
-        addMessage(`Расписание на ${workDay.name} изменено`, 'complete')
-    }, [])
+    const onSaveClick = useCallback(async (workDay: IWorkSchedule) => {
+        await applicationStore.changeWorkSchedule(workDay)
+        if (!applicationStore.error) {
+            addMessage(`Расписание на ${workDay.name} изменено`, 'complete')
+        }
+        else {
+            addMessage(applicationStore.error, 'error')
+        }
+    }, [applicationStore.error])
+    useEffect(() => {
+        if (applicationStore.workSchedule) {
+            setWorkSchedule(applicationStore.workSchedule)
+        }
+    }, [applicationStore.workSchedule])
     return (
         <ListItemController
             className={classes.adminWorkDay}

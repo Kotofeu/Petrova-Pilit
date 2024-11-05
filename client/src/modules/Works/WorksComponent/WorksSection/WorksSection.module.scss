@@ -22,6 +22,7 @@
     &__aside {
         padding-top: 85px;
         display: flex;
+        gap: 10px;
         flex-direction: column;
         align-items: center;
         position: relative;
@@ -37,10 +38,17 @@
         padding: 0 10px;
     }
 
+    &__nav {
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin-bottom: auto;
+        padding: 8px 40px 20px;
+
+    }
+
     &__tabs {
         width: 100%;
-        padding: 18px 40px 20px;
-        margin-bottom: auto;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -194,10 +202,14 @@
             font-size: 60px;
         }
 
-        &__tabs {
+        &__nav {
             max-width: 500px;
+            padding: 10px 10px 20px;
+        }
+
+        &__tabs {
             width: 100%;
-            padding: 20px 10px 20px;
+
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
@@ -250,9 +262,12 @@
             min-height: 100vh;
         }
 
-        &__tabs {
+        &__nav {
             max-width: none;
-            padding: 20px 40px 20px;
+            padding: 10px 40px 20px;
+        }
+
+        &__tabs {
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -328,10 +343,11 @@
             min-width: 550px;
             width: 60%
         }
-
+        &__nav{
+            padding: 20px 15px 20px;
+        }
         &__tabs {
             width: 100%;
-            padding: 30px 15px 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;

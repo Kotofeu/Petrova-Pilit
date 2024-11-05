@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useState } from 'react'
+import { FC, memo, useCallback, useEffect, useState } from 'react'
 import TextArea from '../../../../UI/TextArea/TextArea'
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 
@@ -26,6 +26,11 @@ export const AdminTextArea: FC<IAdminTextArea> = memo(({
         }
         else addMessage('Значение не менялось', 'message')
     }, [value, initialValue])
+    useEffect(() => {
+        if (initialValue) {
+            setValue(initialValue)
+        }
+    }, [initialValue])
     return (
         <div className={classes.adminTextArea}>
             <TextArea

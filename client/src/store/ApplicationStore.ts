@@ -13,8 +13,8 @@ import defaultOfficeImage2 from '../assets/images/defaultImages/office/office_2.
 import defaultOfficeImage3 from '../assets/images/defaultImages/office/office_3.jpeg'
 import defaultSliderImage from '../assets/images/defaultImages/mainSlider/main_slider_1.jpeg'
 
-import { IImages } from '.';
-import { IAdvantageValue, IContactsValue, IMainInfoValue } from '../http';
+import { IGetAllJSON, IImages } from '.';
+import { advantageApi, contactApi, homeSliderApi, IAdvantageValue, IContactsValue, IMainInfoValue, mainInfoApi, officeApi, workScheduleApi } from '../http';
 
 
 export interface ILink {
@@ -131,6 +131,7 @@ export class ApplicationStore {
 
 
     private _error: string | null = null
+    private _isLoading: boolean = false
 
 
     get promoBanner() {
@@ -177,134 +178,170 @@ export class ApplicationStore {
         return this._workSchedule
     }
 
-    get error() {
-        return this._error
+    get isLoading() {
+        return this._isLoading;
     }
 
+    get error() {
+        return this._error;
+    }
+
+    async handleAction<T>(action: () => Promise<T>): Promise<T | undefined> {
+        this._error = '';
+        this._isLoading = true;
+
+        try {
+            return await action();
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        } finally {
+            this._isLoading = false;
+        }
+    }
+
+    // Контакты
     setContactsLinks(contactLinks: IContactLink[]) {
         this._contactLinks = contactLinks
     }
-    setSliderImages(sliderImages: IImages[]) {
-        this._homeSlider = sliderImages
+
+    async changeContactLink(id: number, contactLink: IContactsValue, image?: File) {
+        const updatedContact = await this.handleAction<IContactLink>(() => contactApi.changeContactById(id, contactLink, image));
+        if (!this._error && updatedContact) {
+            this._contactLinks = this._contactLinks.map((contact) => contact.id === updatedContact.id ? updatedContact : contact)
+        }
     }
-    setOfficeImages(officeImages: IImages[]) {
-        this._officeImages = officeImages
+
+    async addContactLink(contactLink: IContactsValue, image: File) {
+        const createdContact = await this.handleAction<IContactLink>(() => contactApi.addContact(contactLink, image));
+        if (!this._error && createdContact) {
+            this._contactLinks.push(createdContact)
+        }
     }
+
+    async deleteContactLink(id: number) {
+        await this.handleAction(() => contactApi.deleteContactById(id))
+        if (!this._error) {
+            this._contactLinks = this._contactLinks.filter((contact) => contact.id !== id)
+        }
+    }
+
+    // Преимущества 
     setAdvantages(advantages: IAdvantages[]) {
         this._advantages = advantages
     }
+    async changeAdvantages(id: number, advantage: IAdvantages, icon?: File) {
+        const updatedAdvantage = await this.handleAction<IAdvantages>(() => advantageApi.changeAdvantageById(id, advantage, icon));
+        if (!this._error && updatedAdvantage) {
+            this._advantages = this._advantages.map((advantage) => advantage.id === updatedAdvantage.id ? updatedAdvantage : advantage)
+        }
+    }
+
+    async addAdvantage(advantage: IAdvantageValue, icon: File) {
+        const createdAdvantage = await this.handleAction<IAdvantages>(() => advantageApi.addAdvantage(advantage, icon));
+        if (!this._error && createdAdvantage) {
+            this._advantages.push(createdAdvantage)
+        }
+    }
+
+    async deleteAdvantages(id: number) {
+        await this.handleAction(() => advantageApi.deleteAdvantageById(id))
+        if (!this._error) {
+            this._advantages = this._advantages.filter((advantage) => advantage.id !== id)
+        }
+    }
+
+    // Картинки слайдера
+    setSliderImages(sliderImages: IImages[]) {
+        this._homeSlider = sliderImages
+    }
+
+    async addMainSlider(images: File[]) {
+        await this.handleAction(() => homeSliderApi.addImages(images));
+        if (!this._error) {
+            const newImages: IGetAllJSON<IImages> = await homeSliderApi.getImages()
+            this.setSliderImages(newImages.rows)
+        }
+    }
+
+    async deleteMainSlider(id: number) {
+        await this.handleAction(() => homeSliderApi.deleteImageById(id))
+        if (!this._error) {
+            this._homeSlider = this._homeSlider.filter(image => image.id !== id);
+        }
+    }
+
+    // Картинки офиса 
+
+    setOfficeImages(officeImages: IImages[]) {
+        this._officeImages = officeImages
+    }
+
+    async addOfficeImage(images: File[]) {
+        await this.handleAction(() => officeApi.addImages(images));
+        if (!this._error) {
+            const newImages: IGetAllJSON<IImages> = await officeApi.getImages()
+            this.setOfficeImages(newImages.rows)
+        }
+    }
+
+    async deleteOfficeImage(id: number) {
+        await this.handleAction(() => officeApi.deleteImageById(id))
+        if (!this._error) {
+            this._officeImages = this._officeImages.filter(image => image.id !== id);
+        }
+    }
+
+    // График работы
     setWorkSchedule(workSchedule: IWorkSchedule[]) {
         this._workSchedule = workSchedule
     }
+
+    async changeWorkSchedule(workDay: IWorkSchedule) {
+        await this.handleAction(() => workScheduleApi.changeWorkSchedule(workDay.id, workDay.value))
+        if (!this._error) {
+            this._workSchedule = this._workSchedule.map(day => day.id === workDay.id ? workDay : day);
+        }
+    }
+
+
     setGeneralData(generalData: IMainInfoValue) {
         this._generalData = generalData
     }
-
-    changeHowToGetPreview(preview: File) {
-        this._generalData.howToGetPreview = this.createImageSrc(preview)
+    async changeHowToGetPreview(preview: File) {
+        await this.handleAction(() => mainInfoApi.changeHowToGetPreview(preview))
+        if (!this._error) {
+            this._generalData.howToGetPreview = URL.createObjectURL(preview)
+        }
     }
-    changeHowToGetVideo(video: File) {
-        this._generalData.howToGetVideo = this.createImageSrc(video)
+    async changeHowToGetVideo(video: File) {
+        await this.handleAction(() => mainInfoApi.changeHowToGetVideo(video))
+        if (!this._error) {
+            this._generalData.howToGetVideo = URL.createObjectURL(video)
+        }
     }
-    changePromoBanner(text: string) {
-        this._generalData.promoBanner = text
-    }
-    changeWorkSchedule(workDay: IWorkSchedule) {
-        this._workSchedule = this.updateArray(this._workSchedule, workDay, 'id');
-    }
-    changeContactLink(contactLink: IContactLink & ICreateContactLink) {
-        const { id, name, link, imageFile, imageSrc } = contactLink;
-        const newContactLink = {
-            id,
-            name,
-            link,
-            imageSrc: this.createImageSrc(imageFile, imageSrc),
-        };
-        this._contactLinks = this.updateArray(this._contactLinks, newContactLink, 'id');
+    async changePromoBanner(text: string) {
+        await this.handleAction(() => mainInfoApi.changePromoBanner(text))
+        if (!this._error) {
+            this._generalData.promoBanner = text
+        }
     }
 
-    addContactLink({ name, link, imageFile }: ICreateContactLink): IContactLink {
-        const newContactLink: IContactLink = {
-            id: Date.now(),
-            name,
-            link,
-            imageSrc: this.createImageSrc(imageFile),
-        };
-        this._contactLinks.push(newContactLink);
-        return newContactLink;
+    async setAddressMap(address: string) {
+        await this.handleAction(() => mainInfoApi.changeAddressMap(address))
+        if (!this._error) {
+            this._generalData.addressMap = address
+        }
     }
 
-    deleteContactLink(id: number) {
-        this._contactLinks = this._contactLinks.filter(link => link.id !== id);
-    }
-
-    changeAdvantages(advantage: IAdvantages & ICreateAdvantages) {
-        const { id, name, description, imageFile, imageSrc, iconSrc, iconFile } = advantage;
-        const newAdvantage = {
-            id,
-            name,
-            description,
-            imageSrc: this.createImageSrc(imageFile, imageSrc),
-            iconSrc: this.createImageSrc(iconFile, iconSrc)
-        };
-        this._advantages = this.updateArray(this._advantages, newAdvantage, 'id');
-    }
-
-    addAdvantage({ name, description, imageFile, iconFile }: ICreateAdvantages): IAdvantages {
-        const newAdvantage: IAdvantages = {
-            id: Date.now(),
-            name,
-            description,
-            imageSrc: this.createImageSrc(imageFile),
-            iconSrc: this.createImageSrc(iconFile),
-        };
-        this._advantages.push(newAdvantage);
-        return newAdvantage;
-    }
-
-    deleteAdvantages(id: number) {
-        this._advantages = this._advantages.filter(advantage => advantage.id !== id);
-    }
-
-
-
-
-    addMainSlider(image: File): IImages {
-
-        const newImage: IImages = {
-            id: -Math.random(),
-            imageSrc: this.createImageSrc(image),
-        };
-        this._homeSlider.push(newImage);
-        return newImage;
-    }
-
-    deleteMainSlider(id: number) {
-        this._homeSlider = this._homeSlider.filter(image => image.id !== id);
-    }
-
-
-    addOfficeImage(image: File): IImages {
-
-        const newImage: IImages = {
-            id: -Math.random(),
-            imageSrc: this.createImageSrc(image),
-        };
-        this._officeImages.push(newImage);
-        return newImage;
-    }
-
-    deleteOfficeImage(id: number) {
-        this._officeImages = this._officeImages.filter(image => image.id !== id);
-    }
-
-
-    setAddressMap(address: string) {
-        this._generalData.addressMap = address
-    }
-
-    setAboutMe(aboutMe: string) {
-        this._generalData.aboutMe = aboutMe
+    async setAboutMe(aboutMe: string) {
+        await this.handleAction(() => mainInfoApi.changeAboutMe(aboutMe))
+        if (!this._error) {
+            this._generalData.aboutMe = aboutMe
+        }
     }
 
     setError(error: string) {
@@ -312,16 +349,4 @@ export class ApplicationStore {
             this._error = error
         }
     }
-
-    private createImageSrc(imageFile?: File, imageSrc?: string | null): string {
-        return imageFile ? URL.createObjectURL(imageFile) : imageSrc || '';
-    }
-
-    private updateArray<T>(array: T[], item: T, idKey: keyof T): T[] {
-        return array.map(existingItem => (
-            existingItem[idKey] === item[idKey] ? { ...existingItem, ...item } : existingItem
-        ));
-    }
-
-
 }

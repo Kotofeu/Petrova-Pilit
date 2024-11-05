@@ -17,7 +17,7 @@ interface IWorkModalImages {
     setAfter: (file: File | null) => void;
     setBefore: (file: File | null) => void;
     setOthers: (file: File[] | null) => void;
-    setImagesToDelete: (images: React.SetStateAction<IImages[]>) => void
+    setImagesToDelete: (images: React.SetStateAction<number[]>) => void
 }
 
 export const WorkModalImages: FC<IWorkModalImages> = memo(({
@@ -39,7 +39,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
 
     const handleInitialImageDelete = useCallback((id: number) => {
         const deletedImage = initialImages.find(image => image.id === id)
-        setImagesToDelete(prev => deletedImage ? [...prev, deletedImage] : prev)
+        setImagesToDelete(prev => deletedImage?.id ? [...prev, deletedImage.id] : prev)
         setInitialImages(prev => prev.filter(image => image.id !== id))
 
     }, [initialImages, setInitialImages, setImagesToDelete])
@@ -98,8 +98,7 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
                                     />
                                 </div>
                             )
-                        })
-                            : null
+                        }) : null
                     }
                     {
                         otherImages?.length ? otherImages.map((image, index) => {
@@ -122,13 +121,9 @@ export const WorkModalImages: FC<IWorkModalImages> = memo(({
 
                             )
 
-                        })
-                            : null
+                        }) : null
                     }
-
                 </div>
-
-
             </div>
         </div>
     )

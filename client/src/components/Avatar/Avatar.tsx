@@ -59,7 +59,6 @@ const Avatar: FC<IAvatar> = memo((props) => {
                 className={classes.avatar__image}
                 variants={animateUp}
                 transition={{ duration: 0.5 }}
-
                 src={imageSrc}
                 alt='Анастасия Петрова аватарка'
             />
@@ -67,7 +66,7 @@ const Avatar: FC<IAvatar> = memo((props) => {
                 className={classes.avatar__decoration}
                 variants={animateLeft}
                 transition={{ duration: 0.5 }}
-
+                alt='Задний фон фигура'
                 src={defaultBlob}
 
             />
@@ -76,7 +75,7 @@ const Avatar: FC<IAvatar> = memo((props) => {
                 variants={animateRight}
                 transition={{ duration: 0.5 }}
                 src={defaultSplashes}
-
+                alt='Задний фон рисунок'
             />
         </motion.div>
     )

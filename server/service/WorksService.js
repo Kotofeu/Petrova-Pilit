@@ -163,8 +163,8 @@ class WorksService {
         }
         const isValid =
             Array.isArray(otherImages)
-            ? otherImages.length + work.works_images.length - deletedImages.length > 12
-            : otherImages ? 1 + work.works_images.length - deletedImages.length > 12 : false
+                ? otherImages.length + work.works_images.length - deletedImages.length > 12
+                : otherImages ? 1 + work.works_images.length - deletedImages.length > 12 : false
 
         if (isValid) {
             throw ApiError.BadRequest("Вы превысили доспуск в 12 изображений");
@@ -211,8 +211,6 @@ class WorksService {
                 });
             }));
         }
-
-
         await work.save();
         const newWork = await Works.findOne({
             where: { id: work.id },

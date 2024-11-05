@@ -1,7 +1,7 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import ModalSend from '../../../../components/Modal/ModalSend'
 import { observer } from 'mobx-react-lite'
-import { IImages, IWork, worksStore } from '../../../../store'
+import { applicationStore, IGetAllJSON, IWork, IWorksType, worksStore } from '../../../../store'
 
 import classes from './WorkModal.module.scss'
 import Button from '../../../../UI/Button/Button'
@@ -10,78 +10,97 @@ import Input from '../../../../UI/Input/Input'
 import { useMessage } from '../../../MessageContext'
 import { WorkModalImages } from '../WorkModalImages/WorkModalImages'
 import TextArea from '../../../../UI/TextArea/TextArea'
+import { IWorkValue, workTypeApi } from '../../../../http'
+import useRequest from '../../../../utils/hooks/useRequest'
+import Loader from '../../../../UI/Loader/Loader'
 
 interface IWorkModal {
     work?: IWork;
 }
+const initialWorkValue: IWorkValue = {
+    name: '',
+    description: '',
+    typeId: undefined,
+    imageAfterSrc: '',
+    imageBeforeSrc: '',
+    images: []
+}
 export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
-    // undefined - тип не установлен, -1 - новый тип, другое число - выбранный тип
     const { addMessage } = useMessage()
 
+    const [workTypes, workTypesIsLoading, workTypesError]
+        = useRequest<IGetAllJSON<IWorksType>>(workTypeApi.getWorkTypes);
+
+    useEffect(() => {
+        if (workTypes?.count) { worksStore.setWorkTypes(workTypes.rows) }
+    }, [workTypes])
+
+    useEffect(() => {
+        if (workTypesError && workTypesError !== applicationStore.error) {
+            applicationStore.setError(workTypesError)
+            addMessage(workTypesError, 'error')
+        }
+    }, [workTypesError])
+
+
+    const [workValues, setWorkValues] = useState<IWorkValue>(work || initialWorkValue)
     const [action, setAction] = useState<'type' | 'text' | 'photo'>('type');
-
-    const [typeId, setTypeId] = useState<number | undefined>(work?.workType?.id);
-    const [newType, setNewType] = useState<string>('')
-
-    const [name, setName] = useState<string>(work?.name || '')
-    const [description, setDescription] = useState<string>(work?.description || '')
 
     const [beforeImage, setBeforeImage] = useState<File | null>(null)
     const [afterImage, setAfterImage] = useState<File | null>(null)
-
     const [otherImages, setOtherImages] = useState<File[] | null>(null)
-    const [imagesToDelete, setImagesToDelete] = useState<IImages[]>([])
-
-
-    const onConfirm = useCallback(() => {
-        if (action === 'type') {
-            if (!worksStore.workTypes.length || typeId === -1) {
-                if (newType.length > 2) {
-                   // setTypeId(worksStore.addType(newType))
-                    setAction('text')
-                }
-                else {
-                    addMessage('Введите название больше 2 символов', 'error')
-                }
-            }
-            if (typeId !== -1) {
-                setAction('text')
-            }
-        }
-        else if (action === 'text') {
-            if (name.length < 2) {
-                addMessage('Введите название больше 2 символов', 'error')
-            }
-            else {
-                setAction('photo')
-            }
-
-        }
-        else {
-            if (work?.imageAfterSrc) {
-
-            }
-            if (work?.imageBeforeSrc) {
-
-            }
-            if (otherImages?.length) {
-
-            }
-            console.log(imagesToDelete)
-        }
-    }, [worksStore, newType, typeId, name, action, imagesToDelete])
+    const [imagesToDelete, setImagesToDelete] = useState<number[]>([])
 
     const closeModal = useCallback(() => {
         worksStore.setIsWorkCreating(false)
-        setTypeId(work?.workType?.id)
-        setNewType('')
-        setName(work?.name || '')
-        setDescription(work?.description || '')
         setAction('type')
         setBeforeImage(null)
         setAfterImage(null)
         setOtherImages(null)
     }, [worksStore])
+
+    const onConfirm = useCallback(async () => {
+        if (action === 'type') {
+            setAction('text')
+        }
+        else if (action === 'text') {
+            if (!workValues.name || workValues.name && workValues.name.length < 2) {
+                addMessage('Введите название больше 2 символов', 'error')
+                return
+            }
+            else if (!workValues.description || workValues.description && workValues.description.length < 2) {
+                addMessage('Введите описание', 'error')
+                return
+            }
+            else {
+                setAction('photo')
+            }
+        }
+        else {
+            if (!work) {
+                if (!beforeImage && !afterImage) {
+                    addMessage('Добавьте изображение до и/или после', 'error')
+                    return
+                }
+                else {
+                    await worksStore.addWork(workValues, afterImage, beforeImage, otherImages)
+                }
+            }
+            else {
+                await worksStore.changeById(work.id, workValues, afterImage, beforeImage, otherImages, imagesToDelete)
+            }
+            if (worksStore.error) {
+                addMessage(worksStore.error, 'error')
+                return
+            }
+            else {
+                addMessage('Работа сохранена', 'complete')
+                closeModal()
+            }
+        }
+    }, [worksStore, workValues, action, imagesToDelete, beforeImage, afterImage, otherImages, worksStore.error, closeModal])
+
+
 
     const onBack = useCallback(() => {
         if (action === 'photo') {
@@ -95,7 +114,23 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
         }
     }, [action, setAction, closeModal])
 
-
+    useEffect(() => {
+        if (worksStore.isWorkCreating) {
+            if (work) {
+                setWorkValues({
+                    name: work.name,
+                    description: work.description,
+                    typeId: work.workType?.id,
+                    imageAfterSrc: work.imageAfterSrc,
+                    imageBeforeSrc: work.imageBeforeSrc,
+                    images: work.images
+                })
+            }
+            else {
+                setWorkValues(initialWorkValue)
+            }
+        }
+    }, [work, worksStore.isWorkCreating])
 
     return (
         <ModalSend
@@ -116,21 +151,9 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                         worksStore.workTypes.length && action === 'type'
                             ? <WorkModalTag
                                 types={worksStore.workTypes}
-                                typeId={typeId}
-                                setTypeId={setTypeId}
+                                typeId={workValues.typeId || undefined}
+                                setTypeId={(type) => setWorkValues(prev => ({ ...prev, typeId: type }))}
                             />
-                            : null
-                    }
-                    {
-                        (!worksStore.workTypes.length || typeId === -1) && action === 'type'
-                            ? <div className={classes.workModal__newTag}>
-                                <Input
-                                    value={newType}
-                                    onChange={(event) => setNewType(event.target.value)}
-                                    title='Новый тип'
-                                    placeholder='Название типа'
-                                />
-                            </div>
                             : null
                     }
                     {
@@ -138,16 +161,16 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                             ? <div className={classes.workModal__text}>
                                 <Input
                                     className={classes.workModal__inputTitle}
-                                    value={name}
-                                    onChange={(event) => setName(event.target.value)}
+                                    value={workValues.name || ''}
+                                    onChange={(event) => setWorkValues(prev => ({ ...prev, name: event.target.value }))}
                                     name='title'
                                     title='Заголовок публикации'
                                     placeholder='Заголовок публикации'
                                 />
                                 <TextArea
                                     className={classes.workModal__description}
-                                    value={description}
-                                    onChange={(event) => setDescription(event.target.value)}
+                                    value={workValues.description || ''}
+                                    onChange={(event) => setWorkValues(prev => ({ ...prev, description: event.target.value }))}
                                     name='description'
                                     title='Текст публикации'
                                     placeholder='Текст публикации'
@@ -155,23 +178,21 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                             </div>
                             : null
                     }
-
                     {
                         action === 'photo'
                             ? <WorkModalImages
-                                initialAfter={work?.imageAfterSrc}
-                                initialBefore={work?.imageBeforeSrc}
-                                initialOtherImages={work?.images}
+                                className={classes.workModal__photos}
+                                initialAfter={workValues.imageAfterSrc}
+                                initialBefore={workValues.imageBeforeSrc}
+                                initialOtherImages={workValues.images}
                                 setAfter={setAfterImage}
                                 setBefore={setBeforeImage}
                                 setOthers={setOtherImages}
                                 setImagesToDelete={setImagesToDelete}
-                                title={name}
-                                className={classes.workModal__photos}
+                                title={workValues.name || ''}
                             />
                             : null
                     }
-
                 </div>
                 <div className={classes.workModal__buttons}>
                     <Button
@@ -180,9 +201,13 @@ export const WorkModal: FC<IWorkModal> = observer(({ work }) => {
                     >
                         {action === 'type' ? 'Закрыть' : 'Назад'}
                     </Button>
+                    <Loader
+                        isLoading={worksStore.isLoading || workTypesIsLoading}
+                    />
                     <Button
                         className={classes.workModal__button}
                         onClick={onConfirm}
+                        disabled={worksStore.isLoading}
                     >
                         {action === 'photo' ? 'Сохранить' : 'Далее'}
                     </Button>

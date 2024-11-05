@@ -1,7 +1,7 @@
 import { FC, memo, useCallback, useEffect, useState } from 'react'
 
 import classes from './AdminImages.module.scss'
-import { IImages } from '../../../../store'
+import { applicationStore, IImages } from '../../../../store'
 import { useMessage } from '../../../MessageContext'
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton'
 import MultipleFileInput from '../../../../components/MultipleFileInput/MultipleFileInput'
@@ -9,8 +9,8 @@ import ServerImage from '../../../../UI/ServerImage/ServerImage'
 
 interface IAdminImages {
     images?: IImages[];
-    addImage: (image: File) => void;
-    deleteImage: (id: number) => void;
+    addImage: (image: File[]) => Promise<void>;
+    deleteImage: (id: number) => Promise<void>;
     title?: string;
     aspect?: number;
 }
@@ -25,18 +25,29 @@ export const AdminImages: FC<IAdminImages> = memo(({
     const [files, setFiles] = useState<File[] | null>(null)
 
 
-    const onDeleteImage = useCallback((id: number) => {
-        deleteImage(id)
-        addMessage('Изображение удалено', 'complete')
-    }, [])
+    const onDeleteImage = useCallback(async (id: number) => {
+        await deleteImage(id)
+        if (applicationStore.error) {
+            addMessage(applicationStore.error, 'error')
+        }
+        else {
+            addMessage('Изображение удалено', 'complete')
+        }
+    }, [deleteImage, applicationStore.error])
 
+    const onAddImage = useCallback(async (images: File[]) => {
+        await addImage(images)
+        if (applicationStore.error) {
+            addMessage(applicationStore.error, 'error')
+        }
+        else {
+            addMessage('Изображение(ия) добавлено', 'complete')
+        }
+    }, [addImage, applicationStore.error])
     useEffect(() => {
         if (files) {
-            files.map(image => {
-                addImage(image)
-            })
+            onAddImage(files)
             setFiles(null)
-            addMessage('Изображение(ия) добавлено', 'complete')
         }
     }, [files])
 

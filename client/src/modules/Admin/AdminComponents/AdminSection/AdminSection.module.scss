@@ -2,7 +2,13 @@
 
 .admin {
     padding: 85px 0 40px;
-
+    &__loader{
+        position: fixed !important;
+        top: 15px;
+        right: 15px;
+        font-size:  50px;
+        z-index: 99999;
+    }
     &__title {
         text-align: center;
         font-size: 32px;

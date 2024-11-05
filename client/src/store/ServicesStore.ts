@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx'
 
 import { IGetAllJSON } from '.';
-import { IServiceValue } from '../http';
+import { IServiceValue, serviceApi } from '../http';
 
 export interface IService extends IServiceValue {
     id: number;
@@ -14,8 +14,8 @@ export class ServicesStore {
         makeAutoObservable(this, {}, { deep: true })
     }
     private _services: IService[] = []
-    private _isLoading: boolean = true;
-    private _error: AxiosError | null = null
+    private _isLoading: boolean = false;
+    private _error: string = ''
 
 
     get services() {
@@ -29,27 +29,51 @@ export class ServicesStore {
         return this._error
     }
 
+    async handleServiceAction<T>(action: () => Promise<T>): Promise<T | undefined> {
+        this._error = '';
+        this._isLoading = true;
+
+        try {
+            return await action();
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                this._error = err.response?.data.message || err.message;
+            } else {
+                this._error = `${err}`;
+            }
+        } finally {
+            this._isLoading = false;
+        }
+    }
+
     setServices(services: IService[]) {
         this._services = services
     }
-    changeService(service: IService & IServiceValue) {
-
+    async changeService(service: IService) {
+        const updatedService = await this.handleServiceAction<IService>(() => serviceApi.changeServiceById(service.id, service));
+        if (!this._error && updatedService) {
+            this._services = this._services.map((service) => service.id === updatedService.id ? updatedService : service)
+        }
     }
 
-    addService(service: IServiceValue) {
-
+    async addService(contactLink: IServiceValue) {
+        const createdService = await this.handleServiceAction<IService>(() => serviceApi.addService(contactLink));
+        if (!this._error && createdService) {
+            this._services.push(createdService)
+        }
     }
 
-
-    deleteService(id: number) {
-
+    async deleteService(id: number) {
+        await this.handleServiceAction(() => serviceApi.deleteServiceById(id))
+        if (!this._error) {
+            this._services = this._services.filter((service) => service.id !== id)
+        }
     }
-
     private setIsLoading(isLoading: boolean) {
         this._isLoading = isLoading
     }
 
-    private setError(error: AxiosError) {
+    private setError(error: string) {
         this._error = error
     }
 }

@@ -12,6 +12,8 @@ import ControllerButton from '../../UI/ControllerButton/ControllerButton';
 import Counter, { CounterButtonType } from '../Counter/Counter';
 import Button from '../../UI/Button/Button';
 import ModalOk from '../Modal/ModalOk';
+import { useNavigate } from 'react-router-dom';
+import { USER_ROUTE } from '../../utils/const/routes';
 
 
 interface IUserCard {
@@ -25,25 +27,29 @@ const UserCard: FC<IUserCard> = observer(({ className, user, isShortCard = false
     const [visits, setVisits] = useState<number | undefined | null>();
     const debounceVisit = useDebounce(visits, 300);
     const [isNewName, setIsNewName] = useState<boolean>(false);
+    const router = useNavigate();
 
     const { addMessage } = useMessage();
 
-    const userAction = useCallback(async (customActioin?: string) => {
+    const userAction = useCallback(async (customAction?: string) => {
         if (user) {
             switch (action) {
                 case 'delete':
                     await userStore.deleteUserById(user.id);
+                    router(USER_ROUTE)
                     break;
                 case 'admin':
                     await userStore.giveRole(user.id, "ADMIN");
+                    user.role = 'ADMIN'
                     break;
                 case 'user':
                     await userStore.giveRole(user.id, "USER");
+                    user.role = 'USER'
                     break;
                 default:
                     break;
             }
-            switch (customActioin) {
+            switch (customAction) {
                 case 'name':
                     await userStore.changeUserById(user.id, { ...user, name: newUserName });
                     break;

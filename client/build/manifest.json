@@ -1,0 +1,8 @@
+{
+  "short_name": "PPilit",
+  "name": "Petrova Pilit",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#FFFFFF",
+  "background_color": "#ffffff"
+}

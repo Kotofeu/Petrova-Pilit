@@ -8,23 +8,21 @@ import classes from './HomeMainSection.module.scss'
 import ContactList from "../../../../components/ContactList/ContactList"
 import { classConnection } from "../../../../utils/function"
 import useRequest from "../../../../utils/hooks/useRequest"
-import { contactApi, homeSliderApi } from "../../../../http"
-import { applicationStore, IContactLink, IGetAllJSON, IImages } from "../../../../store"
+import { homeSliderApi } from "../../../../http"
+import { applicationStore, IGetAllJSON, IImages } from "../../../../store"
 import { useMessage } from "../../../MessageContext"
 
 export const HomeMainSection = memo(() => {
-    const [
-        contacts,
-        contactsIsLoading,
-        contactsError
-    ] = useRequest<IGetAllJSON<IContactLink>>(contactApi.getContacts);
+    const { addMessage } = useMessage()
+
     const [
         sliderImages,
         sliderImagesIsLoading,
         sliderImagesError
     ] = useRequest<IGetAllJSON<IImages>>(homeSliderApi.getImages);
-    const { addMessage } = useMessage()
+   
     const homeMainBottom = useRef<HTMLDivElement>(null)
+ 
     const lookMoreClick = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault()
         if (homeMainBottom.current) {
@@ -34,12 +32,7 @@ export const HomeMainSection = memo(() => {
             });
         }
     }
-    useEffect(() => {
-        if (contactsError && contactsError !== applicationStore.error) {
-            applicationStore.setError(contactsError)
-            addMessage(contactsError, 'error')
-        }
-    }, [contactsError])
+
     useEffect(() => {
         if (sliderImagesError && sliderImagesError !== applicationStore.error) {
             applicationStore.setError(sliderImagesError)
@@ -48,15 +41,11 @@ export const HomeMainSection = memo(() => {
     }, [sliderImagesError])
 
     useEffect(() => {
-        if (contacts?.rows.length) {
-            applicationStore.setContactsLinks(contacts.rows)
-        }
-    }, [contacts])
-    useEffect(() => {
         if (sliderImages?.rows.length) {
             applicationStore.setSliderImages(sliderImages.rows)
         }
     }, [sliderImages])
+    
     return (
         <Section className={classes.homeMain} isUnderline>
             <div className={classes.homeMain__titleBox}>

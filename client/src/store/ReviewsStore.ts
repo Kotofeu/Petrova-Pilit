@@ -96,15 +96,12 @@ export class ReviewsStore {
         }
     }
 
-    async updateReview(review: IReviewValue, deletedIds?: number[], images?: File[]) {
+    async changeById(review: IReviewValue, deletedIds?: number[], images?: File[]) {
         const updatedReview = await this.handleReviewAction(() => reviewApi.changeById(review, deletedIds, images));
         if (!this._error && updatedReview) {
             this._reviews = this._reviews.map((review) => review.id === updatedReview.id ? updatedReview : review)
+            this._mainReviews = this._mainReviews.map((review) => review.id === updatedReview.id ? updatedReview : review)
         }
-    }
-
-    async deleteImagesById(deletedIds: number[]) {
-        return await this.handleReviewAction(() => reviewApi.deleteImageById(deletedIds))
     }
 
     async deleteImagesByIdAdmin(deletedIds: number[]) {
@@ -116,12 +113,15 @@ export class ReviewsStore {
             await this.handleReviewAction(() => reviewApi.deleteById(id))
             if (!this._error) {
                 this._reviews = this._reviews.filter((review) => review.id !== id)
+                this._mainReviews = this._mainReviews.filter((review) => review.id !== id)
             }
         }
         else {
             await this.handleReviewAction(() => reviewApi.delete())
             if (!this._error && userId) {
                 this._reviews = this._reviews.filter((review) => review.user?.id !== userId)
+                this._mainReviews = this._mainReviews.filter((review) => review.user?.id !== userId)
+
             }
         }
     }

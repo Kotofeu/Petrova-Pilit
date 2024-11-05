@@ -12,12 +12,8 @@ import TextArea from '../../../../UI/TextArea/TextArea'
 import classes from './AdminServices.module.scss'
 import { IServiceValue } from '../../../../http/API/serviceApi'
 
-interface IServices extends IService, IServiceValue {
-    id: number
-}
-
 export const AdminServices: FC = observer(() => {
-    const [services, setServices] = useState<IServices[]>([]);
+    const [services, setServices] = useState<IService[]>([]);
     const [newServices, setNewServices] = useState<IServiceValue>({
         name: '',
         time: 0,
@@ -26,7 +22,18 @@ export const AdminServices: FC = observer(() => {
     })
 
     const { addMessage } = useMessage();
-    const validateLink = (service: IServices) => {
+
+    const serviceAction = useCallback(async (action: () => Promise<void>, message: string) => {
+        await action()
+        if (!servicesStore.error) {
+            addMessage(message, 'complete');
+        }
+        else {
+            addMessage(servicesStore.error, 'error');
+        }
+    }, [servicesStore, servicesStore.error, addMessage])
+
+    const validateLink = (service: IServiceValue) => {
         if (service.name && (service.name.length < 2)) return 'Заголовок должен быть длиннее 2 символов';
         if (!service.description) return 'Описание отсутствует';
         if (!service.time) return 'Время работы';
@@ -47,25 +54,29 @@ export const AdminServices: FC = observer(() => {
     }, []);
 
     const onAddService = useCallback(() => {
-        const errorMessage = validateLink(newServices as IServices);
+        const errorMessage = validateLink(newServices as IService);
         if (errorMessage) {
             addMessage(errorMessage, 'error');
             return;
         }
-        servicesStore.addService(newServices)
-        addMessage(`Услуга ${newServices.name} добавлена`, 'complete')
+        serviceAction(
+            async () => servicesStore.addService(newServices),
+            `Услуга ${newServices.name} добавлена`
+        )
         setNewServices({ name: '', time: 0, description: '', price: 0 })
     }, [newServices])
 
 
-    const onSaveClick = useCallback((contactLink: IServices) => {
+    const onSaveClick = useCallback((contactLink: IService) => {
         const errorMessage = validateLink(contactLink);
         if (errorMessage) {
             addMessage(errorMessage, 'error');
             return;
         }
-        servicesStore.changeService(contactLink)
-        addMessage(`Услуга ${contactLink.name} обновлена`, 'complete')
+        serviceAction(
+            async () =>  servicesStore.changeService(contactLink),
+            `Услуга ${contactLink.name} обновлена`
+        )
     }, [])
 
 
@@ -118,7 +129,7 @@ export const AdminServices: FC = observer(() => {
                 </div>
             )}
             addItem={onAddService}
-            deleteItem={(id) => servicesStore.deleteService(+id)}
+            deleteItem={(id) => serviceAction(async () => servicesStore.deleteService(id), `Услука удалена`)}
             saveItem={(service) => onSaveClick(service)}
             renderItemToAdd={() => (
                 <div className={classes.adminServices__row}>

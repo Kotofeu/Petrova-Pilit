@@ -13,7 +13,7 @@ import { classConnection } from '../../../../utils/function';
 import { HeaderUserModal } from '../HeaderUserModal/HeaderUserModal';
 import { HeaderAsideModal } from '../HeaderAsideModal/HeaderAsideModal';
 import defaultImage from '../../../../assets/icons/User-icon.svg'
-const bannerForAuth = 'Приходите, с удовольствием приму вас ещё'
+const bannerForAuth = 'Тут только четкие и эстетичные ногти '
 export const Header: FC = observer(() => {
   const [scrollingDown, setScrollingDown] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);

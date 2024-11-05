@@ -1,27 +1,27 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import Input from '../../../../UI/Input/Input'
-import { worksStore } from '../../../../store'
-import { observer } from 'mobx-react-lite'
 
 import useDebounce from '../../../../utils/hooks/useDebounce'
-import { useMessage } from '../../../MessageContext'
 
 interface IWorkEditType {
     className?: string;
-    initialValue?: string | null;
     id?: number;
+    initialValue?: string | null;
+    onTypeEdit: (id: number, name: string) => void;
 }
 
-export const WorkEditType: FC<IWorkEditType> = observer(({ className, initialValue, id }) => {
+export const WorkEditType: FC<IWorkEditType> = memo(({
+    className,
+    id,
+    initialValue,
+    onTypeEdit
+}) => {
     const [name, setName] = useState<string>(initialValue || '')
     const debouncedName = useDebounce(name, 1000)
-    const { addMessage } = useMessage()
-    
-    useEffect(() => {
-        console.log(debouncedName, initialValue, id)
-        if (debouncedName && debouncedName !== initialValue && id !== undefined) {
 
-            addMessage('Тип изменён', 'complete')
+    useEffect(() => {
+        if (debouncedName && debouncedName !== initialValue && id !== undefined) {
+            onTypeEdit(id, debouncedName)
         }
     }, [initialValue, id, debouncedName])
     return (

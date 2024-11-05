@@ -8,34 +8,41 @@ import ModalOk from '../../../../components/Modal/ModalOk';
 import ControllerButton from '../../../../UI/ControllerButton/ControllerButton';
 import Button from '../../../../UI/Button/Button';
 import { useMessage } from '../../../MessageContext';
-import Loader from '../../../../UI/Loader/Loader';
 import ServerImage from '../../../../UI/ServerImage/ServerImage';
 
 interface IUserReview {
     user: IUser;
-    userReview: IReview;
+    userReview: IReview
 }
 
 export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {
     // Если number - удалить изображение, число это id изображения
     const [action, setAction] = useState<'deleteReview' | number | undefined>()
+    const [review, setReview] = useState<IReview | null>(userReview)
     const { addMessage } = useMessage();
     const images = useMemo(() => {
-        if (!userReview) return null
-        if (!userReview.reviews_images?.length) return null
-        return userReview.reviews_images
-    }, [userReview])
+        if (!review) return null
+        if (!review.reviews_images?.length) return null
+        return review.reviews_images
+    }, [review])
     const userAction = useCallback(async () => {
-        if (action) {
+        if (action && review) {
             let message;
             switch (action) {
                 case 'deleteReview':
                     message = 'Вы удалили отзыв'
-                    await reviewsStore.deleteReview(userReview.id)
+                    await reviewsStore.deleteReview(review.id)
+                    setReview(null)
                     break;
                 case (action && Number(action)):
                     message = 'Вы удалили фото'
                     await reviewsStore.deleteImagesByIdAdmin([action])
+                    setReview(prev =>
+                    (prev ? {
+                        ...prev,
+                        reviews_images: prev.reviews_images?.filter(image => image.id !== action)
+                    } : null)
+                    )
                     break;
             }
             if (reviewsStore.error) {
@@ -45,13 +52,13 @@ export const UserReview: FC<IUserReview> = observer(({ user, userReview }) => {
                 addMessage(message, 'message')
             }
         }
-    }, [action, reviewsStore, reviewsStore.error])
-
+    }, [action, reviewsStore, reviewsStore.error, review])
+    if (!review) return null
     return (
         <div className={classes.userReview}>
             <ReviewCard
                 className={classes.userReview__review}
-                review={userReview}
+                review={review}
             >
                 <Button
                     className={classes.userReview__deleteReview}

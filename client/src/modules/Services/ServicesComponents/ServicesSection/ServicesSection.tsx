@@ -14,13 +14,13 @@ import { useMessage } from '../../../MessageContext'
 import { classConnection } from '../../../../utils/function'
 export const ServicesSection = observer(() => {
     const [isServiceOpen, setIsServiceOpen] = useState<number | null>(null)
+    const { addMessage } = useMessage()
 
     const [
         services,
         servicesIsLoading,
         servicesError
     ] = useRequest<IGetAllJSON<IService>>(serviceApi.getServices);
-    const { addMessage } = useMessage()
     
     useEffect(() => {
         if (servicesError && servicesError !== applicationStore.error) {

@@ -19,7 +19,12 @@ export class ContactApi {
         image: File
     ) => {
         const formData = new FormData();
-        formData.append('contact', JSON.stringify(contact));
+        if (contact.name) {
+            formData.append('name', contact.name);
+        }
+        if (contact.link) {
+            formData.append('link', contact.link);
+        }
         if (image) {
             formData.append('image', image)
         }
@@ -30,10 +35,15 @@ export class ContactApi {
     changeContactById = async (
         id: number,
         contact: IContactsValue,
-        image: File | null
+        image?: File
     ) => {
         const formData = new FormData();
-        formData.append('contact', JSON.stringify(contact));
+        if (contact.name) {
+            formData.append('name', contact.name);
+        }
+        if (contact.link) {
+            formData.append('link', contact.link);
+        }
         if (image) {
             formData.append('image', image)
         }

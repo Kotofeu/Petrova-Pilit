@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Section from '../../../../components/Section/Section'
 
 import Button from '../../../../UI/Button/Button';
@@ -7,14 +7,16 @@ import { AdminSocial } from '../AdminSocial/AdminSocial';
 import { AdminAdvantages } from '../AdminAdvantages/AdminAdvantages';
 import { AdminTextArea } from '../AdminTextArea/AdminTextArea';
 import { observer } from 'mobx-react-lite';
-import { applicationStore } from '../../../../store';
+import { applicationStore, IAdvantages, IGetAllJSON, IImages, IService, servicesStore } from '../../../../store';
 import { AdminServices } from '../AdminServices/AdminServices';
 import { AdminImages } from '../AdminImages/AdminImages';
 import { AdminHowToGet } from '../AdminHowToGet/AdminHowToGet';
 
 import classes from './AdminSection.module.scss'
-
-
+import useRequest from '../../../../utils/hooks/useRequest';
+import { advantageApi, homeSliderApi, officeApi, serviceApi } from '../../../../http';
+import { useMessage } from '../../../MessageContext';
+import Loader from '../../../../UI/Loader/Loader';
 
 interface IParagraph {
     title: string;
@@ -25,7 +27,6 @@ interface IContent {
     title: string;
     paragraphs: IParagraph[];
 }
-
 
 export const AdminSection = observer(() => {
 
@@ -90,8 +91,6 @@ export const AdminSection = observer(() => {
         },
     ];
 
-
-
     const sectionRefs = useRef<(HTMLDivElement | null)[][]>(Array(content.length).fill(null).map(() => Array(0)));
 
     const scrollToSection = (sectionIndex: number, paraIndex?: number) => {
@@ -102,9 +101,79 @@ export const AdminSection = observer(() => {
             window.scrollTo({ top, behavior: 'smooth' });
         }
     };
+    const { addMessage } = useMessage()
+
+    const handleError = (error: string | null) => {
+        if (error && error !== applicationStore.error) {
+            applicationStore.setError(error);
+            addMessage(error, 'error');
+        }
+    };
+    const [
+        services,
+        servicesIsLoading,
+        servicesError
+    ] = useRequest<IGetAllJSON<IService>>(serviceApi.getServices);
+
+    const [
+        homeSlider,
+        homeSliderIsLoading,
+        homeSliderError
+    ] = useRequest<IGetAllJSON<IImages>>(homeSliderApi.getImages);
+
+    const [
+        advantages,
+        advantagesIsLoading,
+        advantagesError
+    ] = useRequest<IGetAllJSON<IAdvantages>>(advantageApi.getAdvantages);
+
+    const [
+        officeImages,
+        officeImagesIsLoading,
+        officeImagesError
+    ] = useRequest<IGetAllJSON<IImages>>(officeApi.getImages);
+
+    useEffect(() => {
+        handleError(servicesError);
+        if (services?.rows.length) {
+            servicesStore.setServices(services.rows)
+        }
+    }, [services, servicesError])
+
+    useEffect(() => {
+        handleError(homeSliderError);
+        if (homeSlider?.rows.length) {
+            applicationStore.setSliderImages(homeSlider.rows)
+        }
+    }, [homeSlider, homeSliderError])
+
+    useEffect(() => {
+        handleError(advantagesError);
+        if (advantages?.rows.length) {
+            applicationStore.setAdvantages(advantages.rows)
+        }
+    }, [advantages, advantagesError])
+
+    useEffect(() => {
+        handleError(officeImagesError);
+        if (officeImages?.rows.length) {
+            applicationStore.setOfficeImages(officeImages.rows)
+        }
+    }, [officeImages, officeImagesError])
 
     return (
         <Section className={classes.admin}>
+            <Loader
+                className={classes.admin__loader}
+                isLoading={
+                    servicesIsLoading ||
+                    homeSliderIsLoading ||
+                    advantagesIsLoading ||
+                    officeImagesIsLoading ||
+                    applicationStore.isLoading ||
+                    servicesStore.isLoading
+                }
+            />
             <h1 className={classes.admin__title}>Панель администратора</h1>
             <nav className={classes.admin__nav}>
                 <ul className={classes.admin__navList}>

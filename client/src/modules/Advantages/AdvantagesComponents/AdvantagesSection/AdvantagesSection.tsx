@@ -11,12 +11,13 @@ import { useEffect } from 'react'
 import { classConnection } from '../../../../utils/function'
 
 export const AdvantagesSection = observer(() => {
+    const { addMessage } = useMessage()
+
     const [
         advantages,
         advantagesIsLoading,
         advantagesError
     ] = useRequest<IGetAllJSON<IAdvantages>>(advantageApi.getAdvantages);
-    const { addMessage } = useMessage()
 
     useEffect(() => {
         if (advantagesError && advantagesError !== applicationStore.error) {
